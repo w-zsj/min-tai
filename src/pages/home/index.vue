@@ -1,16 +1,16 @@
 <template>
   <view class="content">
-    <view>
-      <text class="title">{{ title }}</text>
-    </view>
+    <productUnit></productUnit>
   </view>
 </template>
 
 <script>
+import productUnit from '@comps/product-unit/index.vue'
 export default {
+  components:{productUnit},
   data() {
     return {
-      title: "Hello",
+     
     };
   },
   onLoad() { },
@@ -18,5 +18,10 @@ export default {
 };
 </script>
 
-<style>
+<style lang='scss' scope>
+.content{
+  padding: 32rpx;
+  background: #F6F6F6;
+  min-height: 100vh;
+}
 </style>

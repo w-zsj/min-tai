@@ -1,0 +1,116 @@
+page {
+    padding-bottom: 100rpx;
+  }
+  .address {
+    height: 140rpx;
+    background: #f4f4f4;
+    /* display: flex;
+    align-items: center;
+    text-align: center; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .address2-bottom{
+    padding-left: 20rpx;
+  }
+
+  .cart-title {
+    height: 80rpx;
+    display: flex;
+    align-items: center;
+    padding-left: 20rpx;
+    font-size: 36rpx;
+    color: #ec0d0d;
+  }
+  .cart {
+    height: 240rpx;
+    border-bottom: 2rpx solid #ccc;
+    display: flex;
+  }
+  .cart .cart1 {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .cart .cart2 {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .cart .cart2 image {
+    width: 90%;
+  }
+  .cart .cart3 {
+    flex: 4;
+    padding: 20rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .cart .cart3 .cart3-top {
+    word-break: break-all;
+  }
+  .cart .cart3 .cart3-center{
+    color:#ccc;
+  }
+  .cart .cart3 .cart3-bottom {
+    display: flex;
+    justify-content: space-between;
+  }
+  .cart .cart3 .cart3-bottom .price {
+    color: #ec0d0d;
+  }
+  .cart .cart3 .cart3-bottom .edit {
+    display: flex;
+  }
+  .cart .cart3 .cart3-bottom .edit .calc {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ccc;
+  }
+  .cart .cart3 .cart3-bottom .edit .num {
+    margin: 0 20rpx;
+  }
+  .tool {
+    height: 100rpx;
+    position: fixed;
+    bottom: 100rpx;
+    width: 100%;
+    border-top: 2rpx solid #ccc;
+    display: flex;
+    background-color: #fff;
+  }
+  .tool .tool1 {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .tool .tool2 {
+    flex: 1;
+    display: flex;
+    justify-content: space-center;
+    align-items: center;
+    padding: 8rpx;
+  }
+  .tool .tool2 .tool2-top text {
+    color: #ec0d0d;
+    font-weight: 700;
+  }
+  .tool .tool3 {
+    flex: 1;
+    background:#ec0d0d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-weight: 700;
+    border-radius: 140rpx;
+  }
+  

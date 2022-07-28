@@ -112,14 +112,14 @@
   }
   .info-service{
     background: #fed8d9;
-    width: 500rpx;
-    height:60rpx;
-   margin: 0 auto;
-   padding: 20px;
+    width: 600rpx;
+    height:100rpx;
+    margin: 0 auto;
+    padding: 10rpx 10rpx;
   
   }
   .info-service text{
-      text-align: center;
+    
       font-size: 12px;
   }
 

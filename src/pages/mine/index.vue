@@ -7,14 +7,14 @@
           <text>17601330133</text>
           <view class="add-money">
             <text class="sub-money" decode>0金币</text>
-            <text class="iconfont icon-jia"></text>
-            <text class="iconfont icon-jia"></text>
+            <text class="iconfont icon-quxiao1"></text>
+            <text class="iconfont icon-chaoshi"></text>
           </view>
         </view>
       </view>
       <view class="right">
         <text>账号管理</text>
-        <text class="iconfont icon-jiantou"></text>
+        <text class="iconfont icon-quxiao1"></text>
       </view>
     </view>
     <view class="uni-margin-wrap">
@@ -57,7 +57,10 @@
     </view>
     <!-- 广告位 -->
     <view class="advertisement-container">
-      <image class="advertisement-img" src="https://file.9jinhuan.com/mall/images/t/fe1067de5e2545d6b0f689116adbb16e.png" />
+      <image
+        class="advertisement-img"
+        src="https://file.9jinhuan.com/mall/images/t/fe1067de5e2545d6b0f689116adbb16e.png"
+      />
     </view>
     <!-- 地址 -->
     <view class="mine-address">
@@ -77,8 +80,10 @@
       <text>17522222</text>
     </view>
     <view class="info-service">
-      <text class="iconfont icon-search"></text>
-      <text>如您购买的商品有任何问题，请与客服联系，客服会专门为你处理，让您售后无忧</text>
+      <text class="iconfont icon-quxiao1"></text>
+      <text
+        >如您购买的商品有任何问题，请与客服联系，客服会专门为你处理，让您售后无忧</text
+      >
     </view>
     <view class="customer-service">
       <button type="warn" open-type="contact" size="default">联系客服</button>

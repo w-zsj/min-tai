@@ -22,9 +22,16 @@
   .cates .cates_right {
     flex: 5;
   }
-  .cates .cates_right .banner {
-    padding: 20rpx;
+  .cates_right_area{
+  display: flex;
+  flex-direction: column;
+  height: 480rpx;
+  padding: 10rpx;
   }
+  /* .cates .cates_right .banner {
+    padding: 20rpx;
+    padding-top: 0rpx;
+  } */
   .cates .cates_right .banner image {
     width: 100%;
     height: 180rpx;
@@ -33,29 +40,36 @@
     height: 60rpx;
     line-height: 60rpx;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
   }
   .cates .cates_right .list .title .line {
     color: #dcdcdc;
   }
-  .cates .cates_right .list .content {
+  .cates .cate-info{
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-around;
   }
-  .cates .cates_right .list .content .item {
-    width: 33.3%;
+  .cates .cate-info text.cate-price{
+    color:#ec0d0d;
+    
+  }
+  .cates .cate-info text.cate-sale{
+    flex: 1;
+    padding-left: 20rpx;
+  }
+  .cates .cate-info .add-cate {
+    background:#ec0d0d;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 10rpx;
-  }
-  .cates .cates_right .list .content .item image {
-    width: 90rpx;
-    height: 90rpx;
-  }
-  .cates .cates_right .list .content .item text {
-    font-size: 24rpx;
-    margin-top: 8rpx;
+    color: #fff;
+    font-weight: 700;
+    border-radius: 10rpx;
+    flex: 1;
+    
   }
   ::-webkit-scrollbar {
     width: 0;

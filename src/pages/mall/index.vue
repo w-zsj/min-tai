@@ -2,7 +2,7 @@
   <view>
     <!-- 收货地址部分 -->
     <view class="address">
-      <text class="iconfont icon-quxiao1"></text>
+      <text class="iconfont icon-search"></text>
       <view class="address2-bottom">湖南省长沙市</view>
     </view>
     <!-- 购物车标题 -->

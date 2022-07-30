@@ -2,7 +2,7 @@
  * @Author: zhangsanjun 
  * @Date: 2022-07-25 11:01:10 
  * @Last Modified by: zhangsanjun
- * @Last Modified time: 2022-07-25 11:47:28
+ * @Last Modified time: 2022-07-30 16:28:16
  */
 
 import {
@@ -20,5 +20,7 @@ export const Resource = {
   addMobile: HttpResource(`${API_HOST}${SERVICE_NAME}/account/userInfo/:type`),
   //上传图片
   uploadImage: HttpResource(`${API_HOST}${SERVICE_NAME}/file/oss/upload`),
+  // 分类
+  classifyList: HttpResource(`${API_HOST}${SERVICE_NAME}/mall-portal/productClassify/:type`),
 
 };

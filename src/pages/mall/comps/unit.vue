@@ -8,7 +8,7 @@
     </view>
     <view class="base-info flex-col-btwn">
       <view>
-        <view class="name ellip">大华股份绝对是规范甲方</view>
+        <view class="name ellip">大华股份绝对是规范甲方大华股份绝对是规范甲方大华股份绝对是规范甲方</view>
         <view class="sku">规格22</view>
       </view>
       <view class="price"><text class="rb">฿</text>77777</view>
@@ -67,6 +67,7 @@ export default {
       font-weight: 400;
       color: #272727;
       line-height: 40rpx;
+      width: 350rpx;
     }
     .sku {
       background: #fafafa;

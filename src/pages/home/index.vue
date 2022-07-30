@@ -36,7 +36,6 @@ import productUnit from "@comps/product-unit/index.vue";
 import vajraPosition from "@comps/vajra-position/index.vue";
 import mySwiper from "@comps/my-swiper/index.vue";
 import serachInput from "@comps/serach-input/index.vue";
-import { tr } from "@dcloudio/vue-cli-plugin-uni/packages/postcss/tags";
 export default {
   components: { productUnit, vajraPosition, mySwiper, serachInput },
   data() {
@@ -55,19 +54,16 @@ export default {
   methods: {
     // 轮播图点击
     bannerTap: function (url, type) {
-      console.log("e---", url, type); //type: 1商品详情 2h5  3图片 4:开通vip页面
-      const urlTypeArr = [1, 4]; //小程序内页面跳转
+      console.log("e---", url, type); //type 2h5  3图片
       const tabBarPages = [
         "/pages/mall/index",
         "/pages/category/index",
         "/pages/mine/index",
       ]; //tabar页面
-      if (urlTypeArr.includes(type)) {
-        if (tabBarPages.includes(url)) {
-          uni.switchTab({ url: url });
-        } else {
-          uni.navigateTo({ url: url });
-        }
+      if (tabBarPages.includes(url)) {
+        uni.switchTab({ url: url });
+      } else {
+        uni.navigateTo({ url: url });
       }
     },
     closemodal(e) {

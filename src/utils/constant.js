@@ -1,6 +1,4 @@
-// #ifdef H5
-import ENV from '@/utils/wxConfig/env.js'
-// #endif
+
 const IS_TEST = process.env.NODE_ENV == 'development';
 const SERVER_PRD = 'https://api.9jinhuan.com';
 const SERVER_TEST = 'http://testapi.taihail.com/porta/';
@@ -24,16 +22,9 @@ const SK = {
 const reqConfig = {
     IS_TEST,
     version: '2.1.8',
-    // #ifdef H5
-    os: 'h5',
-    key: "TWpBeU1XZzFRREF3TkdnMQ==",
-    payType: ENV.ua.wx ? "wxh5" : "h5",
-    // #endif
-    // #ifdef MP-WEIXIN
     os: 'wx',
     key: "TWpBeU1YZGxhWGhwYmtBd01EZDNlQT09",
     payType: 'xcx'
-    // #endif
 }
 module.exports = {
     IS_TEST,

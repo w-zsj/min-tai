@@ -7,7 +7,7 @@
         @delItem="delItem"
       >
         <view style="color: #000000">
-          <unit></unit>
+          <unit :item="item" :changeSelect="changeSelect"></unit>
         </view>
       </sidesLip>
     </view>
@@ -19,18 +19,23 @@ import unit from "./comps/unit.vue";
 export default {
   components: { sidesLip, unit },
   data() {
-    return{
-      list:[
-      {},
-      {},
-      {}
-    ]
-    }
+    return {
+      list: [{}, {}, {}],
+    };
+  },
+  methods: {
+    changeSelect(item) {
+      console.log("选择商品");
+    },
+    // 删除
+    delItem(data) {
+       console.log("删除商品");
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
-.wrap{
+.wrap {
   margin-bottom: 32rpx;
 }
 @import "./inedx.scss";

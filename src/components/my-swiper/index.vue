@@ -72,7 +72,7 @@ export default {
     overflow: hidden;
 }
 .swiper-container {
-  height: 500rpx;
+  height: 230rpx;
   width: 100%;
   position: relative;
 }
@@ -127,7 +127,7 @@ swiper-item {
 }
 .cover-image {
   width: 100%;
-  height: 500rpx;
+  height: 230rpx;
   border-radius: 16rpx;
 }
 </style>

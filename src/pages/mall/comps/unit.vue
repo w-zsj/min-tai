@@ -1,6 +1,8 @@
 <template>
   <view class="c-list flex-aic">
-    <view class="checkbox"></view>
+    <view @click.stop="changeSelect(item)" style="height:100%;">
+      <view class="checkbox"></view>
+    </view>
     <view class="pic">
       <!-- <image src="" /> -->
     </view>
@@ -19,7 +21,18 @@
   </view>
 </template>
 <script>
-export default {};
+export default {
+  props: {
+    changeSelect: {
+      type: Function,
+      default: () => {},
+    },
+    item: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+};
 </script>
 <style scoped lang="scss">
 .c-list {
@@ -90,14 +103,14 @@ export default {};
       .div {
         width: 50rpx;
         height: 50rpx;
-        font-size: 24px;
+        font-size: 20px;
         color: #ccc9c9;
         border-right: 1px solid #e4e2e2;
       }
       .add {
         width: 50rpx;
         height: 50rpx;
-        font-size: 24px;
+        font-size: 20px;
         color: #ccc9c9;
         border-left: 1px solid #e4e2e2;
       }

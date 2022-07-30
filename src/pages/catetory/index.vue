@@ -122,11 +122,6 @@
             :class="isShowTwoCategory ? 'pad-top' : ''"
             v-if="prodList.length == 0"
           >
-            <image
-              class="_img"
-              src="https://file.9jinhuan.com/wine/wechat/about_us.png"
-              mode=""
-            ></image>
             <view class="txt">暂无商品</view>
           </view>
           <scroll-view

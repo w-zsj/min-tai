@@ -17,7 +17,7 @@ export default {
   props: {
     list: {
       type: Array,
-      default: () => new Array(10),
+      default: () => [],
     },
   },
   data() {

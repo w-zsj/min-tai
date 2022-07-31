@@ -208,7 +208,7 @@ const login = (params = {}, $isResolve = null) => {
 		uni.login().then((res) => {
 			code = res[1].code
 			// #endif
-			Resource.token
+			Resource.open
 				.post({
 					type: 'login'
 				}, {
@@ -217,18 +217,14 @@ const login = (params = {}, $isResolve = null) => {
 				})
 				.then((res) => {
 					if (res && res.data && res.data['token']) {
-						let {
-							token = '', nickname = '', image = '', uid = '', style = 'A', hasmobile = 0, uservipinfo = {}
-						} = res.data;
+						let { token, nickName, image, phone } = res.data;
 						localStorage.set({
 							[SK.TOKEN]: token,
-							[SK.NICK_NAME]: nickname,
+							[SK.HAS_MOBILE]: phone ? 1 : 0,
+							[SK.NICK_NAME]: nickName,
 							[SK.USER_IMAGE]: image,
-							[SK.USER_STYLE]: style,
-							[SK.USER_UID]: uid,
-							[SK.HAS_MOBILE]: hasmobile ? 1 : 0,
-							[SK.USER_VIP_INFO]: JSON.stringify(uservipinfo)
-						});
+							[SK.USER_PHONE]: phone,
+						  });
 						if ($isResolve) $isResolve()
 						else resolve(res.data)
 					}

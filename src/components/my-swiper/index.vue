@@ -1,11 +1,11 @@
 <template>
   <view class="banner-header-container" v-if="bannerList.length">
-    <view class="swiper-container">
+    <view class="swiper-container" :class="source == 'gg' ? 'gg' : ''">
       <swiper
         :indicator-dots="indicatorDots"
         indicator-color="rgba(255, 255, 255, 0.7)"
         :indicator-active-color="activeColor"
-        :autoplay="autoplay"
+        :autoplay="source == 'gg' ? false : autoplay"
         :interval="interval"
         :duration="duration"
         :circular="circular"
@@ -13,15 +13,20 @@
         @change="firstSwiperChange"
       >
         <block v-for="(item, index) in bannerList" :key="index">
-          <swiper-item @click.stop.prevent="bannerTap(item.url, item.urlType)"
-            ><image
+          <swiper-item @click.stop.prevent="bannerTap(item.url, item.urlType, source)">
+            <view v-if="source == 'gg'">
+              <vajraPosition :list='item'></vajraPosition>
+            </view>
+            <image
+              v-else
               class="cover-image"
+              :class="source == 'gg' ? 'gg' : ''"
               src="http://www.youtaidu.com/uploads/down/20210529094352103.jpg"
             ></image
           ></swiper-item>
         </block>
       </swiper>
-      <view class="swiper-dot-container" v-if="bannerList.length > 1">
+      <view class="swiper-dot-container" v-if="bannerList.length > 1 && source !== 'gg'">
         <block v-for="(item, index) in bannerList" :key="index"
           ><view
             :class="{
@@ -35,6 +40,7 @@
   </view>
 </template>
 <script>
+import vajraPosition from "@comps/vajra-position/index.vue";
 export default {
   props: {
     bannerList: {
@@ -45,7 +51,12 @@ export default {
       type: Function,
       default: () => {},
     },
+    source: {
+      type: String,
+      default: "",
+    },
   },
+  components: { vajraPosition },
   data() {
     return {
       firstBannerCurrent: 0,
@@ -67,14 +78,17 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-.banner-header-container{
-    border-radius: 16rpx;
-    overflow: hidden;
+.banner-header-container {
+  border-radius: 16rpx;
+  overflow: hidden;
 }
 .swiper-container {
   height: 230rpx;
   width: 100%;
   position: relative;
+  &.gg {
+    height: 428rpx;
+  }
 }
 .swiper-banner-content {
   width: 100%;
@@ -129,5 +143,8 @@ swiper-item {
   width: 100%;
   height: 230rpx;
   border-radius: 16rpx;
+  &.gg {
+    height: 428rpx;
+  }
 }
 </style>

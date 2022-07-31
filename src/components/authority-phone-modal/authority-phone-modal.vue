@@ -3,19 +3,26 @@
     <view v-if="isShowAuthPhone" class="authority-phone-mask"></view>
     <view class="authority-phone-modal" v-if="isShowAuthPhone">
       <view class="authority-context">
-        <view class="authority-title">授权头像、昵称</view>
+        <view class="authority-title">{{
+          isShowAuthHeader ? "授权头像、昵称" : "授权手机号"
+        }}</view>
         <view class="authority-rectangle">
           <image src="/static/images/logo.png" class="rectangle-image img"></image>
         </view>
-       
+
         <view class="authority-phone"></view>
         <view class="authority-btns">
           <button class="btn" @click.stop="reject" v-if="isShowReject">取消</button>
-          <button class="btn" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">
+          <!-- 头像 -->
+          <button class="btn" v-if="isShowAuthHeader" @click="wechatLogin">确认</button>
+          <button
+            class="btn"
+            v-else
+            open-type="getPhoneNumber"
+            @getphonenumber="getPhoneNumber"
+          >
             确认
           </button>
-          <!-- 头像 -->
-          <!-- <button class="btn" @click="wechatLogin">确认</button> -->
         </view>
       </view>
     </view>
@@ -40,6 +47,7 @@ export default {
   data() {
     return {
       isShow: true,
+      isShowAuthHeader: !localStorage.get([SK.NICK_NAME]),
     };
   },
   options: {
@@ -59,9 +67,7 @@ export default {
       default: true,
     },
   },
-  onShow() {
-    this.wechatLogin();
-  },
+  onShow() {},
   // 生命周期函数，可以为函数，或一个在methods段中定义的方法名
   beforeMount: function () {
     // #ifndef H5
@@ -89,7 +95,12 @@ export default {
         desc: "获取你的昵称、头像、地区及性别",
         success: (res) => {
           console.log(res);
-          console.log(1);
+          let { avatarUrl, nickName } = res.userInfo;
+          this.isShowAuthHeader = false;
+          localStorage.set({
+            [SK.NICK_NAME]: nickName,
+            [SK.USER_IMAGE]: avatarUrl,
+          });
         },
         fail: (res) => {
           console.log(2);
@@ -100,40 +111,34 @@ export default {
 
     //手机号授权
     getPhoneNumber: function (e) {
+      let nickName = localStorage.get([SK.NICK_NAME]) || "",
+        image = localStorage.get([SK.USER_IMAGE]);
       let { errMsg, encryptedData = "", iv = "" } = e.detail,
         params = {
           code: _loginCode,
-          phonedata: encryptedData,
+          phoneData: encryptedData,
           iv: iv,
+          nickName,
+          image,
         };
-      if (app.globalData["inviteUid"]) params["inviteuid"] = app.globalData["inviteUid"];
       console.log("授权params>>>", params);
       if (errMsg == "getPhoneNumber:ok") {
-        Resource.addMobile
-          .post({ type: "addMobile" }, params)
+        Resource.open
+          .post({ type: "auth" }, params)
           .then((res) => {
             if (res.code == 1) {
               ToastInfo("授权成功"); // 更新标识符
-              let {
-                token,
-                nickname,
-                image,
-                uid = "",
-                hasmobile,
-                uservipinfo = {},
-              } = res.data;
+              let { token, nickName, image, phone } = res.data;
               if (res.data) {
                 localStorage.set({
                   [SK.TOKEN]: token,
-                  [SK.NICK_NAME]: nickname,
+                  [SK.HAS_MOBILE]: phone ? 1 : 0,
+                  [SK.NICK_NAME]: nickName,
                   [SK.USER_IMAGE]: image,
-                  [SK.HAS_MOBILE]: hasmobile ? 1 : 0,
-                  [SK.USER_UID]: uid,
-                  [SK.USER_VIP_INFO]: JSON.stringify(uservipinfo),
+                  [SK.USER_PHONE]: phone,
                 });
               }
               this.reject("success");
-              this.getCarCount(); // 授权成功 更新购物车数量
             } else {
               ToastInfo((res && res.msg) || res.message);
               setTimeout(() => this.reject(), 1000);

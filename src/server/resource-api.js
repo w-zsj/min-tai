@@ -2,7 +2,7 @@
  * @Author: zhangsanjun 
  * @Date: 2022-07-25 11:01:10 
  * @Last Modified by: zhangsanjun
- * @Last Modified time: 2022-07-30 16:28:16
+ * @Last Modified time: 2022-07-31 22:27:09
  */
 
 import {
@@ -12,15 +12,16 @@ import {
   SERVER
 } from '../utils/constant.js'; 
 const API_HOST = SERVER
-const SERVICE_NAME = `/api`;
+const SERVICE_NAME = ``;
+console.log('API_HOST',API_HOST)
 export const Resource = {
-  // token获取
-  token: HttpResource(`${API_HOST}${SERVICE_NAME}/account/open/:type`),
-  //获取手机号/api/account/userInfo/addMobile
-  addMobile: HttpResource(`${API_HOST}${SERVICE_NAME}/account/userInfo/:type`),
+  // open
+  open: HttpResource(`${API_HOST}/open/:type`),
   //上传图片
-  uploadImage: HttpResource(`${API_HOST}${SERVICE_NAME}/file/oss/upload`),
+  uploadImage: HttpResource(`${API_HOST}/file/oss/upload`),
   // 分类
-  classifyList: HttpResource(`${API_HOST}${SERVICE_NAME}/mall-portal/productClassify/:type`),
+  classifyList: HttpResource(`${API_HOST}/productClassify/:type`),
+  // 首页
+  home: HttpResource(`${API_HOST}/home/:type`),
 
 };

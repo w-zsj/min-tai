@@ -15,7 +15,7 @@
         <view class="product-price">
           <text class="mark-price">
             <text class="txt">市场价:</text><text class="rb">￥</text>88
-          </text >
+          </text>
           <text class="origin-price">￥888</text>
         </view>
         <view class="sale-count">已售3700件</view>
@@ -51,7 +51,7 @@ export default {};
     padding-right: 32rpx;
     font-size: 28rpx;
     color: #272727;
-    .get-product-date{
+    .get-product-date {
       margin: 20rpx 0;
       color: #333;
     }
@@ -77,8 +77,8 @@ export default {};
           color: #a7002d;
         }
       }
-      .origin-price{
-        text-decoration:line-through
+      .origin-price {
+        text-decoration: line-through;
       }
       .rb {
         font-size: 28rpx;
@@ -100,6 +100,11 @@ export default {};
     font-family: PingFangSC-Medium, PingFang SC;
     font-weight: 500;
     color: #ffffff;
+  }
+  .ellip {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 }
 </style>

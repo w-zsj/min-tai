@@ -1,5 +1,6 @@
 <script>
 import { CheckVersion, localStorage, login } from "./utils/extend";
+import { SK } from "./utils/constant";
 const app = getApp();
 export default {
   onLaunch: function () {

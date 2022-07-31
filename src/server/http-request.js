@@ -2,10 +2,10 @@
  * @Author: zhangsanjun 
  * @Date: 2022-07-25 17:27:23 
  * @Last Modified by: zhangsanjun
- * @Last Modified time: 2022-07-25 17:33:09
+ * @Last Modified time: 2022-07-31 23:03:38
  */
 
-import { ToastInfo } from '@/utils/util';
+import { ToastInfo } from '@/utils/util.js';
 import { localStorage } from '@/utils/extend';
 import { reqConfig } from '@/utils/constant.js'
 import { sign } from '@/utils/sign'
@@ -136,7 +136,7 @@ class HttpRequset {
             data = {
                 ...bodyParams,
                 timestamp,
-                sign: sign({ ...bodyParams, timestamp }, reqConfig.key)
+                sign: sign({ ...bodyParams, timestamp })
             }
         }
         return fetchMethod(matchUrlSearchParams(this.url, urlSearchParams), {
@@ -146,7 +146,7 @@ class HttpRequset {
             ...config
         })
             .then((res) => {
-                if (res.code == 100003) sign(data, reqConfig.key, 1)
+                if (res.code == 100003) sign(data, 1)
                 return res
             })
             .catch((err) => {

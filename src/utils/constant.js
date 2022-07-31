@@ -1,7 +1,7 @@
 
 const IS_TEST = process.env.NODE_ENV == 'development';
 const SERVER_PRD = 'https://api.9jinhuan.com';
-const SERVER_TEST = 'http://testapi.taihail.com/porta/';
+const SERVER_TEST = 'http://testapi.taihail.com/portal';
 /*
  * SK:storage key
  * 本地存储键名
@@ -15,6 +15,7 @@ const SK = {
     LOGS: IS_TEST ? 'test_logs' : 'logs',
     USER_INFO: IS_TEST ? 'test_userInfo' : 'userInfo',
     REGECT_LOGIN_PHONEE: IS_TEST ? 'test_regectLoginPhone' : 'regectLoginPhone',
+    USER_PHONE: IS_TEST ? 'test_phone' : 'phone', // 手机号是否存在
     HAS_MOBILE: IS_TEST ? 'test_hasmobile' : 'hasmobile', // 手机号是否存在
     SEARCH_HISTORY: IS_TEST ? 'test_history' : 'history', // 搜索历史
 };

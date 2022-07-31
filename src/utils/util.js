@@ -353,7 +353,7 @@ function bannerTap(e) {
   }
 };
 
-module.exports = {
+export  {
   formatTime,
   ToastInfo,
   debounce,

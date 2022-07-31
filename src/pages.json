@@ -26,6 +26,12 @@
 				"navigationBarTextStyle": "white",
 				"navigationBarBackgroundColor": "#a7002d"
 			}
+		},
+		{
+			"path": "pages/search-history/index",
+			"style": {
+				"navigationBarTitleText": "搜索"
+			}
 		}
 	],
 	"tabBar": {

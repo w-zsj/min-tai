@@ -106,7 +106,7 @@ const $to = debounce((path, routeType = 'navigate', isneedrec = false) => {
  */
 
 class Storage {
-	static _pre = 'jiujinhuan_';
+	static _pre = 'taihaile_';
 
 	set(key, val = '', isneedpre = true) {
 		if (key instanceof Object) {

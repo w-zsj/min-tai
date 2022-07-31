@@ -1,7 +1,7 @@
 <template>
   <view class="home">
     <!-- 搜索 -->
-    <serachInput></serachInput>
+    <serachInput :goto='goto'></serachInput>
     <!-- 轮播 -->
     <mySwiper :bannerList="bannerList" :bannerTap="bannerTap"></mySwiper>
     <!-- 金刚位 -->
@@ -72,6 +72,9 @@ export default {
         this.isShowLoginHint = false;
       }
     },
+    goto(){
+      this.$to('search-history/index')
+    }
   },
   /**
    * 用户点击右上角分享

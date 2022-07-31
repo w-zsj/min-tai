@@ -3,20 +3,19 @@
     <view v-if="isShowAuthPhone" class="authority-phone-mask"></view>
     <view class="authority-phone-modal" v-if="isShowAuthPhone">
       <view class="authority-context">
-        <view class="authority-title">微信授权</view>
+        <view class="authority-title">授权头像、昵称</view>
         <view class="authority-rectangle">
-          <image
-            src="https://file.9jinhuan.com/wine/wechat/rectangle.png"
-            class="rectangle-image img"
-          ></image>
+          <image src="/static/images/logo.png" class="rectangle-image img"></image>
         </view>
-        <view class="authority-success-text">微信授权成功</view>
-        <view class="authority-phone">授权绑定你的手机号码</view>
+       
+        <view class="authority-phone"></view>
         <view class="authority-btns">
-          <button class="btn" @click.stop="reject" v-if="isShowReject">拒绝</button>
+          <button class="btn" @click.stop="reject" v-if="isShowReject">取消</button>
           <button class="btn" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">
-            允许
+            确认
           </button>
+          <!-- 头像 -->
+          <!-- <button class="btn" @click="wechatLogin">确认</button> -->
         </view>
       </view>
     </view>
@@ -60,6 +59,9 @@ export default {
       default: true,
     },
   },
+  onShow() {
+    this.wechatLogin();
+  },
   // 生命周期函数，可以为函数，或一个在methods段中定义的方法名
   beforeMount: function () {
     // #ifndef H5
@@ -80,6 +82,22 @@ export default {
         detail: e == "success" ? "success" : false,
       });
     },
+    // 用户昵称
+    wechatLogin() {
+      // 获取用户信息
+      uni.getUserProfile({
+        desc: "获取你的昵称、头像、地区及性别",
+        success: (res) => {
+          console.log(res);
+          console.log(1);
+        },
+        fail: (res) => {
+          console.log(2);
+          console.log(res);
+        },
+      });
+    },
+
     //手机号授权
     getPhoneNumber: function (e) {
       let { errMsg, encryptedData = "", iv = "" } = e.detail,
@@ -89,7 +107,7 @@ export default {
           iv: iv,
         };
       if (app.globalData["inviteUid"]) params["inviteuid"] = app.globalData["inviteUid"];
-      console.log('授权params>>>',params)
+      console.log("授权params>>>", params);
       if (errMsg == "getPhoneNumber:ok") {
         Resource.addMobile
           .post({ type: "addMobile" }, params)

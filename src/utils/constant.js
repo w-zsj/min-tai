@@ -16,8 +16,7 @@ const SK = {
     USER_INFO: IS_TEST ? 'test_userInfo' : 'userInfo',
     REGECT_LOGIN_PHONEE: IS_TEST ? 'test_regectLoginPhone' : 'regectLoginPhone',
     HAS_MOBILE: IS_TEST ? 'test_hasmobile' : 'hasmobile', // 手机号是否存在
-    USER_VIP_INFO: IS_TEST ? 'test_uservipinfo' : 'uservipinfo',
-    COUPON_INTEGRAL_ORDER_SN: IS_TEST ? 'test_couponIntegralOrderSn' : 'couponIntegralOrderSn',
+    SEARCH_HISTORY: IS_TEST ? 'test_history' : 'history', // 搜索历史
 };
 const reqConfig = {
     IS_TEST,

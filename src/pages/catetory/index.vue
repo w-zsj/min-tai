@@ -1,6 +1,5 @@
 <template>
   <view class="category">
-    <ls-skeleton ref="skeleton" :show="loadding"></ls-skeleton>
     <!-- 正文 -->
     <view class="content flex-aic" :style="'height:' + contentHeight">
       <!-- 一级类目 -->
@@ -197,7 +196,7 @@ export default {
       skuEventParams: null,
       item: {},
       scrollTop: -1,
-      loadding: true,
+
       isEnd: false,
       total: 0,
       pageNum: 1,
@@ -298,7 +297,6 @@ export default {
       Resource.classifyList.post({ type: "classifyList" }, {}).then((res) => {
         this.list = res?.data || [];
         // 渲染骨架屏异步数据
-        this.$refs.skeleton.draws();
         if (res.code == 1) {
           if (res?.data?.length) {
             if (oneCateIndex >= res.data.length) {
@@ -373,7 +371,6 @@ export default {
               total: data.total,
             });
             // 渲染骨架屏异步数据
-            _.$refs.skeleton.draws();
             _.$nextTick(function () {
               _.scrollTop = 0;
               const query = uni.createSelectorQuery().in(_);
@@ -388,8 +385,6 @@ export default {
         })
         .finally(() => {
           uni.hideLoading();
-          // 加载完成,取消骨架屏
-          setTimeout(() => (_.loadding = false), 500);
         });
     },
     customevent: debounce(

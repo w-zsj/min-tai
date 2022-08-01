@@ -101,10 +101,11 @@ export default {
             [SK.NICK_NAME]: nickName,
             [SK.USER_IMAGE]: avatarUrl,
           });
+          ToastInfo('已授权头像请继续授权手机号')
         },
         fail: (res) => {
-          console.log(2);
           console.log(res);
+          this.isShowAuthHeader = false;
         },
       });
     },

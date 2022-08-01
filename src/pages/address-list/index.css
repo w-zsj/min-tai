@@ -1,0 +1,122 @@
+.empty {
+    margin: 270rpx auto 266rpx;
+}
+
+.empty image {
+    width: 332rpx;
+    height: 332rpx;
+}
+
+.empty .txt {
+    font-size: 44rpx;
+    font-weight: 600;
+    color: #272727;
+    padding-top: 64rpx;
+}
+
+.del image {
+    width: 82rpx ;
+    height: 82rpx;
+    margin-bottom: 20rpx;
+}
+.font28 {
+    font-size: 28rpx;
+}
+.list{
+    min-height: 270rpx;
+}
+.address-container {
+    padding: 32rpx;
+    padding-bottom: 98rpx;
+    background: #faf7f7;
+    min-height: 100vh;
+}
+
+.address-container.Inipx {
+    padding-bottom: 166rpx;
+}
+
+.address-container.white {
+    background: #fff;
+}
+
+.cont {
+    padding: 32rpx;
+    padding-bottom: 0;
+    background: #fff;
+    border-radius: 12rpx;
+    overflow: hidden;
+}
+
+.cont .ellip {
+    display: inline-block;
+    max-width: 160rpx;
+    margin-right: 16rpx;
+}
+
+.cont .name {
+    font-weight: 500;
+    color: #272727;
+    font-size: 32rpx;
+    margin-bottom: 10rpx;
+    align-items: center;
+}
+
+.name .font28 {
+    font-size: 28rpx;
+    color: #807b7b;
+    font-weight: 400;
+}
+
+.addr {
+    font-size: 28rpx;
+    font-weight: 400;
+    color: #272727;
+    line-height: 40rpx;
+    padding-bottom: 32rpx;
+    /* border-bottom: 1px solid #E4E2E2; */
+    white-space: normal;
+}
+.addr.line::after {
+    top: auto;
+    bottom: 0;
+}
+.default {
+    padding: 32rpx 0;
+}
+
+.default image {
+    width: 48rpx;
+    height: 48rpx;
+    margin-right: 6px;
+}
+
+.default .selsct image {
+    width: 30rpx;
+    height: 30rpx;
+}
+
+.app-btn {
+    width: 686rpx;
+    margin: 0 auto;
+    font-weight: 400;
+}
+
+.fixed,
+.fixed.line {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 16rpx 32rpx;
+    background: #fff;
+    z-index: 10;
+    /* border-top: 1px solid #E4E2E2; */
+}
+.line::after {
+    bottom: auto;
+    top: 0;
+}
+.fixed.Inipx {
+    padding-bottom: 84rpx;
+}

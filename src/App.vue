@@ -4,10 +4,33 @@ import { SK } from "./utils/constant";
 const app = getApp();
 export default {
   onLaunch: function () {
+    let self = this;
     try {
       CheckVersion();
       login({}, this.$isResolve);
       this.globalData.isRestart = true;
+      // 获取系统消息
+      uni.getSystemInfo({
+        success(res) {
+          const { statusBarHeight, windowWidth } = res; // 得到右上角菜单的位置尺寸
+          // #ifdef MP-WEIXIN ||MP-ALIPAY
+          const menuButtonObject = uni.getMenuButtonBoundingClientRect();
+          const { top, height, left } = menuButtonObject; // 计算导航栏的高度
+          // 此高度基于右上角菜单在导航栏位置垂直居中计算得到
+          const navBarHeight = height + (top - statusBarHeight) * 2;
+          self.globalData.statusBarHeight = statusBarHeight;
+          self.globalData.navBarHeight = navBarHeight;
+          self.globalData.menuButtonLeft = windowWidth - left; //小程序胶囊左边界坐标(相对于右上角)
+          // #endif
+
+          self.globalData["deviceInfo"] = res.deviceId;
+          self.globalData["sys"] = res;
+          self.globalData["Inipx"] = !!(
+            res.platform == "ios" || res.platform == "devtools"
+          );
+        },
+        fail(res) {},
+      });
     } catch (e) {}
   },
   onShow: function () {

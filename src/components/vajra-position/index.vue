@@ -3,9 +3,7 @@
     <view class="list" v-for="(item, idx) in list" :key="idx">
       <view class="item">
         <view class="pic flex-ctr">
-          <image
-            src="https://img0.baidu.com/it/u=1554123735,539862863&fm=253&fmt=auto&app=120&f=JPEG?w=1080&h=717"
-          />
+          <image :src="item.icon" />
         </view>
         <view class="name">{{ item.name }}</view>
       </view>

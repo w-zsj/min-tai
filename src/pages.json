@@ -86,6 +86,12 @@
 			"style": {
 				"navigationBarTitleText": "支付凭证"
 			}
+		},
+		{
+			"path": "pages/webview/index",
+			"style": {
+				"navigationBarTitleText": "泰嗨乐"
+			}
 		}
 		
 		

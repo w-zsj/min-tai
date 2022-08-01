@@ -1,31 +1,69 @@
 <template>
   <view class="product-unit">
     <view class="pic flex-ctr">
-      <image
-        src="http://www.youtaidu.com/uploads/down/20210529094352103.jpg"
-        mode="widthFix"
-      />
+      <image :src="item.pic" mode="widthFix" />
     </view>
     <view class="flex-aic-btwn">
       <view class="product-info">
         <view class="product-name ellip">
-          火锅店缸发动机身高多少估计合计过火锅店缸发动机身高多少估计合计过
+          {{ item.name }}
         </view>
-        <view class="get-product-date">提货时间8月21日</view>
+        <!-- <view class="get-product-date">提货时间8月21日</view> -->
         <view class="product-price">
           <text class="mark-price">
-            <text class="txt">市场价:</text><text class="rb">฿</text>88
+            <text class="txt">市场价:</text><text class="rb">฿</text>{{ item.price }}
           </text>
-          <text class="origin-price">฿888</text>
+          <!-- <text class="origin-price">฿888</text> -->
         </view>
-        <view class="sale-count">已售3700件</view>
+        <view class="sale-count">已售{{ item.sale }}件</view>
       </view>
-      <view class="add-car flex-ctr">加入购物车</view>
+      <view class="add-car flex-ctr" @click="selectSku">加入购物车</view>
     </view>
+    <!-- 加入购物车 -->
+    <sku-modal
+      v-if="selectSkuModalShow"
+      :productId="item.id"
+      source="catetory"
+      @close="selectSkuModalShow = false"
+    >
+    </sku-modal>
+    <!-- 授权手机号 -->
+    <authority-phone-modal
+      @closemodal="isShowAuthPhone = false"
+      :isShowAuthPhone="isShowAuthPhone"
+    ></authority-phone-modal>
   </view>
 </template>
 <script>
-export default {};
+import skuModal from "@/components/sku-modal/index.vue";
+import { debounce } from "@/utils/util.js";
+const app = getApp();
+export default {
+  components: { skuModal },
+  props: {
+    item: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+  data() {
+    return {
+      selectSkuModalShow: false,
+      isShowAuthPhone: false,
+    };
+  },
+  methods: {
+    selectSku: debounce(
+      function (e) {
+        if (!!app.globalData.hasmobile()) {
+          this.selectSkuModalShow = true;
+        } else this.isShowAuthPhone = true;
+      },
+      500,
+      true
+    ),
+  },
+};
 </script>
 <style scoped lang="scss">
 .product-unit {

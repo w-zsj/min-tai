@@ -21,7 +21,7 @@
               v-else
               class="cover-image"
               :class="source == 'gg' ? 'gg' : ''"
-              src="http://www.youtaidu.com/uploads/down/20210529094352103.jpg"
+              :src="item.pic"
             ></image
           ></swiper-item>
         </block>

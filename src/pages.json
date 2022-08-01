@@ -34,6 +34,12 @@
 			}
 		},
 		{
+			"path": "pages/search-result/index",
+			"style": {
+				"navigationBarTitleText": "搜索结果"
+			}
+		},
+		{
 			"path": "pages/goods-detail/index",
 			"style": {
 				"navigationBarTitleText": "商品详情"
@@ -67,6 +73,18 @@
 			"path": "pages/order-detail/index",
 			"style": {
 				"navigationBarTitleText": "订单详情"
+			}
+		},
+		{
+			"path": "pages/account-management/index",
+			"style": {
+				"navigationBarTitleText": "账户管理"
+			}
+		},
+		{
+			"path": "pages/payment-voucher/index",
+			"style": {
+				"navigationBarTitleText": "支付凭证"
 			}
 		}
 		

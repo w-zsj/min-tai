@@ -3,7 +3,9 @@
     <!-- 搜索 -->
     <serachInput :goto="goto"></serachInput>
     <!-- 轮播 -->
-    <mySwiper :bannerList="bannerList" :bannerTap="bannerTap"></mySwiper>
+    <view style="margin-bottom: 20rpx">
+      <mySwiper :bannerList="bannerList" :bannerTap="bannerTap"></mySwiper>
+    </view>
     <!-- 金刚位 -->
     <mySwiper :bannerList="catetoryList" :bannerTap="bannerTap" source="gg"></mySwiper>
     <!-- 商品列表 -->
@@ -32,6 +34,7 @@
 </template>
 
 <script>
+import { Resource } from "@/server/resource-api";
 import productUnit from "@comps/product-unit/index.vue";
 import mySwiper from "@comps/my-swiper/index.vue";
 import serachInput from "@comps/serach-input/index.vue";
@@ -41,20 +44,18 @@ export default {
   data() {
     return {
       bannerList: new Array(6),
-      catetoryList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+      catetoryList: [],
       isShowAuthPhone: false,
       isShowLoginHint: true,
     };
   },
   async onLoad() {
-   
     await this.$onLaunched;
-     var result = [];
-    for (var i = 0; i < this.catetoryList.length; i += 10) {
-      result.push(this.catetoryList.slice(i, i + 10));
-    }
-    this.catetoryList = result
     if (!app.globalData.hasmobile()) this.isShowLoginHint = false;
+    // 获取分类
+    this.getClassifyList();
+    // 获取banner
+    this.getHomeBannerList();
   },
   // 上拉加载
   onReachBottom: function () {},
@@ -82,6 +83,30 @@ export default {
     },
     goto() {
       this.$to("search-history/index");
+    },
+    getHomeBannerList() {
+      Resource.open
+        .post({ type: "home/getHomePageAdvertiseList" }, { type: 1 })
+        .then((res) => {
+          if (res.code == 1) {
+            if (res?.data?.length) {
+            }
+          }
+        });
+    },
+    getClassifyList() {
+      Resource.classifyList.post({ type: "classifyList" }, {}).then((res) => {
+        // 渲染骨架屏异步数据
+        if (res.code == 1) {
+          if (res?.data?.length) {
+            var result = [];
+            for (var i = 0; i < res?.data.length; i += 10) {
+              result.push(res?.data.slice(i, i + 10));
+            }
+            this.catetoryList = result;
+          }
+        }
+      });
     },
   },
   /**

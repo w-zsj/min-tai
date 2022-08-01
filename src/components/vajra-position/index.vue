@@ -7,7 +7,7 @@
             src="https://img0.baidu.com/it/u=1554123735,539862863&fm=253&fmt=auto&app=120&f=JPEG?w=1080&h=717"
           />
         </view>
-        <view class="name">蔬菜</view>
+        <view class="name">{{ item.name }}</view>
       </view>
     </view>
   </view>
@@ -27,9 +27,9 @@ export default {
 </script>
 <style scoped lang="scss">
 .vajra-position {
-//   border-top: 32rpx solid #f6f6f6;
+  //   border-top: 32rpx solid #f6f6f6;
   background: #fff;
-  padding: 20rpx  28rpx 0 28rpx;
+  padding: 20rpx 28rpx 0 28rpx;
   margin-bottom: 20rpx;
   border-radius: 16rpx;
   margin-top: 20rpx;

@@ -5,9 +5,9 @@ const app = getApp();
 export default {
   onLaunch: function () {
     let self = this;
+    login({}, this.$isResolve);
     try {
       CheckVersion();
-      login({}, this.$isResolve);
       this.globalData.isRestart = true;
       // 获取系统消息
       uni.getSystemInfo({

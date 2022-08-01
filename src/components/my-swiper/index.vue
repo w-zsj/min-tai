@@ -8,7 +8,7 @@
         :autoplay="source == 'gg' ? false : autoplay"
         :interval="interval"
         :duration="duration"
-        :circular="circular"
+        :circular="source == 'gg' ? false : circular"
         class="first-swiper"
         @change="firstSwiperChange"
       >
@@ -138,6 +138,7 @@ export default {
 swiper-item {
   border-radius: 16rpx;
   overflow: hidden;
+  background: #ffffff;
 }
 .cover-image {
   width: 100%;

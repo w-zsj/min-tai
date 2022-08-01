@@ -82,6 +82,7 @@ export default {};
       }
       .rb {
         font-size: 28rpx;
+        padding-right: 8rpx;
       }
     }
     .sale-count {

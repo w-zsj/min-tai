@@ -218,111 +218,6 @@ function selectElement(node, all = false, _) {
   });
 }
 
-function createCountDown() {
-  let t = null;
-  let queue = [];
-  return {
-    on(cb) {
-      if (!t) {
-        t = setInterval(() => {
-          // console.log('倒计时----000000')
-          queue.forEach((q) => q());
-        }, 1000);
-      }
-      queue.push(cb);
-    },
-
-    off(cb) {
-      // console.log('ttttt00000');
-      const i = queue.indexOf(cb);
-      queue.splice(i, 1);
-      if (queue.length == 0) {
-        // console.log('00000000')
-        clearInterval(t);
-        t = null;
-      }
-    },
-
-    clear() {
-      queue = [];
-      clearInterval(t);
-      t = null;
-    }
-  };
-} // 倒计时
-
-let countDownTimer = null;
-
-function countDown(options) {
-  if (!countDownTimer) {
-    countDownTimer = createCountDown();
-  }
-
-  const app = getApp();
-  let endtime = options.end_time; // 结束时间戳
-  if (endtime <= 0) {
-    return;
-  }
-  const down = () => {
-    if (endtime < -1000) {
-      console.log(endtime, 'down========util')
-      setTimeout(() => {
-        if (options.callback) {
-          options.callback();
-        }
-      }, 0);
-      return;
-    }
-
-    let day_ms = 24 * 60 * 60 * 1000;
-    let hour_ms = 60 * 60 * 1000;
-    let min_ms = 60 * 1000;
-    let ss_ms = 1 * 1000;
-    let day = Math.floor(endtime / day_ms); //天数
-
-    let hour = Math.floor((endtime % day_ms) / hour_ms); //小时数
-
-    let minutes = Math.floor((endtime % hour_ms) / min_ms); // 分钟数
-
-    let seconds = Math.floor((endtime % min_ms) / ss_ms); // 秒数
-
-    if (hour < 10) {
-      hour = '0' + hour;
-    }
-
-    if (seconds < 10) {
-      seconds = '0' + seconds;
-    }
-
-    if (minutes < 10) {
-      minutes = '0' + minutes;
-    }
-
-    // endtime -= 1000;
-
-    const sheng = {
-      day,
-      hour,
-      minutes,
-      seconds
-    };
-    options.success({
-      sheng: sheng,
-      index: options.index,
-      endtime: endtime
-    });
-    // index:如果是列表，则为列表下标
-    endtime -= 1000;
-  };
-
-  down();
-  countDownTimer.on(down);
-  app.globalData.countDownTimer = countDownTimer; // 存定时器
-
-  return () => {
-    countDownTimer.off(down);
-  };
-};
 // 轮播图点击
 function bannerTap(e) {
   console.log(e);
@@ -361,6 +256,5 @@ export  {
   openMiniProgramPay,
   _clone,
   selectElement,
-  countDown,
   bannerTap
 };

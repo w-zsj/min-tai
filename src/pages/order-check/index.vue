@@ -40,7 +40,7 @@
                   <view class="section-detail-amount">
                     <!-- 正常显示价格 -->
                     <view v-if="item.realAmount > 0 || item.price > 0">
-                      ￥{{ item.realAmount || item.price }}
+                      ฿{{ item.realAmount || item.price }}
                     </view>
                   </view>
                   <view class="section-detail-num">x{{ item.quantity }}</view>
@@ -70,7 +70,7 @@
           <view class="section-item-right section-total-amount">
             <!-- 普通商品 价格 -->
             <text v-if="totalAmount > 0 || payAmount > 0"
-              >￥{{ totalAmount || payAmount }}
+              >฿{{ totalAmount || payAmount }}
             </text>
           </view>
         </view>
@@ -80,7 +80,7 @@
           共{{ productCount }}件, 合计
           <view class="bottom-detail-amount">
             <text>
-              <text class="bottom-detail-amount-bigger">￥</text>
+              <text class="bottom-detail-amount-bigger">฿</text>
               <text class="bottom-detail-amount-bigger"> {{payAmount}} </text>
             </text>
           </view>

@@ -1,0 +1,34 @@
+.order-list {
+    background: #f6f6f6;
+    min-height: 100vh;
+    .nav {
+        .list {
+            height: 124rpx;
+            font-size: 28rpx;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #272727;
+            line-height: 40rpx;
+            &.act {
+                color: #a7002d;
+            }
+        }
+    }
+    .product-list{
+        padding:0 32rpx 32rpx 32rpx;
+        .loop{
+            background: #fff;
+            padding: 32rpx;
+            border-radius: 8rpx;
+            margin-bottom: 32rpx;
+        }
+    }
+    .loading {
+        text-align: center;
+        color: #ccc9c9;
+        font-size: 24rpx;
+        // padding-bottom: 48rpx;
+        padding-bottom: constant(safe-area-inset-bottom);  /* 兼容 iOS < 11.2 */
+        padding-bottom: env(safe-area-inset-bottom);  /* 兼容 iOS >= 11.2 */
+      }
+}

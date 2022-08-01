@@ -110,7 +110,7 @@
 }
 
 .product-sale-price::before {
-	content: '￥';
+	content: '฿';
 }
 
 /* .recommend-score image {
@@ -133,7 +133,7 @@
 }
 
 .vip-price-number::before {
-	content: '￥';
+	content: '฿';
 	font-size: 24rpx;
 }
 

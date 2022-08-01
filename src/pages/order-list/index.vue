@@ -1,0 +1,27 @@
+<template>
+  <view class="order-list">
+    <!-- 菜单 -->
+    <view class="nav flex-aic-ard">
+      <view
+        class="list flex-ctr"
+        :class="curIdx == idx ? 'act' : ''"
+        v-for="(item, idx) in statusOptions"
+        :key="idx"
+        @click.stop="selectTab(item, idx)"
+      >
+        <text>{{ item.label }}</text>
+      </view>
+    </view>
+    <!-- 列表 -->
+    <view class="product-list">
+      <view class="loop" v-for="(item, idx) in list" :key="idx">
+        <unit :item='item' :index='idx'></unit>
+      </view>
+    </view>
+     <view class="loading" v-if="!loadAll && list.length">已加载全部</view>
+  </view>
+</template>
+<script src="./index.js"></script>
+<style scoped lang="scss">
+@import "./index.scss";
+</style>

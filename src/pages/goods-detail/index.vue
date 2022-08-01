@@ -25,7 +25,7 @@
                   class="price-onsale"
                   v-if="detail.originalPrice && detail.originalPrice != 'null'"
                 >
-                  ￥{{ detail.originalPrice }}
+                  ฿{{ detail.originalPrice }}
                 </text>
               </block>
             </view>

@@ -14,9 +14,9 @@
         <view class="get-product-date">提货时间8月21日</view>
         <view class="product-price">
           <text class="mark-price">
-            <text class="txt">市场价:</text><text class="rb">￥</text>88
+            <text class="txt">市场价:</text><text class="rb">฿</text>88
           </text>
-          <text class="origin-price">￥888</text>
+          <text class="origin-price">฿888</text>
         </view>
         <view class="sale-count">已售3700件</view>
       </view>

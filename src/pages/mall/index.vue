@@ -11,6 +11,18 @@
         </view>
       </sidesLip>
     </view>
+    <view class="bottom line">
+      <view class="bottom-detail flex-aic">
+        共{{ productCount }}件, 合计
+        <view class="bottom-detail-amount">
+          <text>
+            <text class="bottom-detail-amount-bigger">฿</text>
+            <text class="bottom-detail-amount-bigger">222 </text>
+          </text>
+        </view>
+      </view>
+      <view class="bottom-btn" @click="handleOrder"> 下单 </view>
+    </view>
   </view>
 </template>
 <script>
@@ -29,7 +41,7 @@ export default {
     },
     // 删除
     delItem(data) {
-       console.log("删除商品");
+      console.log("删除商品");
     },
   },
 };

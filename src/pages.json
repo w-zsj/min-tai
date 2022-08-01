@@ -56,6 +56,18 @@
 			"style": {
 				"navigationBarTitleText": "添加收货地址"
 			}
+		},
+		{
+			"path": "pages/order-list/index",
+			"style": {
+				"navigationBarTitleText": "订单列表"
+			}
+		},
+		{
+			"path": "pages/order-detail/index",
+			"style": {
+				"navigationBarTitleText": "订单详情"
+			}
 		}
 		
 		

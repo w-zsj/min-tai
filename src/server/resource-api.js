@@ -2,7 +2,7 @@
  * @Author: zhangsanjun 
  * @Date: 2022-07-25 11:01:10 
  * @Last Modified by: zhangsanjun
- * @Last Modified time: 2022-07-31 22:27:09
+ * @Last Modified time: 2022-08-01 10:53:34
  */
 
 import {
@@ -23,5 +23,7 @@ export const Resource = {
   classifyList: HttpResource(`${API_HOST}/productClassify/:type`),
   // 首页
   home: HttpResource(`${API_HOST}/home/:type`),
+    //商品
+    product: HttpResource(`${API_HOST}/product/:type`),
 
 };

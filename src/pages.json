@@ -32,7 +32,14 @@
 			"style": {
 				"navigationBarTitleText": "搜索"
 			}
+		},
+		{
+			"path": "pages/goods-detail/index",
+			"style": {
+				"navigationBarTitleText": "商品详情"
+			}
 		}
+		
 	],
 	"tabBar": {
 		"backgroundColor": "#FFFFFF",

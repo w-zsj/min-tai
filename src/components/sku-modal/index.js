@@ -61,23 +61,6 @@ export default {
     };
   },
   computed: {
-    // 按钮样式
-    className() {
-      let color = "",
-        { userStyle, selectBtnType, teamId, source, expand, modelType } = this;
-      if (userStyle === "A") {
-        if (selectBtnType == "addcar") color = "black-bg";
-        else color = "red-bg";
-      } else {
-        if (selectBtnType == "addcar") color = "red-bg";
-        else color = "black-bg";
-      }
-      // 参团按钮红色
-      if (teamId || source == "mall-edit-sku") color = color + " " + "red-bg";
-      // 积分按钮红色
-      if (expand.isIntegration && modelType.leftStock) color = color + " " + "red-bg";
-      return color;
-    },
     // 会员价格以及秒杀价显示判断
     showMemberSkuPricePrice() {
       let { isJoinGroup, selectBtnType, modelType } = this,
@@ -116,11 +99,12 @@ export default {
             if (data?.skuInfoList?.length) {
               // 积分sku时判断 全部sku 是否有库存
               allNotStock = !data?.skuInfoList.some((i) => i.leftStock);
-              _.setData({
+              Object.assign(_,{
                 info: data || {},
                 leftIntegrationCount: data.leftIntegrationCount, // 我的所有积分
                 allNotStock,
-              }, init);
+              })
+              init()
             }
           } else {
             ToastInfo(res.message || res.msg);
@@ -163,7 +147,7 @@ export default {
           if (!Array.isArray(item.spData)) item.spData = JSON.parse(item.spData);
         }
       });
-      _.setData({
+      Object.assign(_,{
         selectBtnType: type,
         teamPromotionCode,
         isJoinGroup,
@@ -228,7 +212,8 @@ export default {
         let a = itemKey.replace(reg, "");
         shopItemInfo[a] = item;
       });
-      _.setData({ shopItemInfo }, () => _.distachAttrValue(skuInfoList));
+      _.shopItemInfo = shopItemInfo;
+      _.distachAttrValue(skuInfoList)
     },
     /* 处理数据 */
     distachAttrValue: function (skuInfoList) {
@@ -317,9 +302,10 @@ export default {
           }
       }
       initFirstCheck();
-      _.setData({ modelType, modelTypeLists, selectArr, subIndex, },
-        () => _.subIndex.length && checkItem()
-      );
+      Object.assign(_, {
+        modelType, modelTypeLists, selectArr, subIndex,
+      })
+      _.subIndex.length && checkItem()
     },
     getAttrIndex: function (attrName, modelTypeLists) {
       // 判断数组中的key是否有该属性值
@@ -353,7 +339,9 @@ export default {
         selectArr[curIndexParent] = "";
         subIndex[curIndexParent] = -1; //去掉选中的颜色
       }
-      _.setData({ selectArr, subIndex }, _.checkItem);
+      _.selectArr = selectArr;
+      _.subIndex = subIndex;
+      _.checkItem();
     },
     //  根据已选择的sku 判断其他sku 是否可选择
     checkItem: function () {
@@ -401,12 +389,12 @@ export default {
         modelType.month = t[0].replace(/(?=\/)/, "#").split("#/")[1];
         modelType.hours = second[0] + ":" + second[1];
       }
-      _.setData({
+      Object.assign(_,{
         modelTypeLists: option,
         modelType,
         count: 1,
       });
-      console.log("已选择sku", this.selectArr, "modelType", this.modelType);
+      console.log("已选择sku", _.selectArr, "modelType", _.modelType);
     },
     /**
      * 处理页面需要展示的价格
@@ -525,7 +513,7 @@ export default {
     },
     // 重置数据
     skuModalClose() {
-      this.setData({
+      Object.assign(_,{
         modelTypeLists: [],
         selectArr: [],
         shopItemInfo: {},

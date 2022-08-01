@@ -77,7 +77,7 @@
       </view>
       <!-- 底部 -->
       <view :class="['buy-btn', 'flex-aic-btwn' , classNameStatus && 'disabled']">
-        <button :class="['group-car-btn','flex-ctr',className]" @click.stop="submit">
+        <button :class="['group-car-btn','flex-ctr',selectBtnType == 'buy'&&'red-bg']" @click.stop="submit">
           <!-- 积分活动 -->
           <view v-if="expand.isIntegration">
             <text class="txt" v-if="allNotStock">暂无库存</text>

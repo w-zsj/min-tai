@@ -1,5 +1,107 @@
 <template>
-  <view>订单详情</view>
+  <view>
+    <view class="main-wrapper">
+      <view class="header">
+        <view class="order-status">
+          <view>{{ orderStatus }}</view>
+        </view>
+        <view class="header-address">
+          <image
+            class="address-icon"
+            src="//file.9jinhuan.com/wine/wechat/choose_address.png"
+          />
+          <view class="address-detail">
+            <view class="address-detail-info">
+              <view class="address-detail-name">{{ address.name }}</view>
+              <view class="address-detail-phone">{{ address.phone }}</view>
+            </view>
+            <view class="address-detail-add">{{ address.add }}</view>
+          </view>
+        </view>
+      </view>
+      <view class="section">
+        <view class="section-title">商品信息</view>
+        <view>
+          <view class="section-list" v-for="item in productList" :key="item.id">
+            <view class="section-detail" :data-item="item" @click="checkGoodDetail">
+              <image class="section-detail-image" :src="item.productPic" />
+              <view class="section-detail-center flex-col-btwn">
+                <view class="section-detail-title">{{ item.productName }}</view>
+                <view class="section-detail-type">
+                  <text class="txt" v-for="item in item.productAttr" :key="item.key"
+                    >{{ item.key }}:{{ item.value }}</text
+                  >
+                </view>
+              </view>
+              <view class="section-detail-right flex-col-btwn">
+                <view>
+                  <view class="section-detail-amount">
+                    <!-- 普通商品价格 -->
+                    <view v-if="item.productPrice > 0"> ￥{{ item.productPrice }} </view>
+                  </view>
+                  <view class="section-detail-num">x{{ item.productQuantity }}</view>
+                </view>
+              </view>
+            </view>
+            <view class="line"></view>
+          </view>
+        </view>
+
+        <view class="section-item section-num">
+          <view class="section-item-title">商品总价</view>
+          <view class="section-item-right flex-aic">
+            <text v-if="totalAmount > 0">￥{{ totalAmount }}</text>
+          </view>
+        </view>
+        <view class="section-item section-deliver">
+          <view class="section-item-title">订单运费</view>
+          <view class="section-item-right">￥{{ freightAmount }}</view>
+        </view>
+
+        <view class="real-amount">
+          <text>共{{ productQuantity }}件, 实付款</text>
+          <text class="real-amount-num">￥{{ payAmount }}</text>
+        </view>
+      </view>
+
+      <view class="section">
+        <view class="section-title">订单信息</view>
+        <view class="section-item">
+          <view class="section-item-title">订单编号</view>
+          <view class="section-item-right">
+            {{ orderSn }}
+            <text
+              class="section-item-right-copy"
+              :data-ordersn="orderSn"
+              @click="copyOrderSn"
+              >复制</text
+            >
+          </view>
+        </view>
+        <view class="section-item">
+          <view class="section-item-title">下单时间</view>
+          <view class="section-item-right">{{ createTime }}</view>
+        </view>
+        <view class="section-item" v-if="paymentTime">
+          <view class="section-item-title">支付时间</view>
+          <view class="section-item-right">{{ paymentTime }}</view>
+        </view>
+        <view class="section-item" v-if="tradeNo">
+          <view class="section-item-title">交易单号</view>
+          <view class="section-item-right">{{ tradeNo }}</view>
+        </view>
+        <view class="section-item">
+          <view class="section-item-title">备注信息</view>
+          <view class="section-item-right">{{ note }}</view>
+        </view>
+      </view>
+
+      <view class="bottom line" :class="{ ipx: Inipx }" v-if="orderStatus === 0">
+        <!-- <view class="bottom-btn bottom-btn-left" @click="handleCancelOrder">不想买了</view> -->
+        <view class="bottom-btn" @click="handleOrder">立即支付 {{ payTimer }}</view>
+      </view>
+    </view>
+  </view>
 </template>
 <script src="./index.js"></script>
 <style scoped lang="scss">

@@ -3,7 +3,7 @@
     <view class="code">
       <view class="tit flex-ctr">{{ source == 1 ? "支付码" : "充值码" }}</view>
       <view class="pic flex-ctr">
-        <image class="img" show-menu-by-longpress src="" />
+        <!-- <image class="img" show-menu-by-longpress src="" /> -->
       </view>
     </view>
     <view class="desc flex-aic">

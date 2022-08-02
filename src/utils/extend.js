@@ -39,11 +39,10 @@ const $to = debounce((path, routeType = 'navigate', isneedrec = false) => {
 	let routes = getCurrentPages(),
 		data = {},
 		tabBars = [
-			'/pages/home/home',
+			'/pages/home/index',
 			'/pages/category/index',
-			'/pages/vip/members-rights/index',
-			'/pages/mall/mall',
-			'/pages/mine/mine'
+			'/pages/mall/index',
+			'/pages/mine/index'
 		],
 		isTab = false,
 		query = (path && path.split('?')) || []

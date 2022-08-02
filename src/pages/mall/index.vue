@@ -23,6 +23,11 @@
       </view>
       <view class="bottom-btn" @click="handleOrder"> 下单 </view>
     </view>
+    <!-- 授权手机号 -->
+    <authority-phone-modal
+      @closemodal="isShowAuthPhone = false"
+      :isShowAuthPhone="isShowAuthPhone"
+    ></authority-phone-modal>
   </view>
 </template>
 <script>
@@ -33,7 +38,14 @@ export default {
   data() {
     return {
       list: [{}, {}, {}],
+      isShowAuthPhone: false,
     };
+  },
+  onLoad() {},
+  onShow() {
+    this.checkHasMobile((isLoged) => {
+      this.isShowAuthPhone = isLoged;
+    });
   },
   methods: {
     changeSelect(item) {

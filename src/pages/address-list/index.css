@@ -3,8 +3,8 @@
 }
 
 .empty image {
-    width: 332rpx;
-    height: 332rpx;
+    width: 260rpx;
+    /* height: 300rpx; */
 }
 
 .empty .txt {

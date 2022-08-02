@@ -75,6 +75,7 @@ export default {
       name: "",
       phoneNumber: "",
       detailAddress: "",
+      addressId: "",
     };
   },
   /**
@@ -96,9 +97,7 @@ export default {
         phoneNumber: addr["phoneNumber"],
         defaultStatus: addr["defaultStatus"],
         detailAddress: addr["detailAddress"],
-        show: {
-          id: addr["id"],
-        },
+        addressId: addr["id"],
       });
     }
   },
@@ -118,11 +117,11 @@ export default {
           }
         }
       }
-    }, 300),
+    }, 10),
 
     // 保存数据
     save: debounce(function () {
-      let { show, detailAddress, name, phoneNumber, defaultStatus } = this,
+      let { addressId, detailAddress, name, phoneNumber, defaultStatus } = this,
         params = {
           detailAddress,
           name,
@@ -146,8 +145,8 @@ export default {
 
       let api = Resource.addAddress.post,
         type = { type: "add" };
-      if (show.id) {
-        params.id = show.id;
+      if (addressId) {
+        params.id = addressId;
         type.type = "update";
       }
 
@@ -155,7 +154,7 @@ export default {
         .then((res) => {
           if (res.code == 1) {
             ToastInfo("添加成功");
-            this.$to("address-list/index");
+            this.$to("address-list/index",'redirect');
           }
         })
         .catch((e) => {

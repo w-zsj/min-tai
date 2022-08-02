@@ -66,19 +66,19 @@ export default {
   },
   mounted() {
     let _ = this;
-    customCountDown(
-      { time: _.copyItem.time, type: "h" },
-      (d, T) => {
-        _.$set(_.copyItem, "date", d);
-        console.log(_.copyItem);
-        _.clearTimer = T;
-        clearTimeout(T);
-      },
-      (d) => {
-        console.log("d---", d == "end");
-        if (_.clearTimer) clearTimeout(_.clearTimer);
-      }
-    );
+    // customCountDown(
+    //   { time: _.copyItem.time, type: "h" },
+    //   (d, T) => {
+    //     _.$set(_.copyItem, "date", d);
+    //     console.log(_.copyItem);
+    //     _.clearTimer = T;
+    //     clearTimeout(T);
+    //   },
+    //   (d) => {
+    //     console.log("d---", d == "end");
+    //     if (_.clearTimer) clearTimeout(_.clearTimer);
+    //   }
+    // );
   },
 };
 </script>

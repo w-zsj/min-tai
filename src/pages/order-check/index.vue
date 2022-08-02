@@ -2,10 +2,7 @@
   <view>
     <view class="main-wrapper">
       <view class="header" @click="handleChooseAdd">
-        <image
-          class="address-icon"
-          src="/static/images/shipping_address_icon.png"
-        />
+        <image class="address-icon" src="/static/images/shipping_address_icon.png" />
         <view class="address-detail" v-if="address">
           <view class="address-detail-info">
             <view class="address-detail-name">{{ address.name }}</view>
@@ -16,10 +13,7 @@
           </view>
         </view>
         <view class="address-tip" v-else>请选择收货地址</view>
-        <image
-          class="address-arrow"
-          src="/static/images/arrow_gray_icon.png"
-        />
+        <image class="address-arrow" src="/static/images/arrow_gray_icon.png" />
       </view>
       <view class="section">
         <view class="section-title">商品信息</view>
@@ -81,7 +75,7 @@
           <view class="bottom-detail-amount">
             <text>
               <text class="bottom-detail-amount-bigger">฿</text>
-              <text class="bottom-detail-amount-bigger"> {{payAmount}} </text>
+              <text class="bottom-detail-amount-bigger"> {{ payAmount }} </text>
             </text>
           </view>
         </view>
@@ -104,6 +98,9 @@
         @input="inputs"
       />
     </Pop>
+    <!-- 确认订单 -->
+    <!-- Confirm Order -->
+    <confirmModal :address='address' @onClose='onClose' @confirmModal='onConfirmModal'></confirmModal>
   </view>
 </template>
 <script src="./index.js"></script>

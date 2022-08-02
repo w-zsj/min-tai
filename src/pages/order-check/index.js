@@ -2,17 +2,18 @@
  * @Author: zhangsanjun 
  * @Date: 2022-05-17 17:37:18 
  * @Last Modified by: zhangsanjun
- * @Last Modified time: 2022-08-01 13:24:46
+ * @Last Modified time: 2022-08-02 10:08:40
  */
 
 import Pop from "@/components/pop";
 import { ToastInfo, openMiniProgramPay, debounce } from "@/utils/util";
 import { localStorage } from "@/utils/extend";
 import { Resource } from "@/server/resource-api";
+import confirmModal from './comps/confirm-modal.vue'
 let app = getApp(), _;
 export default {
   components: {
-    Pop,
+    Pop,confirmModal
   },
   data() {
     _ = this;
@@ -111,6 +112,10 @@ export default {
         note: _.textAreaNote,
       });
     },
+    // 确认订单
+    onConfirmModal() { },
+    // 取消确认订单
+    onClose(){},
     initData: function () {
       Resource.addAddress
         .post({ type: "queryDefaultAddress" })

@@ -82,15 +82,21 @@
 			}
 		},
 		{
-			"path": "pages/payment-voucher/index",
-			"style": {
-				"navigationBarTitleText": "支付凭证"
-			}
-		},
-		{
 			"path": "pages/webview/index",
 			"style": {
 				"navigationBarTitleText": "泰嗨乐"
+			}
+		},
+		{
+			"path": "pages/pay/index",
+			"style": {
+				"navigationBarTitleText": "支付"
+			}
+		},
+		{
+			"path": "pages/payment-voucher/index",
+			"style": {
+				"navigationBarTitleText": "支付凭证"
 			}
 		}
 		

@@ -1,6 +1,6 @@
 <template>
   <view>
-    <web-view src="{{url}}" bindmessage="msgHandle" />
+    <web-view :src="url" />
   </view>
 </template>
 <script>

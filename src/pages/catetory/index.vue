@@ -121,6 +121,7 @@
             :class="isShowTwoCategory ? 'pad-top' : ''"
             v-if="prodList.length == 0"
           >
+            <image class="_img" src="/static/images/add-empty-icon.png" mode=""></image>
             <view class="txt">暂无商品</view>
           </view>
           <scroll-view

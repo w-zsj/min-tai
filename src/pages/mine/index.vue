@@ -56,6 +56,7 @@
     <!-- 授权手机号 -->
     <authority-phone-modal
       @closemodal="isShowAuthPhone = false"
+      :isShowReject="false"
       :isShowAuthPhone="isShowAuthPhone"
     ></authority-phone-modal>
   </view>
@@ -106,7 +107,7 @@ export default {
   },
   onShow() {
     this.checkHasMobile((isLoged) => {
-      this.isShowAuthPhone = isLoged;
+      this.isShowAuthPhone = !isLoged;
     });
   },
   methods: {

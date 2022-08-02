@@ -26,6 +26,7 @@
     <!-- 授权手机号 -->
     <authority-phone-modal
       @closemodal="isShowAuthPhone = false"
+      :isShowReject="false"
       :isShowAuthPhone="isShowAuthPhone"
     ></authority-phone-modal>
   </view>
@@ -33,23 +34,30 @@
 <script>
 import sidesLip from "@/components/sides-lip/index.vue";
 import unit from "./comps/unit.vue";
+let _;
 export default {
   components: { sidesLip, unit },
   data() {
+    _ = this;
     return {
-      list: [{}, {}, {}],
+      list: [{ id: 1 }, { id: 2 }, { id: 3 }],
       isShowAuthPhone: false,
     };
   },
   onLoad() {},
   onShow() {
     this.checkHasMobile((isLoged) => {
-      this.isShowAuthPhone = isLoged;
+      this.isShowAuthPhone = !isLoged;
     });
   },
   methods: {
     changeSelect(item) {
-      console.log("选择商品");
+      let list = JSON.parse(JSON.stringify(_.list));
+      console.log("选择商品", list);
+      for (let key in list) {
+        if (list[key].id == item.id) list[key].checked = !list[key].checked;
+      }
+      _.list = list;
     },
     // 删除
     delItem(data) {

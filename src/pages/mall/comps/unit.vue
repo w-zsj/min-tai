@@ -1,14 +1,18 @@
 <template>
   <view class="c-list flex-aic">
-    <view @click.stop="changeSelect(item)" style="height:100%;">
-      <view class="checkbox"></view>
+    <view @click.stop="changeSelect(item)" style="height: 100%">
+      <view class="checkbox" :class="item.checked ? 'act' : ''">
+        <image class="img" v-if="item.checked" src="/static/images/checked_icon.png" />
+      </view>
     </view>
     <view class="pic">
       <!-- <image src="" /> -->
     </view>
     <view class="base-info flex-col-btwn">
       <view>
-        <view class="name ellip">大华股份绝对是规范甲方大华股份绝对是规范甲方大华股份绝对是规范甲方</view>
+        <view class="name ellip">
+          大华股份绝对是规范甲方大华股份绝对是规范甲方大华股份绝对是规范甲方
+        </view>
         <view class="sku">规格22</view>
       </view>
       <view class="price"><text class="rb">฿</text>77777</view>
@@ -45,6 +49,14 @@ export default {
     border: 1px solid #807b7b;
     border-radius: 50%;
     margin-right: 32rpx;
+    &.act {
+      border: 0;
+      .img {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+    }
   }
   .pic {
     width: 154rpx;

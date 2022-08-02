@@ -9,7 +9,7 @@ Vue.prototype.$onLaunched = new Promise(resolve => {
 })
 Vue.prototype.$to = $to
 Vue.prototype.checkHasMobile = function (cb = () => { }) {
-  if (Number(localStorage.get(SK.HAS_MOBILE) || "0")) cb(true)
+  if (localStorage.get(SK.HAS_MOBILE)==1) cb(true)
   else cb(false)
 }
 App.mpType = 'app'

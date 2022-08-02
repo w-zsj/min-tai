@@ -3,11 +3,11 @@
 		<block v-for="(item, index) in photoList" :key="index">
 			<view class="img-content">
 				<image class="img-item" mode="aspectFill" :src="item" @click.stop="previewImg(index)" />
-				<image class="delete-photo" src="https://file.9jinhuan.com/wine/wechat/delete_photo.png" :data-index="index" data-type="delete" @click="deletePhoto" />
+				<image class="delete-photo" src="/static/images/delete_photo.png" :data-index="index" data-type="delete" @click="deletePhoto" />
 			</view>
 		</block>
 		<view v-if="photoList.length < max" class="modal-comment-upload" @click="uploadImage">
-			<image class="img" src="https://file.9jinhuan.com/wine/wechat/add_img.png"></image>
+			<image class="img" src="/static/images/add_img.png"></image>
 		</view>
 	</view>
 </template>
@@ -33,18 +33,11 @@ export default {
 	methods: {
 		// 图片上传
 		uploadImage: function() {
-			const { uploadNumber } = this;
 			let that = this;
-
-			if (uploadNumber >= 9) {
-				ToastInfo('一次最多只能上传九张图片');
-				return;
-			}
-
 			uni.chooseImage({
 				count: 1,
 				sizeType: ['original', 'compressed'],
-				sourceType: ['album'],
+				sourceType: ['album','camera'],
 				// 'album', 'camera'
 				success(res) {
 					that.conversionAddress(res.tempFilePaths);
@@ -85,11 +78,11 @@ export default {
 				const { code, data = [] } = res;
 				if (code === 1) {
 					photoListArr = [...photoList, ...data];
-					that.setData({
+					Object.assign(that,{
 						uploadNumber: uploadNumber + data.length,
 						list: photoListArr
 					});
-					this.$emit('uploadCall', photoListArr);
+					that.$emit('uploadCall', photoListArr);
 				} else {
 					ToastInfo('图片上传失败');
 				}
@@ -163,13 +156,13 @@ export default {
 	align-items: center;
 	justify-content: center;
 	margin-bottom: 24rpx;
-	height: 140rpx;
-	width: 140rpx;
+	height: 200rpx;
+	width: 200rpx;
 	background: #fafafa;
 }
 .modal-comment-upload .img {
-	height: 57rpx;
-	width: 57rpx;
+	height: 200rpx;
+	width: 200rpx;
 }
 .photo-list {
 	display: flex;
@@ -178,8 +171,8 @@ export default {
 }
 .img-content {
 	position: relative;
-	width: 140rpx;
-	height: 140rpx;
+	width: 200rpx;
+	height: 200rpx;
 	overflow: hidden;
 	margin-right: 10rpx;
 	margin-bottom: 10rpx;
@@ -187,8 +180,8 @@ export default {
 }
 
 .img-item {
-	width: 140rpx;
-	height: 140rpx;
+	width: 200rpx;
+	height: 200rpx;
 	background: #faf7f7;
 	display: flex;
 	align-items: center;

@@ -1,0 +1,35 @@
+.payment-voucher{
+    padding: 32rpx;
+    .code{
+        font-size: 36rpx;
+        font-weight: bold;
+        line-height: 36rpx;
+        .tit{
+            margin-bottom: 32rpx;
+        }
+        .pic{
+            width: 200rpx;
+            height: 200rpx;
+            border-radius: 16rpx;
+            overflow: hidden;
+            .img{
+                display: block;
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+    .desc{
+        font-size: 28rpx;
+        color: #272727;
+        margin: 32rpx 0 100rpx;
+    }
+    .uploader{
+        .tit{
+            font-size: 36rpx;
+            font-weight: bold;
+            line-height: 36rpx;
+            margin-bottom: 32rpx;
+        }
+    }
+}

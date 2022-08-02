@@ -24,7 +24,7 @@ export default {
         },
         pay() {
             console.log('iii', this.curStatus);
-            this.$to('payment-voucher/index')
+            this.$to('payment-voucher/index?source=1')
         }
     }
 }

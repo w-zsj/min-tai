@@ -37,8 +37,8 @@
             </view>
           </view>
         </view>
-        <view class="detail-property-container">
-          <view class="common-row" v-if="propertyList.length">
+        <view class="detail-property-container" v-if="propertyList.length">
+          <view class="common-row" >
             <view class="flex-aic text-ellipsis">
               <text class="common-label">参数</text>
               <view class="common-text-style text-ellipsis">

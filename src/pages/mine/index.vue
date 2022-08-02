@@ -103,7 +103,7 @@ export default {
   },
   onLoad() {
     this.getHomeBannerList(2);
-    this.getHomeBannerList(4);
+    this.getHomeBannerList(3);
   },
   onShow() {
     this.checkHasMobile((isLoged) => {

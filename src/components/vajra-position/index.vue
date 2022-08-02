@@ -1,7 +1,7 @@
 <template>
   <view class="vajra-position">
     <view class="list" v-for="(item, idx) in list" :key="idx">
-      <view class="item">
+      <view class="item" @click="bannerTap(item,'gg')">
         <view class="pic flex-ctr">
           <image :src="item.icon" />
         </view>
@@ -16,6 +16,10 @@ export default {
     list: {
       type: Array,
       default: () => [],
+    },
+    bannerTap: {
+      type: Function,
+      default: () => {},
     },
   },
   data() {

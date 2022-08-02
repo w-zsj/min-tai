@@ -25,6 +25,11 @@
 .list{
     min-height: 270rpx;
 }
+._in{
+    margin-bottom: 20rpx;
+    border-radius: 16rpx;
+    overflow: hidden;
+}
 .address-container {
     padding: 32rpx;
     padding-bottom: 98rpx;

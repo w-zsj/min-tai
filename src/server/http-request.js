@@ -2,7 +2,7 @@
  * @Author: zhangsanjun 
  * @Date: 2022-07-25 17:27:23 
  * @Last Modified by: zhangsanjun
- * @Last Modified time: 2022-07-31 23:03:38
+ * @Last Modified time: 2022-08-02 22:46:52
  */
 
 import { ToastInfo } from '@/utils/util.js';
@@ -56,7 +56,8 @@ const fetchMethod = (_url, _config) => {
                     method: _config.method,
                     success(res) {
                         // console.log(`${_url}`, res)
-                        const { code, msg } = res.data;
+                        const { code } = res.data;
+                        let  msg = res.message || res.msg
                         /**
                          * code状态码 :
                          * 1成功 -1异常
@@ -67,13 +68,10 @@ const fetchMethod = (_url, _config) => {
                          * **/
                         // 请求成功
 
-                        if (code == 1) resolve(res.data);
-                        else {
-                            reject({ code, msg });
-                            if (code === 100009) {
-                                localStorage.del(SK.TOKEN);
-                                ToastInfo('token已过期::请重新登录');
-                            }
+                        resolve(res.data);
+                        if (code === 100009) {
+                            localStorage.del(SK.TOKEN);
+                            ToastInfo('token已过期::请重新登录');
                         }
 
                     },

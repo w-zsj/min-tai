@@ -70,21 +70,28 @@ export default {
   onReachBottom: function () {},
   methods: {
     // 轮播图点击
-    bannerTap: function (url, type, source) {
-      console.log("e---", url, type, source); //type 2h5Url  3图片 4 小程序路径
+    bannerTap: function ({ url, type, id }, source) {
+      console.log("e---", url, type, id, source); //type 2h5Url  3图片 4 小程序路径
       const tabBarPages = [
         "/pages/mall/index",
         "/pages/category/index",
         "/pages/mine/index",
       ]; //tabar页面
-      if (type == 4) {
-        if (tabBarPages.includes(url)) {
-          uni.switchTab({ url: url });
-        } else {
-          uni.navigateTo({ url: url });
+      if (source == "gg") {
+        uni.switchTab({
+          url: "/pages/catetory/index",
+        });
+        getApp().globalData.categoryId=id;
+      } else {
+        if (type == 4) {
+          if (tabBarPages.includes(url)) {
+            uni.switchTab({ url: url });
+          } else {
+            uni.navigateTo({ url: url });
+          }
+        } else if (type == 2) {
+          this.$to(`webview/index?url=${encodeURIComponent(url)}`);
         }
-      } else if (type == 2) {
-        this.$to(`webview/index?url=${encodeURIComponent(url)}`);
       }
     },
     closemodal(e) {
@@ -106,11 +113,13 @@ export default {
         };
       Resource.open.post({ type: "product/hotProductList" }, params).then((res) => {
         if (res.code == 1) {
-          if (res?.data?.length) {
+          if (res?.data?.list?.length) {
             isend = !!(pageNum >= res?.data?.totalPage);
             let data = res.data?.list || [];
+
             if (pageNum == 1) hotProductList = data;
             else list = [...hotProductList, ...data];
+            console.log("hotProductList", hotProductList);
             Object.assign(_, { hotProductList, isend });
           }
         }

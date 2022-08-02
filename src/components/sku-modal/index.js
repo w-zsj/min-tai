@@ -39,9 +39,6 @@ export default {
   },
   data() {
     return {
-      userStyle: localStorage.get(SK.USER_STYLE) || "A",
-      memberleve: app.globalData.uservipinfo(),
-
       modelTypeLists: [], // sku 渲染列表
       selectArr: [], //存放被选中的值
       shopItemInfo: {}, //存放要和选中的值进行匹配的数据

@@ -99,11 +99,11 @@
                 />
                 <image
                   class="ic"
-                  src="@/static/imgs/triangle-act.png"
+                  src="@/static/images/triangle-act.png"
                   v-else
                   style="margin-bottom: 2rpx"
                 />
-                <image class="ic" src="@/static/imgs/triangle-gray.png" />
+                <image class="ic" src="@/static/images/triangle-gray.png" />
               </view>
             </view>
             <view
@@ -205,14 +205,14 @@ export default {
     };
   },
   onLoad(options) {
-    console.log("options", options);
-    this.queryCId = options.id || "";
+    
   },
   async onShow() {
     await this.$onLaunched;
     this.twoCateIndex = 0;
     this.isEnd = false;
     this.pageNum = 1;
+    this.queryCId = app.globalData.categoryId || "";
     this.getList();
   },
   computed: {
@@ -230,6 +230,7 @@ export default {
   methods: {
     // 类目选择
     select(item = {}, index = -1, type) {
+      console.log('item',item,index)
       let _ = this;
       _.id = item.id;
       if (
@@ -313,11 +314,11 @@ export default {
             this.id = item.id;
             // 处理从首页进来
             if (this.queryCId) {
-              for (let key in res.data) {
-                if (res.data[key].id == this.queryCId) {
-                  select(res.data[key], i, "one");
+              for (let i = 0; i < res.data.length; i++) {
+                if (res.data[i].id == this.queryCId) {
+                  this.select(res.data[i], i, "one");
                   this.id = this.queryCId;
-                  item = res.data[key];
+                  item = res.data[i];
                 }
               }
             }
@@ -397,7 +398,8 @@ export default {
                 })
                 .exec();
             });
-          } else _.reset();
+          }
+          // else _.reset();
         })
         .finally(() => {
           uni.hideLoading();

@@ -2,48 +2,50 @@
   <view :class="['address-container', Inipx && 'Inipx', !hasdata && 'white']">
     <view v-if="hasdata" class="list">
       <block v-for="(item, idx) in list" :key="idx">
-        <SidesLip
-          :item="item"
-          :data_transit="{ index: index, item: item }"
-          @delItem="delItem"
-          class="sit"
-        >
-          <view class="cont">
-            <view @click.stop.prevent="goback" data-type="back" :data-item="item">
-              <view class="name flex-aic">
-                <text class="ellip">{{ item.name }}</text>
-                <text class="font28">{{ item.phoneNumber }}</text>
+        <view class="_in">
+          <SidesLip
+            :item="item"
+            :data_transit="{ index: index, item: item }"
+            @delItem="delItem"
+            class="sit"
+          >
+            <view class="cont">
+              <view @click.stop.prevent="goback" data-type="back" :data-item="item">
+                <view class="name flex-aic">
+                  <text class="ellip">{{ item.name }}</text>
+                  <text class="font28">{{ item.phoneNumber }}</text>
+                </view>
+                <view class="addr font28 line">
+                  {{ item.detailAddress }}
+                </view>
               </view>
-              <view class="addr font28 line">
-                {{ item.detailAddress }}
-              </view>
-            </view>
-            <view class="default flex-aic-btwn">
-              <view
-                class="selsct flex flex-ctr"
-                :data-id="item.id"
-                @click.stop.prevent="selet"
-              >
+              <view class="default flex-aic-btwn">
+                <view
+                  class="selsct flex flex-ctr"
+                  :data-id="item.id"
+                  @click.stop.prevent="selet"
+                >
+                  <image
+                    :src="
+                      item.defaultStatus
+                        ? '/static/images/checked_icon.png'
+                        : '/static/images/unselected_radio.png'
+                    "
+                    mode="widthFix"
+                  />
+                  <view class="font28">默认地址</view>
+                </view>
                 <image
-                  :src="
-                    item.defaultStatus
-                      ? '/static/images/checked_icon.png'
-                      : '/static/images/unselected_radio.png'
-                  "
+                  :data-item="item"
+                  data-type="edit"
+                  @click.stop.prevent="goback"
+                  src="/static/images/edit-icon.png"
                   mode="widthFix"
                 />
-                <view class="font28">默认地址</view>
               </view>
-              <image
-                :data-item="item"
-                data-type="edit"
-                @click.stop.prevent="goback"
-                src="/static/images/edit-icon.png"
-                mode="widthFix"
-              />
             </view>
-          </view>
-        </SidesLip>
+          </SidesLip>
+        </view>
       </block>
     </view>
     <view class="empty flex-col-ctr" v-else>
@@ -59,6 +61,7 @@
 <script>
 import SidesLip from "@/components/sides-lip";
 import { Resource } from "@/server/resource-api";
+import { ToastInfo } from "@/utils/util";
 const app = getApp();
 export default {
   components: {
@@ -96,7 +99,17 @@ export default {
       let path = type == "back" ? "" : "address/index";
       this.$to(path);
     },
-
+    delItem(data) {
+      console.log("item", data);
+      Resource.addAddress
+        .post({ type: "delete" }, { id: data.item.id })
+        .then((res) => {
+          if (res.code == 1) {
+            ToastInfo("已删除");
+            this.getList();
+          }else ToastInfo(res.message)
+        })
+    },
     // 获取地址列表
     getList() {
       let that = this,
@@ -105,6 +118,7 @@ export default {
       Resource.addAddress
         .post({ type: "list" })
         .then((res) => {
+          console.log('res',res)
           list = res?.data || [];
           that.hasdata = !!list.length;
           that.list = list;

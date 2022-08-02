@@ -57,8 +57,8 @@ export default {
         // 获取商品详情
         getDetail: function (id) {
             let that = this;
-            Resource.product
-                .post({ type: 'detail' }, { id: id })
+            Resource.open
+                .post({ type: 'product/detail' }, { id: id })
                 .then(res => {
                     if (res && res.code === 1) {
                         const data = res.data || {},

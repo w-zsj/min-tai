@@ -1,5 +1,5 @@
 <template>
-  <view class="product-unit">
+  <view class="product-unit" @click.stop="toDetail(item.id)">
     <view class="pic flex-ctr">
       <image :src="item.pic" mode="widthFix" />
     </view>
@@ -62,6 +62,9 @@ export default {
       500,
       true
     ),
+    toDetail(id) {
+      this.$to('goods-detail/index?id='+id)
+    }
   },
 };
 </script>

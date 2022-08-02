@@ -13,9 +13,11 @@
         @change="firstSwiperChange"
       >
         <block v-for="(item, index) in bannerList" :key="index">
-          <swiper-item @click.stop.prevent="bannerTap(item.url, item.urlType, source)">
+          <swiper-item
+            @click.stop.prevent="source == 'gg' ? false : bannerTap(item, source)"
+          >
             <view v-if="source == 'gg'">
-              <vajraPosition :list='item'></vajraPosition>
+              <vajraPosition :list="item" :bannerTap="bannerTap"></vajraPosition>
             </view>
             <image
               v-else

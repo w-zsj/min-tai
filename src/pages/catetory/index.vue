@@ -177,6 +177,7 @@ export default {
   components: { productUnit, skuModal },
   data() {
     return {
+      queryCId: "", // 从首页 分类进来
       tabBarHeight: null,
       isFixed: true,
       statusBarHeight: app.globalData.statusBarHeight + "px",
@@ -202,6 +203,10 @@ export default {
       total: 0,
       pageNum: 1,
     };
+  },
+  onLoad(options) {
+    console.log("options", options);
+    this.queryCId = options.id || "";
   },
   async onShow() {
     await this.$onLaunched;
@@ -306,6 +311,16 @@ export default {
             }
             let item = res.data[oneCateIndex];
             this.id = item.id;
+            // 处理从首页进来
+            if (this.queryCId) {
+              for (let key in res.data) {
+                if (res.data[key].id == this.queryCId) {
+                  select(res.data[key], i, "one");
+                  this.id = this.queryCId;
+                  item = res.data[key];
+                }
+              }
+            }
             this.getProdList(item.id);
           }
         } else this.reset();

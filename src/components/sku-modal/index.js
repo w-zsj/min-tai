@@ -187,10 +187,10 @@ export default {
           if (res && res.code === 1) {
             _.$emit("close", "addcar");
             _.skuModalClose();
-            // 加入购物车 再次进入购物车页面 为了刷新购物车列表接口 注释 购物车不是每次都刷新
-            getApp().globalData.hasAddCarAction = true;
-            // 刷新tabbar 购物车角标数量
-            _.getCarCount(true);
+            uni.setTabBarBadge({
+              index: 2,
+              text: '1'
+            })
             if (source == "mall-edit-sku") ToastInfo("已更新", "none", 1500);
             else ToastInfo("已加入购物车", "none", 1000);
           } else ToastInfo(res.message);

@@ -1,7 +1,13 @@
 <template>
-  <view class="account-management">账户管理</view>
+  <view class="account-management">
+
+  </view>
 </template>
-<script src='./index.js'></script>
+<script>
+export default {
+  
+}
+</script>
 <style scoped lang='scss'>
 @import "./index.scss";
 </style>

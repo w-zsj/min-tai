@@ -67,11 +67,11 @@ export default {
     handleOrder() {
       console.log("下单", this.list);
     },
-    changeSelect(item) {
+    changeSelect(item, type) {
       let list = JSON.parse(JSON.stringify(_.list));
       for (let key in list) {
         if (list[key].id == item.id) {
-          list[key].checked = !list[key].checked;
+          if (type != "addCount") list[key].checked = !list[key].checked;
           list[key].quantity = item.quantity;
         }
       }

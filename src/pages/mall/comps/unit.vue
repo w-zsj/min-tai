@@ -86,7 +86,7 @@ export default {
         ToastInfo(`数量超出范围`, "none", 1500);
       }
       _.copyItem = copyItem;
-      _.changeSelect(copyItem);
+      _.changeSelect(copyItem,'addCount');
     },
   },
 };

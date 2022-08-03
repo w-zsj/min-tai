@@ -18,7 +18,7 @@
       </view>
       <view
         class="account-management flex-aic"
-        @click.stop="jumpPath('account-management/index')"
+        @click.stop="jumpPath({ path: 'account-management/index' })"
       >
         <text>账户管理</text>
         <image class="arrow_icon" src="/static/images/arrow_icon.png" />

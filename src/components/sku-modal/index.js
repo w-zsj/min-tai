@@ -1,19 +1,9 @@
 import { Resource } from "@/server/resource-api";
-import { ToastInfo ,_clone} from "@/utils/util";
+import { ToastInfo, _clone } from "@/utils/util";
 import { localStorage } from "@/utils/extend";
 import { SK } from "@/utils/constant";
 import pop from "@/components/pop/index";
-const app = getApp(),
-  Enum = {
-    1: "您已享有最佳优惠，请下单",
-    100601: "该优惠券已过期，领取失败",
-    100602: "该优惠券已失效，领取失败",
-    100603: "手慢了，已被抢光",
-    100604: "该优惠券未到领取时间",
-    100605: "该优惠券已达最大领取张数",
-    100606: "该优惠券领取失败",
-    100702: "您已享有最佳优惠，请下单",
-  };
+const app = getApp();
 export default {
   name: "sku-modal",
   components: { pop },
@@ -73,15 +63,15 @@ export default {
     getProductSkuInfo() {
       let _ = this, { productId, init, expand, allNotStock } = _;
       // type 1 积分 2 普通商品 
-      Resource.product
-        .post({ type: `queryProductSkuDetail` }, { id: productId, type: expand.isIntegration ? 1 : 2 })
+      Resource.open
+        .post({ type: `product/queryProductSkuDetail` }, { id: productId, type: expand.isIntegration ? 1 : 2 })
         .then((res) => {
           let { code, data } = res;
           if (code == 1) {
             if (data?.skuInfoList?.length) {
               // 积分sku时判断 全部sku 是否有库存
               allNotStock = !data?.skuInfoList.some((i) => i.leftStock);
-              Object.assign(_,{
+              Object.assign(_, {
                 info: data || {},
                 leftIntegrationCount: data.leftIntegrationCount, // 我的所有积分
                 allNotStock,
@@ -118,7 +108,7 @@ export default {
           if (!Array.isArray(item.spData)) item.spData = JSON.parse(item.spData);
         }
       });
-      Object.assign(_,{
+      Object.assign(_, {
         selectBtnType: type,
       });
       _.rewriteDataFormat(skuInfoList);
@@ -155,10 +145,20 @@ export default {
           if (res && res.code === 1) {
             _.$emit("close", "addcar");
             _.skuModalClose();
-            uni.setTabBarBadge({
-              index: 2,
-              text: '1'
-            })
+            Resource.cart
+              .post({ type: 'list' }, {
+                "pageNum": 1,
+                "pageSize": 1
+              }).then(res => {
+                if (res.code == 1 && res?.data?.total) {
+                  let num = res?.data?.total>99?'99+':(res?.data?.total+'')
+                  uni.setTabBarBadge({
+                    index: 2,
+                    text:num
+                  })
+                }
+              })
+
             if (source == "mall-edit-sku") ToastInfo("已更新", "none", 1500);
             else ToastInfo("已加入购物车", "none", 1000);
           } else ToastInfo(res.message);
@@ -357,7 +357,7 @@ export default {
         modelType.month = t[0].replace(/(?=\/)/, "#").split("#/")[1];
         modelType.hours = second[0] + ":" + second[1];
       }
-      Object.assign(_,{
+      Object.assign(_, {
         modelTypeLists: option,
         modelType,
         count: 1,
@@ -369,11 +369,11 @@ export default {
      * obj
      */
     dealShowPrice(obj = {}) {
-      let  mode = _clone(obj);
+      let mode = _clone(obj);
       // 未选中时 删除库存字段  因为其他操作会依赖库存判断
       delete mode.promotionLeftStock;
       delete mode.leftStock;
-     
+
       if (obj.price) mode.curPrice = Number(obj.price).toFixed(2);
       // 原价购买
       else mode.curPrice = "暂无报价";
@@ -423,7 +423,7 @@ export default {
     //  判断是否可领券下单
     orderCheck(productId, skuId) {
       let _ = this,
-        {  count } = _,
+        { count } = _,
         fn = () => {
           let path =
             `/pages/mall/order-check/order-check` +
@@ -431,14 +431,14 @@ export default {
             `&productSkuId=${skuId}` +
             `&quantity=${count}` +
             `&sourceType=1`; // sourceType 3 积分下单 1 普通商品下单
-            uni.navigateTo({ url: path });
+          uni.navigateTo({ url: path });
         };
-        fn()
+      fn()
       _.$emit("close");
     },
     // 重置数据
     skuModalClose() {
-      Object.assign(_,{
+      Object.assign(this, {
         modelTypeLists: [],
         selectArr: [],
         shopItemInfo: {},

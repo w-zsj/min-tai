@@ -60,11 +60,13 @@
       <view class="context-image" v-if="detail.detailMobileHtml">
         <mp-html :content="detail.detailMobileHtml" />
       </view>
+      {{selectSkuModalShow}}
       <!-- 底部按钮 -->
       <footer-component :detail="detail" @selectSku="selectSku"></footer-component>
     </view>
 
     <!-- 规格选择 -->
+
     <sku-modal
       v-if="selectSkuModalShow"
       :expand="expand"

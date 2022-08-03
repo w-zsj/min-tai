@@ -16,7 +16,8 @@
 		{
 			"path": "pages/mall/index",
 			"style": {
-				"navigationBarTitleText": "购物车"
+				"navigationBarTitleText": "购物车",
+				"onReachBottomDistance": 50
 			}
 		},
 		{

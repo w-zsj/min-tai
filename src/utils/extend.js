@@ -223,9 +223,19 @@ const login = (params = {}, $isResolve = null) => {
 							[SK.NICK_NAME]: nickName,
 							[SK.USER_IMAGE]: image,
 							[SK.USER_PHONE]: phone,
-						  });
+						});
 						if ($isResolve) $isResolve()
 						else resolve(res.data)
+						Resource.cart.post({ type: "list" }, { pageNum: 1, pageSize: 1 }).then((res) => {
+							if (res.code == 1 && res?.data?.total) {
+								let num = res?.data?.total>99?'99+':(res?.data?.total+'')
+								uni.setTabBarBadge({
+									index: 2,
+									text:num
+								})
+							}
+								
+						});
 					}
 				})
 				.catch((e) => console.error(e));

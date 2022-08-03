@@ -1,30 +1,35 @@
 <template>
   <view class="c-list flex-aic">
-    <view @click.stop="changeSelect(item)" style="height: 100%">
-      <view class="checkbox" :class="item.checked ? 'act' : ''">
-        <image class="img" v-if="item.checked" src="/static/images/checked_icon.png" />
+    <view @click.stop="changeSelect(copyItem)" style="height: 100%">
+      <view class="checkbox" :class="copyItem.checked ? 'act' : ''">
+        <image
+          class="img"
+          v-if="copyItem.checked"
+          src="/static/images/checked_icon.png"
+        />
       </view>
     </view>
     <view class="pic">
-      <!-- <image src="" /> -->
+      <image :src="copyItem.productPic" />
     </view>
     <view class="base-info flex-col-btwn">
       <view>
         <view class="name ellip">
-          大华股份绝对是规范甲方大华股份绝对是规范甲方大华股份绝对是规范甲方
+          {{ copyItem.productName }}
         </view>
-        <view class="sku">规格22</view>
+        <view class="sku">{{ copyItem.attr }}</view>
       </view>
-      <view class="price"><text class="rb">฿</text>77777</view>
+      <view class="price"><text class="rb">฿</text>{{ copyItem.price }}</view>
       <view class="add-num flex-aic">
-        <view class="div flex-ctr">-</view>
-        <input type="number" v-model="count" />
-        <view class="add flex-ctr">+</view>
+        <view class="div flex-ctr" data-type="div" @click.stop="addcount">-</view>
+        <input type="number flex-ctr" v-model="copyItem.quantity" @blur="addcount" />
+        <view class="add flex-ctr" data-type="add" @click.stop="addcount">+</view>
       </view>
     </view>
   </view>
 </template>
 <script>
+import { ToastInfo } from "@/utils/util";
 export default {
   props: {
     changeSelect: {
@@ -34,6 +39,51 @@ export default {
     item: {
       type: Object,
       default: () => ({}),
+    },
+  },
+  data() {
+    return {
+      copyItem: {},
+    };
+  },
+  watch: {
+    item: {
+      handler: function (newVal, oldVal) {
+        this.copyItem = JSON.parse(JSON.stringify(newVal));
+        let str = "",
+          o = this.copyItem.productAttr;
+        for (let v in o) str += o[v].key + ":" + o[v].value + " ";
+        this.copyItem["attr"] = str;
+      },
+      immediate: true,
+      deep: true,
+    },
+  },
+  methods: {
+    // 购买数量更新
+    addcount: function (e) {
+      let _ = this,
+        { copyItem } = _,
+        { type } = e?.currentTarget?.dataset,
+        total = copyItem.stockCount;
+      if (!total) return;
+      else if (!Number(copyItem.quantity)) copyItem.quantity = 1;
+      else if (type) {
+        //代表加减
+        if (type == "add") copyItem.quantity++;
+        else {
+          if (copyItem.quantity <= 1) copyItem.quantity = 1;
+          else copyItem.quantity--;
+        }
+      }
+      // 输入框 以及 最后结果校验
+      if (copyItem.quantity <= 1) copyItem.quantity = 1;
+      else if (copyItem.quantity > total) {
+        copyItem.quantity = total;
+        ToastInfo(`数量超出范围`, "none", 1500);
+      }
+      _.copyItem = copyItem;
+      _.changeSelect(copyItem);
     },
   },
 };

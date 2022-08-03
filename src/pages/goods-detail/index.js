@@ -5,9 +5,11 @@ import skuModal from '@/components/sku-modal/index.vue';
 import { Resource } from "@/server/resource-api";
 import { ToastInfo, debounce } from '@/utils/util';
 const app = getApp();
+let _
 export default {
     components: { mpHtml, swiperComponent, footerComponent, skuModal },
     data() {
+        _ = this;
         return {
             tabMenu: [{   //菜单
                 title: '商品',
@@ -26,7 +28,8 @@ export default {
             propertyList: [], //属性列表
             imageList: [], //轮播图图片
             showModal: false, //加入购物车提示弹窗
-            isShowAuthPhone: false
+            isShowAuthPhone: false,
+            selectSkuModalShow:false,
         };
     },
     onLoad(options) {
@@ -97,10 +100,10 @@ export default {
         },
         // sku弹窗
         selectSku: debounce(function (e) {
-            this.checkHasMobile((loged) => {
+            _.checkHasMobile((loged) => {
                 if (loged)
-                    this.selectSkuModalShow = true;
-                else this.isShowAuthPhone = true;
+                    _.selectSkuModalShow = true;
+                else _.isShowAuthPhone = true;
             });
         }, 500, true),
         // 关闭授权手机号弹窗

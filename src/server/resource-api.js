@@ -2,7 +2,7 @@
  * @Author: zhangsanjun 
  * @Date: 2022-07-25 11:01:10 
  * @Last Modified by: zhangsanjun
- * @Last Modified time: 2022-08-01 13:19:09
+ * @Last Modified time: 2022-08-03 22:14:59
  */
 
 import {
@@ -29,5 +29,7 @@ export const Resource = {
   addAddress: HttpResource(`${API_HOST}/member/address/:type`),
   //订单
   order: HttpResource(`${API_HOST}/order/:type`),
+    //购物车
+    cart: HttpResource(`${API_HOST}/cart/:type`),
 
 };

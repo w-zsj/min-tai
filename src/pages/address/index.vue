@@ -154,7 +154,7 @@ export default {
         .then((res) => {
           if (res.code == 1) {
             ToastInfo("添加成功");
-            this.$to("address-list/index",'redirect');
+            this.$to("address-list/index");
           }
         })
         .catch((e) => {

@@ -14,6 +14,7 @@
         <productUnit :item="item"></productUnit>
       </block>
     </view>
+    <view class="loading" v-if="isend && hotProductList.length">已加载全部</view>
 
     <!-- 登录提示 -->
     <view class="login-hint flex-aic-btwn" v-if="!isShowLoginHint">
@@ -81,7 +82,7 @@ export default {
         uni.switchTab({
           url: "/pages/catetory/index",
         });
-        getApp().globalData.categoryId=id;
+        getApp().globalData.categoryId = id;
       } else {
         if (type == 4) {
           if (tabBarPages.includes(url)) {
@@ -106,19 +107,19 @@ export default {
     // 新品推荐
     getHotProductList() {
       let _ = this,
-        { pageNum, hotProductList, isend } = _,
+        { pageNum, hotProductList, isend, pageSize } = _,
         params = {
           pageNum: pageNum || 1,
-          pageSize: 10,
+          pageSize,
         };
-      Resource.open.post({ type: "product/hotProductList" }, params).then((res) => {
+      Resource.open.post({ type: "product/hotProductList" }, params,{loadingDelay:true}).then((res) => {
         if (res.code == 1) {
           if (res?.data?.list?.length) {
             isend = !!(pageNum >= res?.data?.totalPage);
             let data = res.data?.list || [];
 
             if (pageNum == 1) hotProductList = data;
-            else list = [...hotProductList, ...data];
+            else hotProductList = [...hotProductList, ...data];
             console.log("hotProductList", hotProductList);
             Object.assign(_, { hotProductList, isend });
           }
@@ -156,7 +157,7 @@ export default {
     const { isend, hotProductList } = this;
     if (!isend && hotProductList.length) {
       this.pageNum += 1;
-      this.initData();
+      this.getHotProductList();
     }
   },
   /**
@@ -188,6 +189,14 @@ page {
 .home {
   min-height: 100vh;
   padding: 32rpx;
+  .loading {
+    text-align: center;
+    color: #ccc9c9;
+    font-size: 24rpx;
+    // padding-bottom: 48rpx;
+    padding-bottom: constant(safe-area-inset-bottom); /* 兼容 iOS < 11.2 */
+    padding-bottom: env(safe-area-inset-bottom); /* 兼容 iOS >= 11.2 */
+  }
   .content {
     background: #f6f6f6;
     margin-top: 20rpx;

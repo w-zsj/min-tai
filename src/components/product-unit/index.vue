@@ -17,7 +17,7 @@
         </view>
         <view class="sale-count">已售{{ item.sale }}件</view>
       </view>
-      <view class="add-car flex-ctr" @click="selectSku">加入购物车</view>
+      <view class="add-car flex-ctr" @click.stop="selectSku">加入购物车</view>
     </view>
     <!-- 加入购物车 -->
     <sku-modal
@@ -73,6 +73,7 @@ export default {
   background: #fff;
   border-radius: 16rpx;
   padding: 32rpx;
+  margin-bottom: 20rpx;
   .pic {
     height: 300rpx;
     overflow: hidden;

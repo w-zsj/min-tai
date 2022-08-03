@@ -1,8 +1,5 @@
 import { Resource } from "@/server/resource-api";
-import { ToastInfo } from "@/utils/util";
-// #ifdef H5
-import { getWxCode } from "@/utils/wxConfig/wxPay.js";
-// #endif
+import { ToastInfo ,_clone} from "@/utils/util";
 import { localStorage } from "@/utils/extend";
 import { SK } from "@/utils/constant";
 import pop from "@/components/pop/index";
@@ -58,22 +55,10 @@ export default {
     };
   },
   computed: {
-    // 会员价格以及秒杀价显示判断
-    showMemberSkuPricePrice() {
-      let { isJoinGroup, selectBtnType, modelType } = this,
-        bol = false;
-      // 发起拼团不展示会员价
-      if (isJoinGroup && selectBtnType == "buy") bol = false;
-      else if (modelType.activityPrice) {
-        if ((isJoinGroup && selectBtnType == "addcar") || !isJoinGroup) bol = true;
-      }
-      return bol;
-    },
     classNameStatus() {
       let { modelType, expand, allNotStock } = this;
       if (
         !(modelType.promotionLeftStock || modelType.leftStock) ||
-        expand.isGift && !expand.isIntegration ||
         allNotStock
       )
         return true;
@@ -116,23 +101,12 @@ export default {
         {
           info,
           info: { skuInfoList = [] },
-          isJoinGroup,
           expand: {
             type = "addcar",
-            teamPromotionCode = "",
-            teamid = "",
-            limitCountOrRob,
           } = {},
         } = _;
       if (!skuInfoList || skuInfoList.length == 0) return ToastInfo("商品已下架");
-      if (teamid) type = "buy"; // 商品详情 拼团列表  ‘去参团按钮’ 进入
-      // priceType	价格类型  0:正常价格 1:vip价格 2:至尊vip 3:秒杀价 4:团购价 5:低价团" 6新人价 7 积分
-      // limitCountOrRob 秒杀达到限购件数或者已抢光
-      // 判断是不是拼团
-      isJoinGroup = skuInfoList.every((i) => i.priceType == 4 || i.priceType == 5);
-      // 拼团原价购买时 校验的时leftStock
       skuInfoList = skuInfoList.map((i) => {
-        if ((type == "addcar" && isJoinGroup) || limitCountOrRob) i.priceType = 0; // 拼团原价购买相当于 普通商品购买
         if (i.priceType == 0) delete i.promotionLeftStock; // promotionLeftStock 活动库存 普通商品不需要
         return i;
       });
@@ -146,9 +120,6 @@ export default {
       });
       Object.assign(_,{
         selectBtnType: type,
-        teamPromotionCode,
-        isJoinGroup,
-        teamId: teamid,
       });
       _.rewriteDataFormat(skuInfoList);
     },
@@ -398,25 +369,12 @@ export default {
      * obj
      */
     dealShowPrice(obj = {}) {
-      // 会员价以及秒杀价 统一用memberSkuPrice字段表示
-      let { isJoinGroup, selectBtnType, deepClone, expand } = this,
-        mode = deepClone(obj);
+      let  mode = _clone(obj);
       // 未选中时 删除库存字段  因为其他操作会依赖库存判断
       delete mode.promotionLeftStock;
       delete mode.leftStock;
-      // 积分不展示 秒杀 拼团、会员价
-      if (!expand.isIntegration) {
-        // 活动价和会员价用一个字段表示 activityPrice
-        if (obj.promotionPrice && (mode.priceType == 3 || mode.priceType == 6))
-          mode.activityPrice = Number(obj.promotionPrice).toFixed(2);
-        else if (obj.memberSkuPrice)
-          // 会员价
-          mode.activityPrice = Number(obj.memberSkuPrice).toFixed(2);
-      }
-      if (isJoinGroup && selectBtnType == "buy") {
-        // 拼团购买
-        mode.curPrice = Number(obj.promotionPrice).toFixed(2);
-      } else if (obj.price) mode.curPrice = Number(obj.price).toFixed(2);
+     
+      if (obj.price) mode.curPrice = Number(obj.price).toFixed(2);
       // 原价购买
       else mode.curPrice = "暂无报价";
       return mode;
@@ -445,31 +403,15 @@ export default {
             leftStock = 0,
             skuId = "",
             productId = "",
-            integration = "",
           } = {},
           selectBtnType,
           teamId = "",
-          isJoinGroup,
-          teamPromotionCode,
-          expand,
-          count,
-          leftIntegrationCount,
         } = _;
       if (!productId) productId = _.productId;
-      // 非卖品 不支持购买 但支持积分兑换
-      if (expand.isGift && !expand.isIntegration) return;
-      // 积分活动 // 代表积分不足
-       if (leftStock && expand.isIntegration && integration * count > leftIntegrationCount) {
-        _.ShowPntegrationPop = true;
-       }
-       else if (promotionLeftStock || leftStock) {
-        if (selectBtnType == "addcar" && !isJoinGroup) _.addShopping(productId, skuId);
+      if (promotionLeftStock || leftStock) {
+        if (selectBtnType == "addcar") _.addShopping(productId, skuId);
         else {
-          if (selectBtnType == "addcar" || !isJoinGroup) teamPromotionCode = "";
-          // 拼团原价购买 或 立即购买
-          else teamPromotionCode = teamPromotionCode; // 发起拼团
-          // 判断是否支持领券购买
-          _.orderCheck(productId, skuId, teamId, teamPromotionCode);
+          _.orderCheck(productId, skuId, teamId);
         }
         _.skuModalClose();
       }
@@ -479,33 +421,19 @@ export default {
      * @param {signed}   // 单个规格校验库存
      */
     //  判断是否可领券下单
-    orderCheck(productId, skuId, teamId, teamPromotionCode) {
+    orderCheck(productId, skuId) {
       let _ = this,
-        { isJoinGroup, selectBtnType, count, expand } = _,
+        {  count } = _,
         fn = () => {
           let path =
             `/pages/mall/order-check/order-check` +
             `?productId=${productId}` +
             `&productSkuId=${skuId}` +
-            `&teamId=${teamId}` +
-            `&teamPromotionCode=${teamPromotionCode}` +
             `&quantity=${count}` +
-            `&sourceType=${expand.isIntegration ? 3 : 1}`; // sourceType 3 积分下单 1 普通商品下单
-          if (_.isWx()) {
-            uni.removeStorageSync("wxCode");
-            getWxCode(path);
-          } else uni.navigateTo({ url: path });
+            `&sourceType=1`; // sourceType 3 积分下单 1 普通商品下单
+            uni.navigateTo({ url: path });
         };
-      // 发起拼团、积分 不参与领券购买  // 秒杀需要领券购买
-      if (((isJoinGroup || expand.isIntegration) && selectBtnType == "buy") || !expand.hasCoupons) fn();
-      else if (expand.hasCoupons) {
-        Resource.coupon
-          .post({ type: "addCouponByProduct" }, { id: productId })
-          .then((res) => {
-            if (Enum[res.code]) ToastInfo(Enum[res.code], "none", 1500);
-          })
-          .finally((e) => setTimeout(fn, 1500));
-      }
+        fn()
       _.$emit("close");
     },
     // 重置数据
@@ -528,14 +456,10 @@ export default {
       let _ = this,
         {
           modelType: { promotionLeftStock = 0, leftStock = 0 } = {},
-          selectBtnType,
-          isJoinGroup,
-          expand,
         } = _,
         { type } = e?.currentTarget?.dataset,
         total = promotionLeftStock || leftStock;
-      if (expand.isGift && !expand.isIntegration) return;
-      else if (!total || (selectBtnType == "buy" && isJoinGroup)) return;
+      if (!total) return;
       else if (!Number(_.count)) _.count = 1;
       else if (type) {
         //代表加减

@@ -9,7 +9,7 @@
         />
       </view>
     </view>
-    <view class="pic">
+    <view class="pic" @click.stop="toDetail(copyItem.productId)">
       <image :src="copyItem.productPic" />
     </view>
     <view class="base-info flex-col-btwn">
@@ -60,6 +60,9 @@ export default {
     },
   },
   methods: {
+    toDetail(id) {
+      this.$to("goods-detail/index?id=" + id);
+    },
     // 购买数量更新
     addcount: function (e) {
       let _ = this,

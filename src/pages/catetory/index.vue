@@ -204,15 +204,14 @@ export default {
       pageNum: 1,
     };
   },
-  onLoad(options) {
-    
-  },
   async onShow() {
     await this.$onLaunched;
     this.twoCateIndex = 0;
     this.isEnd = false;
     this.pageNum = 1;
+    // 首页分类进来
     this.queryCId = app.globalData.categoryId || "";
+    delete app.globalData.categoryId || "";
     this.getList();
   },
   computed: {

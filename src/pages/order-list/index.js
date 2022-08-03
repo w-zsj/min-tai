@@ -34,6 +34,9 @@ export default {
                 }]
         };
     },
+    onLoad(option) {
+        this.curIdx = option.type || 0;
+    },
     methods: {
         selectTab(item, idx) {
             console.log('item', item)

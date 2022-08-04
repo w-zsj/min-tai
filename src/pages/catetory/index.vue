@@ -293,7 +293,7 @@ export default {
         });
       }
       Object.assign(this, {
-        sEnd: false,
+        isEnd: false,
         pageNum: 1,
       });
       _.getProdList(_.id);

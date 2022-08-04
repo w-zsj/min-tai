@@ -339,7 +339,7 @@ export default {
         }
         const flag = await _.checkOrder();
         if (!flag) return;
-        let path = `/pages/mall/order-check/order-check?cartIds=${JSON.stringify(ids)}`;
+        let path = `/pages/order-check/index?cartIds=${JSON.stringify(ids)}&sourceType=2`;
         uni.navigateTo({
           url: path,
         });

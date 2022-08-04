@@ -2,18 +2,18 @@
  * @Author: zhangsanjun 
  * @Date: 2022-05-17 17:37:18 
  * @Last Modified by: zhangsanjun
- * @Last Modified time: 2022-08-04 13:52:10
+ * @Last Modified time: 2022-08-04 14:55:18
  */
 
 import Pop from "@/components/pop";
-import { ToastInfo, openMiniProgramPay, debounce } from "@/utils/util";
+import { ToastInfo, debounce } from "@/utils/util";
 import { localStorage } from "@/utils/extend";
 import { Resource } from "@/server/resource-api";
 import confirmModal from './comps/confirm-modal.vue'
 let app = getApp(), _;
 export default {
   components: {
-    Pop,confirmModal
+    Pop, confirmModal
   },
   data() {
     _ = this;
@@ -30,6 +30,7 @@ export default {
       payAmount: "",//应付金额
       totalAmount: '',//订单商品总金额
       reqError: false,
+      confirmReceiveAddressModal: false, // 确认收货地址弹框
 
     };
   },
@@ -39,12 +40,9 @@ export default {
   onLoad: function (options) {
     const {
       cartIds = "",
-      productId,
-      productSkuId,
-      quantity = 1,
       sourceType = 1,
     } = options;
-    if (productId && !cartIds) {
+    if (productId && sourceType == 1) {
       Object.assign(_, {
         productId: parseInt(productId),
         productSkuId: parseInt(productSkuId),
@@ -52,10 +50,10 @@ export default {
         sourceType: Number(sourceType),
       })
     } else {
-      console.log('cartIds',cartIds)
+      console.log('cartIds', cartIds)
       Object.assign(_, {
         cartIds: JSON.parse(cartIds),
-        sourceType: 2,
+        sourceType: Number(sourceType),
       });
     }
     _.initData();
@@ -79,14 +77,6 @@ export default {
         else getOrderData();
       });
     },
-    showCouponPop: function () {
-      const { couponHistoryDetailList } = _,
-        currentCouponList = JSON.parse(JSON.stringify(couponHistoryDetailList));
-      _.setData({
-        currentCouponList,
-        isShowCouponPop: true,
-      });
-    },
     handleChooseAdd: function () {
       _.$to('address-list/index?source=1');
     },
@@ -96,6 +86,7 @@ export default {
         note: _.note,
       });
     },
+    // 添加备注信息
     isShowModal: function () {
       _.setData({
         showModal: true,
@@ -112,10 +103,7 @@ export default {
         note: _.textAreaNote,
       });
     },
-    // 确认订单
-    onConfirmModal() { },
-    // 取消确认订单
-    onClose(){},
+    // 初始化
     initData: function () {
       Resource.addAddress
         .post({ type: "queryDefaultAddress" })
@@ -127,9 +115,9 @@ export default {
           }
         });
     },
-
+    // 查询下单信息
     getOrderData: function () {
-      let id = _?.address?.id,
+      let id = _.address?.id,
         {
           cartIds,
           sourceType,
@@ -157,9 +145,8 @@ export default {
           params = { ...params, cartIds };
           break;
       }
-      uni.showLoading({ title: "加载中" });
       resource
-        .post({ type: api }, params)
+        .post({ type: api }, params, { loadingDelay: true })
         .then((res) => {
           let { code, data = {} } = res || {};
           if (code === 1) {
@@ -176,7 +163,6 @@ export default {
               payAmount, totalAmount, productCount
             });
           } else {
-            const { currentCouponList } = _;
             Object.assign(_, {
               reqError: true,
             });
@@ -184,7 +170,14 @@ export default {
           }
         })
         .catch(() => Object.assign(_, { reqError: true }))
-        .finally(uni.hideLoading);
+    },
+    // 确认订单
+    onConfirmModal() {
+      _.generateOrder();
+    },
+    // 取消确认订单
+    onClose() {
+      _.confirmReceiveAddressModal = false;
     },
     // 下单 判断收货地址
     handleOrder: function () {
@@ -193,7 +186,8 @@ export default {
         ToastInfo("请选择地址~");
         return;
       }
-      _.generateOrder();
+      _.confirmReceiveAddressModal = true;
+
     },
     // 下单
     generateOrder: debounce(
@@ -229,9 +223,11 @@ export default {
         resource
           .post({ type: api }, params)
           .then((res) => {
-            // 购物车下单成功 再次进入购物车 需要刷新
-            if(sourceType==2)app.globalData["isNeedUpdetaCarList"] = true;
-
+            if (res.code == 1 && res?.data?.orderSn) {
+              // 购物车下单成功 再次进入购物车 需要刷新
+              if (sourceType == 2) app.globalData["isNeedUpdetaCarList"] = true;
+              _.$to('pay/index?orderSn=' + res.data.orderSn);
+            }
           })
           .finally(uni.hideLoading);
       }, 2000, true),

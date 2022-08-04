@@ -100,7 +100,7 @@
     </Pop>
     <!-- 确认订单 -->
     <!-- Confirm Order -->
-    <confirmModal :address='address' @onClose='onClose' @confirmModal='onConfirmModal'></confirmModal>
+    <confirmModal :address='address' :isVisible="confirmReceiveAddressModal" @onClose='onClose' @confirmModal='onConfirmModal'></confirmModal>
   </view>
 </template>
 <script src="./index.js"></script>

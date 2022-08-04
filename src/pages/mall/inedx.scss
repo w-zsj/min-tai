@@ -1,63 +1,97 @@
-.my-car{
-  background: #FAF7F7;
-  min-height: 100vh;
-  padding: 32rpx;
-}
+.my-car {
+	background: #faf7f7;
+	min-height: 100vh;
+	padding: 32rpx;
+	.footer {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		z-index: 5;
+		.footer-main-container {
+			height: 138rpx;
+			background: #fff;
+			.footer-container {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				height: 96rpx;
+				padding: 16rpx 32rpx 0 32rpx;
+				&.line-lighter {
+					position: relative;
+				}
+				.left {
+					.circle-point {
+						width: 30rpx;
+						height: 30rpx;
+						border: 1px solid #808080;
+						border-radius: 50%;
+					}
+					.circle-point-image {
+						width: 30rpx;
+						height: 30rpx;
+					}
+					.check-all-tetx {
+						font-size: 24rpx;
+						font-family: PingFangSC-Regular, PingFang SC;
+						font-weight: 400;
+						color: #807b7b;
+						padding-left: 10rpx;
+					}
+				}
+				.right {
+					display: flex;
+					align-items: center;
+					justify-content: flex-end;
+					flex: 1;
+					font-size: 24rpx;
+					font-family: PingFangSC-Regular, PingFang SC;
+					font-weight: 400;
+					color: #272727;
+					text-align: right;
+					.total-container {
+						.total-unit {
+							font-size: 24rpx;
+							font-family: OPPOSans-M, OPPOSans;
+							font-weight: normal;
+							color: #a7002d;
+							padding-left: 8rpx;
+							font-weight: 500;
+						}
+						.total-price {
+							font-size: 30rpx;
+							font-family: OPPOSans-H, OPPOSans;
+							font-weight: normal;
+							color: #a7002d;
+							font-weight: 500;
+						}
 
-.bottom {
-	width: 100%;
-	/* height: 166rpx; */
-	background: #fff;
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	display: flex;
-	padding: 16rpx 32rpx 16rpx;
-	justify-content: space-between;
-}
-.bottom.ipx {
-	padding-bottom: 48rpx;
-	/* #ifdef H5 */
-	padding-bottom: constant(safe-area-inset-bottom);
-	padding-bottom: env(safe-area-inset-bottom);
-	/* #endif */
-}
+						.total-point {
+							font-size: 20rpx;
+							font-family: OPPOSans-H, OPPOSans;
+							font-weight: normal;
+							color: #a7002d;
+							padding-right: 20rpx;
+							font-weight: 500;
+						}
 
-.bottom.line::after {
-	top: 0;
-	bottom: none;
-}
-
-.bottom-detail {
-	font-size: 24rpx;
-	color: #272727;
-	padding-top: 20rpx;
-}
-
-.bottom-detail-amount {
-	font-size: 20rpx;
-	color: #a7002d;
-	font-weight: 500;
-	margin-left: 10rpx;
-}
-
-.bottom-detail-amount-bigger {
-	font-size: 30rpx;
-}
-.integra {
-	font-size: 34rpx;
-	margin-right: 4rpx;
-}
-.bottom-btn {
-	width: 208rpx;
-	height: 80rpx;
-	background: #a7002d;
-	border-radius: 40rpx;
-	color: #fff;
-	line-height: 80rpx;
-	text-align: center;
-	padding-bottom: 10rpx;
-}
-.bottom-btn.gray {
-	background: #c9c9c9;
+						
+					}
+					.purchase {
+						width: 208rpx !important;
+						height: 80rpx;
+						background: #a7002d;
+						border-radius: 40rpx;
+						font-size: 32rpx;
+						font-family: PingFangSC-Regular, PingFang SC;
+						font-weight: 400;
+						color: #ffffff;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+					}
+				}
+			}
+		}
+	}
 }

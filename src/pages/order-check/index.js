@@ -2,7 +2,7 @@
  * @Author: zhangsanjun 
  * @Date: 2022-05-17 17:37:18 
  * @Last Modified by: zhangsanjun
- * @Last Modified time: 2022-08-02 10:08:40
+ * @Last Modified time: 2022-08-04 13:52:10
  */
 
 import Pop from "@/components/pop";
@@ -229,7 +229,8 @@ export default {
         resource
           .post({ type: api }, params)
           .then((res) => {
-            
+            // 购物车下单成功 再次进入购物车 需要刷新
+            if(sourceType==2)app.globalData["isNeedUpdetaCarList"] = true;
 
           })
           .finally(uni.hideLoading);

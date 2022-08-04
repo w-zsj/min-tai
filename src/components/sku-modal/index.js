@@ -156,6 +156,8 @@ export default {
                     index: 2,
                     text:num
                   })
+                  // 添加购物车 切换到购物车页面需要刷新
+                  app.globalData['isNeedUpdetaCarList'] = true;
                 }
               })
 

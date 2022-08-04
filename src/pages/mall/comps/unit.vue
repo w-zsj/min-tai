@@ -1,7 +1,14 @@
 <template>
   <view class="c-list flex-aic">
     <view @click.stop="changeSelect(copyItem)" style="height: 100%">
-      <view class="checkbox" :class="copyItem.checked ? 'act' : ''">
+      <view
+        class="checkbox"
+        :class="[
+          'checkbox',
+          copyItem.checked && copyItem.isValid && 'act',
+          !copyItem.isValid && 'disabled',
+        ]"
+      >
         <image
           class="img"
           v-if="copyItem.checked"
@@ -20,9 +27,14 @@
         <view class="sku">{{ copyItem.attr }}</view>
       </view>
       <view class="price"><text class="rb">฿</text>{{ copyItem.price }}</view>
-      <view class="add-num flex-aic">
+      <view :class="['add-num flex-aic', !copyItem.isValid && 'disabled']">
         <view class="div flex-ctr" data-type="div" @click.stop="addcount">-</view>
-        <input type="number flex-ctr" v-model="copyItem.quantity" @blur="addcount" />
+        <input
+          type="number flex-ctr"
+          :disabled="!copyItem.isValid"
+          v-model="copyItem.quantity"
+          @blur="addcount"
+        />
         <view class="add flex-ctr" data-type="add" @click.stop="addcount">+</view>
       </view>
     </view>
@@ -69,7 +81,8 @@ export default {
         { copyItem } = _,
         { type } = e?.currentTarget?.dataset,
         total = copyItem.stockCount;
-      if (!total) return;
+      copyItem.originQuantity = copyItem.quantity;
+      if (!total || !copyItem.isValid) return;
       else if (!Number(copyItem.quantity)) copyItem.quantity = 1;
       else if (type) {
         //代表加减
@@ -83,10 +96,10 @@ export default {
       if (copyItem.quantity <= 1) copyItem.quantity = 1;
       else if (copyItem.quantity > total) {
         copyItem.quantity = total;
-        ToastInfo(`数量超出范围`, "none", 1500);
+        // ToastInfo(`数量超出范围`, "none", 1500);
       }
       _.copyItem = copyItem;
-      _.changeSelect(copyItem,'addCount');
+      _.changeSelect(copyItem, "changeCount");
     },
   },
 };
@@ -96,6 +109,9 @@ export default {
   padding: 32rpx;
   background: #fff;
   border-radius: 8rpx;
+  .disabled {
+    background: #faf7f7 !important;
+  }
   .checkbox {
     width: 30rpx;
     height: 30rpx;

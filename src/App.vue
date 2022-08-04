@@ -48,6 +48,7 @@ export default {
     restart: 1, //全局标识 0:热启动 1:冷启动
     login: login,
     hasmobile: () => Number(localStorage.get(SK.HAS_MOBILE) || "0"),
+    isNeedUpdetaCarList: true,
   },
 };
 </script>

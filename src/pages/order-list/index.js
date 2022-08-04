@@ -1,9 +1,11 @@
 import unit from './comps/unit.vue'
 import { Resource } from "@/server/resource-api";
 import { ToastInfo, debounce } from "@/utils/util";
+let _;
 export default {
     components: { unit },
     data() {
+        _ = this;
         return {
             statusOptions: [
                 {
@@ -33,25 +35,24 @@ export default {
         };
     },
     onLoad(option) {
-        this.curIdx = option.type || 0;
+        _.curIdx = option.type || 0;
     },
     onReachBottom: function () {
-        const { isend, list } = this;
+        const { isend, list } = _;
         if (!isend && list.length) {
-            this.pageNum += 1;
-            this.getList();
+            _.pageNum += 1;
+            _.getList();
         }
     },
     methods: {
         selectTab(item, idx) {
             console.log('item', item)
-            if (this.curIdx == idx) return;
-            this.curIdx = idx;
+            if (_.curIdx == idx) return;
+            _.curIdx = idx;
         },
         // 获取订单列表
         getList(status = null) {
-            let _ = this,
-                { pageNum, list, isend, pageSize } = _,
+            let { pageNum, list, isend, pageSize } = _,
                 params = {
                     pageNum: pageNum || 1,
                     pageSize,
@@ -72,47 +73,60 @@ export default {
                         }
                     }
                 });
-        }
-    },
-    // 列表数据格式化
-    formatList: function (list) {
-        const newList = list.map(item => {
-            const {
-                priceInt,
-                pricePoint
-            } = this.formatPrice(item.payAmount || item.returnAmount);
-            item.priceInt = priceInt;
-            item.pricePoint = pricePoint;
-            return item;
-        });
-        return newList;
-    },
+        },
+        // 列表数据格式化
+        formatList: function (list) {
+            const newList = list.map(item => {
+                const {
+                    priceInt,
+                    pricePoint
+                } = _.formatPrice(item.payAmount || item.returnAmount);
+                item.priceInt = priceInt;
+                item.pricePoint = pricePoint;
+                return item;
+            });
+            return newList;
+        },
 
-    // 价格格式化
-    formatPrice: function (itemPrice) {
-        let priceInt = '';
-        let pricePoint = '';
-        itemPrice = itemPrice || '';
+        // 价格格式化
+        formatPrice: function (itemPrice) {
+            let priceInt = '';
+            let pricePoint = '';
+            itemPrice = itemPrice || '';
 
-        if (itemPrice) {
-            let price = itemPrice + '';
+            if (itemPrice) {
+                let price = itemPrice + '';
 
-            if (price.indexOf('.') !== -1) {
-                priceInt = price.split('.')[0];
-                pricePoint = '.' + price.split('.')[1] || '';
+                if (price.indexOf('.') !== -1) {
+                    priceInt = price.split('.')[0];
+                    pricePoint = '.' + price.split('.')[1] || '';
+                } else {
+                    priceInt = itemPrice;
+                    pricePoint = '';
+                }
             } else {
-                priceInt = itemPrice;
+                priceInt = 0;
                 pricePoint = '';
             }
-        } else {
-            priceInt = 0;
-            pricePoint = '';
-        }
 
-        return {
-            priceInt,
-            pricePoint
-        };
-    },
+            return {
+                priceInt,
+                pricePoint
+            };
+        },
+        // 取消 删除订单
+        handleBtnOrder: debounce(
+            function (orderSn, type) {
+                console.log('orderSn', orderSn, type)
+                Resource.order
+                    .post({ type: type }, params, { loadingDelay: true })
+                    .then(({ code }) => {
+                        if (code == 1) {
+                            ToastInfo(type == 'deleteOrder' ? '已删除' : '已取消');
+                            _.list = _.list.filter((i) => i.orderSn != orderSn);
+                        }
+                    })
+            }, 500, true),
+    }
 
 };

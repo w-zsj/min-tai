@@ -2,7 +2,7 @@
   <view class="list">
     <view class="header flex-aic-btwn">
       <view class="order-no">订单号:{{ copyItem.orderSn }}</view>
-      <view class="status"> 待付款 </view>
+      <view class="status"> {{ orderStatus[copyItem.status] }} </view>
     </view>
     <view class="item">
       <view>
@@ -22,8 +22,8 @@
               <view class="sku">
                 <block
                   class="wine-size"
-                  v-for="attItem in goodsItem.productAttrList"
-                  :key="attItem.attIndex"
+                  v-for="(attItem, attIndex) in goodsItem.productAttrList"
+                  :key="attIndex"
                 >
                   {{ attItem.key }}:{{ attItem.value }}
                 </block>
@@ -49,7 +49,20 @@
       </view>
       <!-- wait-pay -->
       <view class="flex-end">
-        <view class="handel-btn wait-pay">
+        <view
+          class="handel-btn"
+          v-if="copyItem.status == 5"
+          @click.stop="handleBtnOrder(copyItem.orderSn, 'deleteOrder')"
+        >
+          删除订单
+        </view>
+        <view
+          class="handel-btn"
+          v-if="copyItem.status == 0"
+          @click.stop="handleBtnOrder(copyItem.orderSn, 'cancelUserOrder')"
+          >取消订单
+        </view>
+        <view class="handel-btn wait-pay" v-if="copyItem.status == 0">
           待付款
           {{ copyItem.date.h }}:{{ copyItem.date.m }}:{{ copyItem.date.s }}
         </view>
@@ -71,6 +84,10 @@ export default {
       type: Number,
       default: 0,
     },
+    handleBtnOrder: {
+      type: Function,
+      default: () => {},
+    },
   },
   data() {
     _ = this;
@@ -78,6 +95,13 @@ export default {
     return {
       copyItem: {},
       clearTimer,
+      orderStatus: {
+        0: "待付款",
+        1: "待审核",
+        3: "待收货",
+        4: "已取消",
+        5: "已完成",
+      },
     };
   },
   watch: {
@@ -242,6 +266,7 @@ export default {
       font-family: PingFangSC-Regular, PingFang SC;
       font-weight: 400;
       color: #272727;
+      margin-left: 16rpx;
       &.wait-pay {
         color: #fff;
         background: #a7002d;

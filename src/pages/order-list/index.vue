@@ -15,10 +15,10 @@
     <!-- 列表 -->
     <view class="product-list">
       <view class="loop" v-for="(item, idx) in list" :key="idx">
-        <unit :item='item' :index='idx'></unit>
+        <unit :item="item" :index="idx" :handleBtnOrder="handleBtnOrder"></unit>
       </view>
     </view>
-     <view class="loading" v-if="!isend && list.length">已加载全部</view>
+    <view class="loading" v-if="!isend && list.length">已加载全部</view>
   </view>
 </template>
 <script src="./index.js"></script>

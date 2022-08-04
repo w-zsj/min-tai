@@ -67,7 +67,8 @@
 		{
 			"path": "pages/order-list/index",
 			"style": {
-				"navigationBarTitleText": "订单列表"
+				"navigationBarTitleText": "订单列表",
+				"onReachBottomDistance": 50
 			}
 		},
 		{

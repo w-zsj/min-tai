@@ -18,7 +18,7 @@
         <unit :item='item' :index='idx'></unit>
       </view>
     </view>
-     <view class="loading" v-if="!loadAll && list.length">已加载全部</view>
+     <view class="loading" v-if="!isend && list.length">已加载全部</view>
   </view>
 </template>
 <script src="./index.js"></script>

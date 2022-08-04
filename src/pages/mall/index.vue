@@ -258,11 +258,14 @@ export default {
           if (res.code == 1) {
             ToastInfo("已删除");
             _.list = _.list.filter((i) => i.id != data.item.id);
-            let total = _.total > 99 ? "99+" : _.total + "";
-            uni.setTabBarBadge({
-              index: 2,
-              text: total,
-            });
+            let total = _.total - 1;
+            total = total > 99 ? "99+" : total + "";
+            if (total == 0) uni.removeTabBarBadge({ index: 2 });
+            else
+              uni.setTabBarBadge({
+                index: 2,
+                text: total,
+              });
             _.promotion();
           } else ToastInfo(res.message || res.msg);
         });

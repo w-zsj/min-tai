@@ -2,7 +2,7 @@
  * @Author: zhangsanjun 
  * @Date: 2022-05-17 17:37:18 
  * @Last Modified by: zhangsanjun
- * @Last Modified time: 2022-08-04 22:20:21
+ * @Last Modified time: 2022-08-04 22:48:15
  */
 
 import Pop from "@/components/pop";
@@ -226,6 +226,7 @@ export default {
           .post({ type: api }, params)
           .then((res) => {
             if (res.code == 1 && res?.data?.orderSn) {
+              _.confirmReceiveAddressModal = false;
               // 购物车下单成功 再次进入购物车 需要刷新
               if (sourceType == 2) app.globalData["isNeedUpdetaCarList"] = true;
               _.$to('pay/index?orderSn=' + res.data.orderSn);

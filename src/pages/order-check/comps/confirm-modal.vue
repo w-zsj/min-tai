@@ -13,7 +13,7 @@
         <view class="integral-short">
           <view class="text">{{ address.detailAddress }}</view>
           <view class="user-info flex-aic-btwn">
-            <view class="">姓名：{{ item.name }}</view>
+            <view class="">姓名：{{ address.name }}</view>
             <view>手机号：{{ address.phoneNumber }}</view>
           </view>
         </view>

@@ -37,7 +37,7 @@
           <view class="vip-price" v-if="item.memberSkuPrice">
             <view class="vip-price-number">{{ item.memberSkuPrice }}</view>
             <!-- promotionType活动类型 0:普通商品 1：秒杀商品 2：团购商品 4:新人活动商品 -->
-            <image v-if="item.promotionType == 1" src="/static/imgs/flash-price-icon.png" class="flash-price-icon">
+            <image v-if="item.promotionType == 1" src="/static/images/flash-price-icon.png" class="flash-price-icon">
             </image>
             <image class="new-price-icon" v-else-if="item.promotionType == 4"
               src="//file.9jinhuan.com/mall/images/t/c5a74c3c4c954914b5c51a588d91df74.png">

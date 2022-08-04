@@ -37,13 +37,7 @@ export default {
 		// 跳转到精品酒详情
 		toDetail: function (e) {
 			const { id, name } = this.itemClone;
-			try {
-				this.report('home_product', {
-					product_id: id,
-					paroduct_name: name
-				});
-			} catch (e) { }
-			this.$to(`mall/goods-detail/goods-detail?id=${id}`);
+			this.$to(`goods-detail/index?id=${id}`);
 		},
 	},
 	watch: {

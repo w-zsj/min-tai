@@ -94,7 +94,7 @@
               >
                 <image
                   class="ic gray"
-                  src="@/static/imgs/triangle-gray.png"
+                  src="@/static/images/triangle-gray.png"
                   v-if="rise == 0"
                 />
                 <image
@@ -364,9 +364,9 @@ export default {
         }
       }
       uni.showLoading({ title: "加载中" });
-      Resource.product
+      Resource.open
         .post(
-          { type: "queryProductByClassify" },
+          { type: "product/queryProductByClassify" },
           {
             productClassifyId: id,
             sort,
@@ -406,7 +406,7 @@ export default {
     },
     customevent: debounce(
       function (params) {
-        if (app.hasmobile()) {
+        if (app.globalData.hasmobile()) {
           Object.assign(this, {
             selectSkuModalShow: true,
             item: params.item,

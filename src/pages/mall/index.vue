@@ -109,7 +109,8 @@ export default {
         });
       } else {
         const newList = list.map((item) => {
-          if (!item.stockStatus && item.isValid) {
+          // && item.isValid
+          if (!item.stockStatus) {
             item.checked = true;
           }
           return item;
@@ -123,19 +124,21 @@ export default {
     },
     changeSelect(item, type) {
       let list = JSON.parse(JSON.stringify(_.list));
-      if (!item.isValid) return;
+      // if (!item.isValid) return;
       for (let key in list) {
         if (list[key].id == item.id) {
           list[key].quantity = item.quantity;
           if (type == "changeCount") {
+            _.list = list;
             _.updateQuantity(item);
           } else {
             list[key].checked = !list[key].checked;
-            list[key].checked && _.promotion();
+            _.list = list;
+            _.promotion();
           }
         }
       }
-      _.list = list;
+
       console.log("选择商品", _.list, item);
     },
     // 修改购物车商品数量
@@ -165,10 +168,10 @@ export default {
                   (listItem) => item.id === listItem.id
                 );
                 list[checkedIndex].quantity = item.quantity;
-                list[checkedIndex].isValid = item.isValid;
-                if (!item.isValid) {
-                  list[checkedIndex].checked = false;
-                }
+                // list[checkedIndex].isValid = item.isValid;
+                // if (!item.isValid) {
+                //   list[checkedIndex].checked = false;
+                // }
               });
               that.list = [...list];
               that.promotion();
@@ -197,7 +200,8 @@ export default {
         if (item.checked) {
           ids.push(item.id);
         }
-        if (!item.isValid || item.stockStatus) {
+        // !item.isValid ||
+        if (item.stockStatus) {
           unValidIds.push(item.id);
         }
       });
@@ -294,7 +298,8 @@ export default {
         item.pricePoint = pricePoint;
         item.realAmount = 0;
         item.reduceAmount = 0;
-        if (!item.stockStatus && item.isValid && _.isCheckAll) {
+        // && item.isValid
+        if (!item.stockStatus && _.isCheckAll) {
           item.checked = true;
         } else {
           item.checked = false;
@@ -331,18 +336,16 @@ export default {
     },
     // 下单
     goToPurchase: debounce(
-      async function () {
+      function () {
         const { ids } = _;
         if (!ids.length) {
           ToastInfo("您还没有选择商品宝贝哦");
           return;
         }
-        const flag = await _.checkOrder();
-        if (!flag) return;
+        // const flag = await _.checkOrder();
+        // if (!flag) return;
         let path = `/pages/order-check/index?cartIds=${JSON.stringify(ids)}&sourceType=2`;
-        uni.navigateTo({
-          url: path,
-        });
+        uni.navigateTo({ url: path });
       },
       1500,
       true
@@ -365,8 +368,8 @@ export default {
                   (listItem) => item.id === listItem.id
                 );
                 list[checkedIndex].quantity = item.quantity;
-                list[checkedIndex].isValid = item.isValid;
-                list[checkedIndex].checked = item.isValid ? true : false;
+                // list[checkedIndex].isValid = item.isValid;
+                // list[checkedIndex].checked = item.isValid ? true : false;
               });
               that.list = [...list];
               that.promotion();

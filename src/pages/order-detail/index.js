@@ -85,7 +85,7 @@ export default {
             productQuantity = 1,
           } = data;
 
-          that.setData({
+          Object.assign(that,{
             productList: orderItemList,
             createTime,
             tradeNo,

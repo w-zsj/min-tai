@@ -1,14 +1,7 @@
 <template>
   <view class="c-list flex-aic">
     <view @click.stop="changeSelect(copyItem)" style="height: 100%">
-      <view
-        class="checkbox"
-        :class="[
-          'checkbox',
-          copyItem.checked && copyItem.isValid && 'act',
-          !copyItem.isValid && 'disabled',
-        ]"
-      >
+      <view class="checkbox" :class="['checkbox', copyItem.checked && 'act']">
         <image
           class="img"
           v-if="copyItem.checked"
@@ -97,7 +90,7 @@ export default {
       else if (copyItem.quantity > total) {
         copyItem.quantity = total;
         // ToastInfo(`数量超出范围`, "none", 1500);
-      }
+      } else if (copyItem.quantity > 200) copyItem.quantity = 200;
       _.copyItem = copyItem;
       _.changeSelect(copyItem, "changeCount");
     },

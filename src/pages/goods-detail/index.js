@@ -100,6 +100,9 @@ export default {
         },
         // sku弹窗
         selectSku: debounce(function (e) {
+			let { type = 'buy' } = e.currentTarget.dataset,
+			{ expand } = _;
+			expand = Object.assign(expand, { type });
             _.checkHasMobile((loged) => {
                 if (loged)
                     _.selectSkuModalShow = true;

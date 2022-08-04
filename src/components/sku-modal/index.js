@@ -428,7 +428,7 @@ export default {
         { count } = _,
         fn = () => {
           let path =
-            `/pages/mall/order-check/order-check` +
+            `/pages/order-check/index` +
             `?productId=${productId}` +
             `&productSkuId=${skuId}` +
             `&quantity=${count}` +

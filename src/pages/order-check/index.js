@@ -2,7 +2,7 @@
  * @Author: zhangsanjun 
  * @Date: 2022-05-17 17:37:18 
  * @Last Modified by: zhangsanjun
- * @Last Modified time: 2022-08-04 14:55:18
+ * @Last Modified time: 2022-08-04 22:20:21
  */
 
 import Pop from "@/components/pop";
@@ -41,6 +41,9 @@ export default {
     const {
       cartIds = "",
       sourceType = 1,
+      productId,
+      quantity,
+      productSkuId
     } = options;
     if (productId && sourceType == 1) {
       Object.assign(_, {
@@ -64,7 +67,7 @@ export default {
   onShow: function () {
     const { sourceType } = _, address = app.globalData["addrInfo"];
     if (address) {
-      _.setData({ address });
+      _.address = address;
       _.getOrderData(sourceType == 1);
     }
   },
@@ -72,33 +75,32 @@ export default {
     closePromotionModal() {
       // 关闭弹框 刷新接口
       let { $to, invalidType, getOrderData } = _;
-      _.setData({ filterPromotionModal: false }, () => {
-        if (invalidType == 2) $to();
-        else getOrderData();
-      });
+      _.filterPromotionModal = false;
+      if (invalidType == 2) $to();
+      else getOrderData();
     },
     handleChooseAdd: function () {
       _.$to('address-list/index?source=1');
     },
     cacelModal: function () {
-      _.setData({
+      Object.assign(_,{
         showModal: false,
         note: _.note,
       });
     },
     // 添加备注信息
     isShowModal: function () {
-      _.setData({
+      Object.assign(_,{
         showModal: true,
         textAreaNote: _.note,
       });
     },
     inputs: function (e) {
       let value = e.detail.value;
-      _.setData({ textAreaNote: value });
+      Object.assign(_,{ textAreaNote: value });
     },
     addNote: function () {
-      _.setData({
+      Object.assign(_,{
         showModal: false,
         note: _.textAreaNote,
       });
@@ -110,7 +112,7 @@ export default {
         .then((res) => {
           const { code, data = {} } = res || {};
           if (code === 1) {
-            if (data.id) _.setData({ address: data, });
+            if (data.id) _.address = data;
             _.getOrderData();
           }
         });

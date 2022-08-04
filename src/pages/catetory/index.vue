@@ -442,7 +442,7 @@ export default {
       if (isEnd) return;
       else {
         pageNum++;
-        this.setData({ pageNum });
+        this.pageNum = pageNum;
         this.getProdList(this.id);
       }
     },

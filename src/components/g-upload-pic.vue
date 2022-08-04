@@ -132,7 +132,7 @@ export default {
 			const { index } = e.currentTarget.dataset;
 			const { photoList: list, uploadNumber } = this;
 			list.splice(index, 1);
-			this.setData({
+			Object.assign(this,{
 				list,
 				uploadNumber: uploadNumber - 1
 			});

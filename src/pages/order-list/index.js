@@ -127,6 +127,10 @@ export default {
                         }
                     })
             }, 500, true),
+        handleContact(e) {
+            console.log(e.detail.path)
+            console.log(e.detail.query)
+        }
     }
 
 };

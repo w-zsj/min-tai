@@ -1,5 +1,6 @@
 <template>
   <view class="order-list">
+    
     <!-- 菜单 -->
     <view class="nav flex-aic-ard">
       <view
@@ -12,6 +13,7 @@
         <text>{{ item.label }}</text>
       </view>
     </view>
+    <button open-type="contact" bindcontact="handleContact">客服</button>
     <!-- 列表 -->
     <view class="product-list">
       <view class="loop" v-for="(item, idx) in list" :key="idx">

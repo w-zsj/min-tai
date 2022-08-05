@@ -151,10 +151,10 @@ export default {
                 "pageSize": 1
               }).then(res => {
                 if (res.code == 1 && res?.data?.total) {
-                  let num = res?.data?.total>99?'99+':(res?.data?.total+'')
+                  let num = res?.data?.total > 99 ? '99+' : (res?.data?.total + '')
                   uni.setTabBarBadge({
                     index: 2,
-                    text:num
+                    text: num
                   })
                   // 添加购物车 切换到购物车页面需要刷新
                   app.globalData['isNeedUpdetaCarList'] = true;
@@ -475,6 +475,9 @@ export default {
       if (_.count <= 1) _.count = 1;
       else if (_.count > total) {
         _.count = total;
+        ToastInfo(`数量超出范围`, "none", 1500);
+      } else if (_.count > 200) {
+        _.count = 200;
         ToastInfo(`数量超出范围`, "none", 1500);
         return;
       }

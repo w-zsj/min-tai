@@ -1,11 +1,7 @@
 <template>
   <view class="my-car">
     <view v-for="(item, index) in list" :key="index" class="wrap">
-      <sidesLip
-        :item="item"
-        :data_transit="{ index: index, item: item }"
-        @delItem="delItem"
-      >
+      <sidesLip :item="item" :data_transit="{ index: index, item: item }" @delItem="delItem">
         <view style="color: #000000">
           <unit :item="item" :changeSelect="changeSelect"></unit>
         </view>
@@ -16,11 +12,7 @@
         <view class="footer-container line-lighter">
           <view class="left flex-aic" @click.stop="changeCheckAll">
             <view v-if="!isCheckAll" class="circle-point"></view>
-            <image
-              v-else
-              class="circle-point-image"
-              src="https://file.9jinhuan.com/wine/wechat/radio_checked.png"
-            >
+            <image v-else class="circle-point-image" src="https://file.9jinhuan.com/wine/wechat/radio_checked.png">
             </image>
             <view class="check-all-tetx">全选</view>
           </view>
@@ -40,11 +32,8 @@
     </view>
 
     <!-- 授权手机号 -->
-    <authority-phone-modal
-      @closemodal="isShowAuthPhone = false"
-      :isShowReject="false"
-      :isShowAuthPhone="isShowAuthPhone"
-    ></authority-phone-modal>
+    <authority-phone-modal @closemodal="isShowAuthPhone = false" :isShowReject="false"
+      :isShowAuthPhone="isShowAuthPhone"></authority-phone-modal>
   </view>
 </template>
 <script>
@@ -72,27 +61,24 @@ export default {
       total: 0,
     };
   },
-  onLoad() {},
+  onLoad() { },
   onShow() {
-    this.checkHasMobile((isLoged) => {
-      this.isShowAuthPhone = !isLoged;
+    _.checkHasMobile((isLoged) => {
+      _.isShowAuthPhone = !isLoged;
     });
     if (app.globalData["isNeedUpdetaCarList"]) {
       app.globalData["isNeedUpdetaCarList"] = false;
-      this.getCarList();
+      _.getCarList();
     }
   },
   onReachBottom: function () {
-    const { isend, list } = this;
+    const { isend, list } = _;
     if (!isend && list.length) {
-      this.pageNum += 1;
-      this.getCarList();
+      _.pageNum += 1;
+      _.getCarList();
     }
   },
   methods: {
-    handleOrder() {
-      console.log("下单", this.list);
-    },
     // 全选
     changeCheckAll: function () {
       const { list = [] } = _;
@@ -149,9 +135,7 @@ export default {
       const index = list.findIndex((listItem) => item.id === listItem.id);
       Resource.updatePromotion
         .post(
-          {
-            type: "quantity",
-          },
+          { type: "quantity" },
           {
             id: id,
             quantity: quantity,
@@ -187,7 +171,7 @@ export default {
             that.list = [...list];
           }
         })
-        .catch((e) => {});
+        .catch((e) => { });
     },
     // 获取购物车选中内容信息,包括促销信息
     promotion: function () {
@@ -247,7 +231,7 @@ export default {
             ToastInfo(res.msg || res.message || "服务异常");
           }
         })
-        .catch((e) => {});
+        .catch((e) => { });
     },
     // 删除
     delItem(data) {
@@ -271,8 +255,7 @@ export default {
         });
     },
     getCarList() {
-      let _ = this,
-        { pageNum, list, isend, pageSize } = _,
+      let { pageNum, list, isend, pageSize } = _,
         params = {
           pageNum: pageNum || 1,
           pageSize,

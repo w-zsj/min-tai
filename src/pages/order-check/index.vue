@@ -52,10 +52,7 @@
           <view class="section-item-title">备注信息</view>
           <view class="section-item-right">
             <view class="section-item-remark-detail">{{ note }}</view>
-            <image
-              class="section-item-remark-arrow"
-              src="//file.9jinhuan.com/wine/wechat/arrow_icon.png"
-            />
+            <image class="section-item-remark-arrow" src="//file.9jinhuan.com/wine/wechat/arrow_icon.png" />
           </view>
         </view>
         <view class="_line"></view>
@@ -63,8 +60,7 @@
           <view class="section-item-title">订单总额</view>
           <view class="section-item-right section-total-amount">
             <!-- 普通商品 价格 -->
-            <text v-if="totalAmount > 0 || payAmount > 0"
-              >฿{{ totalAmount || payAmount }}
+            <text v-if="totalAmount > 0 || payAmount > 0">฿{{ totalAmount || payAmount }}
             </text>
           </view>
         </view>
@@ -87,20 +83,13 @@
 
     <Pop :isShow="showModal" @conf="addNote" @close="cacelModal">
       <view class="modal-pop-title">添加备注</view>
-      <textarea
-        class="modal-textarea"
-        placeholder-style="color: #CCC9C9;font-size: 28rpx;font-weight: normal;"
-        placeholder="请输入…"
-        maxlength="100"
-        name="note"
-        cursor-spacing="100"
-        :value="textAreaNote"
-        @input="inputs"
-      />
+      <textarea class="modal-textarea" placeholder-style="color: #CCC9C9;font-size: 28rpx;font-weight: normal;"
+        placeholder="请输入…" maxlength="100" name="note" cursor-spacing="100" :value="textAreaNote" @input="inputs" />
     </Pop>
     <!-- 确认订单 -->
     <!-- Confirm Order -->
-    <confirmModal :address='address' :isVisible="confirmReceiveAddressModal" @onClose='onClose' @confirmModal='onConfirmModal'></confirmModal>
+    <confirmModal :address="address" :isVisible="confirmReceiveAddressModal" @onClose="onClose"
+      @confirmModal="onConfirmModal"></confirmModal>
   </view>
 </template>
 <script src="./index.js"></script>

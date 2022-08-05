@@ -2,7 +2,7 @@
  * @Author: zhangsanjun 
  * @Date: 2022-05-17 17:37:18 
  * @Last Modified by: zhangsanjun
- * @Last Modified time: 2022-08-04 22:48:15
+ * @Last Modified time: 2022-08-05 09:55:26
  */
 
 import Pop from "@/components/pop";
@@ -31,6 +31,7 @@ export default {
       totalAmount: '',//订单商品总金额
       reqError: false,
       confirmReceiveAddressModal: false, // 确认收货地址弹框
+      coin: 0,//金币余额
 
     };
   },
@@ -83,24 +84,24 @@ export default {
       _.$to('address-list/index?source=1');
     },
     cacelModal: function () {
-      Object.assign(_,{
+      Object.assign(_, {
         showModal: false,
         note: _.note,
       });
     },
     // 添加备注信息
     isShowModal: function () {
-      Object.assign(_,{
+      Object.assign(_, {
         showModal: true,
         textAreaNote: _.note,
       });
     },
     inputs: function (e) {
       let value = e.detail.value;
-      Object.assign(_,{ textAreaNote: value });
+      Object.assign(_, { textAreaNote: value });
     },
     addNote: function () {
-      Object.assign(_,{
+      Object.assign(_, {
         showModal: false,
         note: _.textAreaNote,
       });
@@ -159,10 +160,12 @@ export default {
               },
               cartPromotionItemList = [],
               productCount = 1,
+              coin = 0,
             } = data;
             Object.assign(_, {
               productList: data.productInfo ? [data.productInfo] : cartPromotionItemList, // 区分兑换商品 和 正常商品
-              payAmount, totalAmount, productCount
+              payAmount, totalAmount, productCount,
+              coin
             });
           } else {
             Object.assign(_, {
@@ -229,7 +232,7 @@ export default {
               _.confirmReceiveAddressModal = false;
               // 购物车下单成功 再次进入购物车 需要刷新
               if (sourceType == 2) app.globalData["isNeedUpdetaCarList"] = true;
-              _.$to('pay/index?orderSn=' + res.data.orderSn);
+              _.$to(`pay/index?orderSn=${res.data.orderSn}&payAmount=${payAmount}&coin=${coin}`)
             }
           })
           .finally(uni.hideLoading);

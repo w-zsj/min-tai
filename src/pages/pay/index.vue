@@ -2,10 +2,10 @@
   <view class="pay">
     <view class="title">
       <view class="txt flex-ctr">支付金额</view>
-      <view class="money flex-ctr"> ฿ 7777 </view>
+      <view class="money flex-ctr"> ฿ {{ payAmount }} </view>
       <view class="order-sn flex-aic-btwn">
         <view>订单编号</view>
-        <view>675797373479</view>
+        <view>{{ orderSn }}</view>
       </view>
     </view>
     <view class="pay-type">

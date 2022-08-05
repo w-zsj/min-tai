@@ -1,10 +1,11 @@
-import { ToastInfo, openMiniProgramPay, debounce } from "@/utils/util";
+import { ToastInfo, debounce } from "@/utils/util";
 import { Resource } from "@/server/resource-api";
 import { customCountDown } from "@/utils/countDown.js";
 let timerInterval,
-  app = getApp();
+  app = getApp(), _;
 export default {
   data() {
+    _ = this;
     return {
       Inipx: app.globalData["Inipx"],
       address: {
@@ -27,6 +28,8 @@ export default {
 
       freightAmount: "", //运费金额
       productQuantity: 1,
+
+      date: {},// 倒计时
     };
   },
   /**
@@ -64,11 +67,9 @@ export default {
       this.$to(`goods-detail/index?id=${item.id}`);
     },
     initData: function () {
-      const that = this,
-        { orderSn } = that;
+      const { orderSn, date } = _;
       Resource.order.post({ type: `detail` }, { orderSn }).then((res) => {
         const { code, data = {} } = res || {};
-
         if (code === 1) {
           const {
             status,
@@ -85,7 +86,7 @@ export default {
             productQuantity = 1,
           } = data;
 
-          Object.assign(that, {
+          Object.assign(_, {
             productList: orderItemList,
             createTime,
             tradeNo,
@@ -105,18 +106,48 @@ export default {
               name: receiverName,
               add: address,
             };
-            this.address = obj;
+            _.address = obj;
+          }
+          if (status == 0) {
+            let timer = remainingTime.second * 1000 || 0;
+            if (remainingTime.hour) {
+              timer += remainingTime.hour * 60 * 60 * 1000
+            } else if (remainingTime.minute) timer += remainingTime.minute * 60 * 1000;
+            customCountDown(
+              { time: copyItem.countDown, type: "m" },
+              (d, T) => {
+                date = d;
+                console.log('---', date);
+                timerInterval = T;
+                _.date = date;
+                clearTimeout(T);
+              },
+              (d) => {
+                console.log("d---", d == "end");
+                if (timerInterval) clearTimeout(timerInterval);
+              }
+            );
           }
         } else ToastInfo(res.message);
       });
     },
 
     // 不想买了
-    handleCancelOrder: function () { },
+    handleCancelOrder: function () {
+      Resource.order
+        .post({ type: `cancelUserOrder` }, { orderSn: _.orderSn })
+        .then((res) => {
+          if (res.code == 1) {
+            ToastInfo('已取消');
+            this.orderStatus = 4;
+          }
+        })
+    },
     // 我要付款
     handleOrder: debounce(
       function () {
         const { orderSn } = this;
+        _.$to(`payment-voucher/index?orderSn=${orderSn}&source=1`)
       },
       2000,
       true

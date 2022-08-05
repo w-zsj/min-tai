@@ -88,7 +88,7 @@
       </view>
 
       <view class="bottom line" :class="{ ipx: Inipx }" v-if="orderStatus === 0">
-        <!-- <view class="bottom-btn bottom-btn-left" @click="handleCancelOrder">不想买了</view> -->
+        <view class="bottom-btn bottom-btn-left" @click="handleCancelOrder">不想买了</view>
         <view class="bottom-btn" @click="handleOrder">立即支付 {{ payTimer }}</view>
       </view>
     </view>

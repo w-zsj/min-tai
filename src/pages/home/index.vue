@@ -19,20 +19,13 @@
     <!-- 登录提示 -->
     <view class="login-hint flex-aic-btwn" v-if="!isShowLoginHint">
       <view class="txt flex-aic">
-        <image
-          class="icon"
-          src="/static/images/close_icon.png"
-          @click.stop="isShowLoginHint = false"
-        />
+        <image class="icon" src="/static/images/close_icon.png" @click.stop="isShowLoginHint = false" />
         登录抢爆款商品
       </view>
       <view class="btn flex-ctr" @click.stop="isShowAuthPhone = true">立即登录</view>
     </view>
     <!-- 授权手机号 -->
-    <authority-phone-modal
-      @closemodal="closemodal"
-      :isShowAuthPhone="isShowAuthPhone"
-    ></authority-phone-modal>
+    <authority-phone-modal @closemodal="closemodal" :isShowAuthPhone="isShowAuthPhone"></authority-phone-modal>
   </view>
 </template>
 
@@ -68,7 +61,7 @@ export default {
     this.getHotProductList();
   },
   // 上拉加载
-  onReachBottom: function () {},
+  onReachBottom: function () { },
   methods: {
     // 轮播图点击
     bannerTap: function ({ url, type, id }, source) {
@@ -112,7 +105,7 @@ export default {
           pageNum: pageNum || 1,
           pageSize,
         };
-      Resource.open.post({ type: "product/hotProductList" }, params,{loadingDelay:true}).then((res) => {
+      Resource.open.post({ type: "product/hotProductList" }, params, { loadingDelay: true }).then((res) => {
         if (res.code == 1) {
           if (res?.data?.list?.length) {
             isend = !!(pageNum >= res?.data?.totalPage);

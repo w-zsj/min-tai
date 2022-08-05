@@ -1,17 +1,14 @@
 <template>
   <view class="category">
+    <!-- 搜索 -->
+    <serachInput :changeValue="changeValue" :source="2"></serachInput>
     <!-- 正文 -->
     <view class="content flex-aic" :style="'height:' + contentHeight">
       <!-- 一级类目 -->
       <view class="one-category skeleton-rect">
         <scroll-view scroll-y="true">
-          <view
-            class="item flex-ctr"
-            :class="idx == oneCateIndex ? 'act' : ''"
-            v-for="(item, idx) in list"
-            :key="idx"
-            @click.stop="select(item, idx, 'one')"
-          >
+          <view class="item flex-ctr" :class="idx == oneCateIndex ? 'act' : ''" v-for="(item, idx) in list" :key="idx"
+            @click.stop="select(item, idx, 'one')">
             <view class="" style="padding: 0 20rpx; text-align: center">
               {{ item.name }}
             </view>
@@ -30,31 +27,16 @@
         <view class="calc-height">
           <view class="two-category" v-if="isShowTwoCategory">
             <view class="horizontal-row">
-              <scroll-view
-                scroll-x="true"
-                :scrollIntoView="
+              <scroll-view scroll-x="true" :scrollIntoView="
                   'key_' + (twoCateIndex > 0 ? twoCateIndex - 1 : twoCateIndex)
-                "
-                class="renwu-title-items"
-                scroll-with-animation
-              >
-                <view
-                  class="item flex-ctr"
-                  :class="idx == twoCateIndex ? 'act' : ''"
-                  :id="'key_' + idx"
-                  v-for="(item, idx) in list[oneCateIndex].children"
-                  :key="idx"
-                  @click.stop="select(item, idx, 'two')"
-                >
+                " class="renwu-title-items" scroll-with-animation>
+                <view class="item flex-ctr" :class="idx == twoCateIndex ? 'act' : ''" :id="'key_' + idx"
+                  v-for="(item, idx) in list[oneCateIndex].children" :key="idx" @click.stop="select(item, idx, 'two')">
                   {{ item.name }}
                 </view>
               </scroll-view>
               <view class="icon" @click="isExpand = !isExpand">
-                <image
-                  class="img"
-                  src="https://file.9jinhuan.com/wine/wechat/arrow_icon.png"
-                  mode=""
-                ></image>
+                <image class="img" src="https://file.9jinhuan.com/wine/wechat/arrow_icon.png" mode=""></image>
               </view>
             </view>
           </view>
@@ -63,22 +45,12 @@
             <view class="all flex-aic-btwn">
               <view class="item">全部分类</view>
               <view class="icon flex-ctr" @click="isExpand = !isExpand">
-                <image
-                  class="_img"
-                  src="https://file.9jinhuan.com/wine/wechat/arrow_icon.png"
-                  mode=""
-                ></image>
+                <image class="_img" src="https://file.9jinhuan.com/wine/wechat/arrow_icon.png" mode=""></image>
               </view>
             </view>
             <view class="other">
-              <view
-                class="item flex-ctr"
-                :class="idx == twoCateIndex ? 'act' : ''"
-                :id="'key_' + idx"
-                v-for="(item, idx) in list[oneCateIndex].children"
-                :key="idx"
-                @click.stop="select(item, idx, 'two')"
-              >
+              <view class="item flex-ctr" :class="idx == twoCateIndex ? 'act' : ''" :id="'key_' + idx"
+                v-for="(item, idx) in list[oneCateIndex].children" :key="idx" @click.stop="select(item, idx, 'two')">
                 {{ item.name }}
               </view>
             </view>
@@ -88,82 +60,41 @@
           <view class="filter flex-ctr" v-if="prodList.length">
             <view class="price flex-aic" @click.stop="filter('rise')">
               <view class="txt flex-ctr" :class="rise ? 'act' : ''">价格</view>
-              <view
-                class="icon flex-col-ctr"
-                :class="rise == 1 ? 'act' : rise == 0 ? 'stop' : ''"
-              >
-                <image
-                  class="ic gray"
-                  src="@/static/images/triangle-gray.png"
-                  v-if="rise == 0"
-                />
-                <image
-                  class="ic"
-                  src="@/static/images/triangle-act.png"
-                  v-else
-                  style="margin-bottom: 2rpx"
-                />
+              <view class="icon flex-col-ctr" :class="rise == 1 ? 'act' : rise == 0 ? 'stop' : ''">
+                <image class="ic gray" src="@/static/images/triangle-gray.png" v-if="rise == 0" />
+                <image class="ic" src="@/static/images/triangle-act.png" v-else style="margin-bottom: 2rpx" />
                 <image class="ic" src="@/static/images/triangle-gray.png" />
               </view>
             </view>
-            <view
-              class="sale txt flex-ctr"
-              :class="sale ? 'act' : ''"
-              @click.stop="filter('sale')"
-              >销量</view
-            >
+            <view class="sale txt flex-ctr" :class="sale ? 'act' : ''" @click.stop="filter('sale')">销量</view>
           </view>
         </view>
         <!-- 搜索结果商品 -->
         <view class="search-list" :style="{ height: calcHeight }">
-          <view
-            class="empt flex-col-ctr"
-            :class="isShowTwoCategory ? 'pad-top' : ''"
-            v-if="prodList.length == 0"
-          >
+          <view class="empt flex-col-ctr" :class="isShowTwoCategory ? 'pad-top' : ''" v-if="prodList.length == 0">
             <image class="_img" src="/static/images/add-empty-icon.png" mode=""></image>
             <view class="txt">暂无商品</view>
           </view>
-          <scroll-view
-            lower-threshold="100"
-            :scroll-top="scrollTop"
-            scroll-y="true"
-            @scrolltolower="bindscrolltolower"
-            v-else
-          >
+          <scroll-view lower-threshold="100" :scroll-top="scrollTop" scroll-y="true" @scrolltolower="bindscrolltolower"
+            v-else>
             <view class="item">
               <block v-for="(item, index) in prodList" :key="index">
                 <view class="skeleton-rect">
-                  <product-unit
-                    className="catetory"
-                    :index="index"
-                    :itemClone="item"
-                    @customevent="customevent"
-                  >
+                  <product-unit className="catetory" :index="index" :itemClone="item" @customevent="customevent">
                   </product-unit>
                 </view>
               </block>
             </view>
-            <view class="end flex-ctr" v-if="total && total == prodList.length"
-              >—— 暂无更多商品 ——</view
-            >
+            <view class="end flex-ctr" v-if="total && total == prodList.length">—— 暂无更多商品 ——</view>
           </scroll-view>
         </view>
       </view>
     </view>
     <!-- 加入购物车 -->
-    <sku-modal
-      v-if="selectSkuModalShow"
-      :productId="item.id"
-      source="catetory"
-      @close="selectSkuModalShow = false"
-    >
+    <sku-modal v-if="selectSkuModalShow" :productId="item.id" source="catetory" @close="selectSkuModalShow = false">
     </sku-modal>
     <!-- 授权手机号 -->
-    <authority-phone-modal
-      @closemodal="closePhoneModal"
-      :isShowAuthPhone="isShowAuthPhone"
-    ></authority-phone-modal>
+    <authority-phone-modal @closemodal="closePhoneModal" :isShowAuthPhone="isShowAuthPhone"></authority-phone-modal>
   </view>
 </template>
 
@@ -172,9 +103,10 @@ import { debounce } from "@/utils/util.js";
 import { Resource } from "@/server/resource-api";
 import productUnit from "@/components/product-unit/cell.vue";
 import skuModal from "@/components/sku-modal/index.vue";
+import serachInput from "@comps/serach-input/index.vue";
 const app = getApp();
 export default {
-  components: { productUnit, skuModal },
+  components: { productUnit, skuModal, serachInput },
   data() {
     return {
       queryCId: "", // 从首页 分类进来
@@ -229,7 +161,7 @@ export default {
   methods: {
     // 类目选择
     select(item = {}, index = -1, type) {
-      console.log('item',item,index)
+      console.log('item', item, index)
       let _ = this;
       _.id = item.id;
       if (

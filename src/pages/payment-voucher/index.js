@@ -9,7 +9,8 @@ export default {
         return {
             source: 1,
             photoList: [],
-            paySource, source, orderno,
+            paySource: 1,
+            orderno: '',
             payImageUrl: "",// 支付截图 
         }
     },

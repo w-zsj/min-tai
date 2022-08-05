@@ -146,6 +146,8 @@
 		"autoscan": true,
 		"custom": {
 			"authority-phone-modal": "@/components/authority-phone-modal/authority-phone-modal",
+			"uni-easyinput": "@/components/uni-easyinput",
+			"uni-icons": "@/components/uni-icons/uni-icons",
 			"^g-(.*)": "@/components/g-$1.vue"
 		}
 	},

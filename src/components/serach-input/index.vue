@@ -1,23 +1,9 @@
 <template>
-  <div class="search-input" @click="goto">
-    <view class="flex-aic">
-      <view class="ipt">
-        <input
-          type="text"
-          placeholder="搜索商品-好物等你"
-          placeholder-class="placeholder"
-          @confirm="changeValue"
-          v-model="content"
-          :disabled="source == 1"
-        />
-        <view class="searcch_icon" @click.stop="changeValue(content)">
-          <image class="searcch_icon" src="/static/images/search_icon.png" />
-        </view>
-      </view>
-      <view class="btn flex-ctr" v-if="source == 2" @click.stop="changeValue(content)">
-        搜索
-      </view>
-    </view>
+  <div class="search-input flex-aic" @click="goto">
+    <uni-easyinput :styles="{ borderColor: '#ececec' }" trim="all" prefixIcon="search" type="text" confirmType="search"
+      v-model="content" placeholder="搜索商品-好物等你" @iconClick="changeValue" @confirm="changeValue">
+    </uni-easyinput>
+    <span class="canl" v-if="source != 1" @click.stop="goBack">取消</span>
   </div>
 </template>
 <script>
@@ -29,11 +15,11 @@ export default {
     },
     changeValue: {
       type: Function,
-      default: () => () => {},
+      default: () => () => { },
     },
     goto: {
       type: Function,
-      default: () => () => {},
+      default: () => () => { },
     },
   },
   data() {
@@ -42,62 +28,25 @@ export default {
     };
   },
   methods: {
-    confirm(value) {
-      console.log("", value);
-    },
+    goBack() {
+      this.$to()
+    }
   },
 };
 </script>
 <style>
-.placeholder {
+/* .placeholder {
   font-size: 24rpx;
   color: #c9c9c9;
-}
+} */
 </style>
 <style scoped lang="scss">
 .search-input {
-  height: 80rpx;
-
-  border-radius: 8rpx;
   margin-bottom: 20rpx;
-
-  .btn {
-    font-size: 24rpx;
-    color: #272727;
-    padding: 0 16rpx;
-    height: 80rpx;
-    border-radius: 8rpx;
-    border: 1px solid #ececec;
-    margin-left: 10rpx;
-  }
-  .ipt {
-    position: relative;
-    flex: 1;
-    background: #fff;
-    border-radius: 8rpx;
-    overflow: hidden;
-    input {
-      height: 80rpx;
-      width: 100%;
-      padding-left: 10rpx;
-    }
-    .searcch_icon {
-      position: absolute;
-      right: 0;
-      top: 0;
-      width: 80rpx;
-      height: 80rpx;
-      padding-right: 32rpx;
-      z-index: 2;
-      image {
-        width: 40rpx;
-        height: 40rpx;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-      }
-    }
+  .canl {
+    color: #222222;
+    font-size: 28rpx;
+    padding-left: 10rpx;
   }
 }
 </style>

@@ -8,10 +8,11 @@ export default {
             orderSn,
             payAmount,
             coin,
-            curStatus: 0,
+            paySource: 2,
+            // paySource	支付来源 1:订单支付 2：金币支付
             list: [{
                 icon: balance_icon,
-                title: '余额支付',
+                title: '金币支付',
                 id: 1
             },
             {
@@ -36,11 +37,11 @@ export default {
     },
     methods: {
         changeSelect(item) {
-            this.curStatus = item.id
+            _.paySource = item.id
         },
         pay() {
-            console.log('iii', this.curStatus);
-            this.$to('payment-voucher/index?source=1')
+            console.log('iii', this.paySource);
+            this.$to(`payment-voucher/index?source=1&paySource=${paySource}&orderno=${orderSn}}`)
         }
     }
 }

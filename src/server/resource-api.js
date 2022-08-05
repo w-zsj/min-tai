@@ -2,7 +2,7 @@
  * @Author: zhangsanjun 
  * @Date: 2022-07-25 11:01:10 
  * @Last Modified by: zhangsanjun
- * @Last Modified time: 2022-08-04 11:30:54
+ * @Last Modified time: 2022-08-05 10:28:18
  */
 
 import {
@@ -35,5 +35,6 @@ export const Resource = {
   promotion: HttpResource(`${API_HOST}/cart/list/:type`),
   //购物车-修改商品数量
   updatePromotion: HttpResource(`${API_HOST}/cart/update/:type`),
-
+  // 小程序支付
+  pay: HttpResource(`${API_HOST}/pay/xcxpay`),
 };

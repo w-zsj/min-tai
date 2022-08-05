@@ -68,6 +68,12 @@ export default {
     });
     if (app.globalData["isNeedUpdetaCarList"]) {
       app.globalData["isNeedUpdetaCarList"] = false;
+      Object.assign(_, {
+        pageNum: 1,
+        pageSize: 10,
+        isend: false,
+        isCheckAll: true
+      })
       _.getCarList();
     }
   },

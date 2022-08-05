@@ -3,10 +3,10 @@
     <view class="userInfo flex-aic-btwn">
       <view class="user flex-aci">
         <view class="header">
-          <image src="/static/images/logo.png" />
+          <image :src="userInfo.avatarUrl" />
         </view>
         <view class="flex-col-btwn">
-          <view class="phone">17601335937</view>
+          <view class="phone">{{userInfo.phone}}</view>
           <view class="gold flex-aic-ard">
             <view class="flex-aic">
               <image class="gold_icon" src="/static/images/gold_icon.png" />
@@ -16,10 +16,7 @@
           </view>
         </view>
       </view>
-      <view
-        class="account-management flex-aic"
-        @click.stop="jumpPath({ path: 'account-management/index' })"
-      >
+      <view class="account-management flex-aic" @click.stop="jumpPath({ path: 'account-management/index' })">
         <text>账户管理</text>
         <image class="arrow_icon" src="/static/images/arrow_icon.png" />
       </view>
@@ -31,12 +28,7 @@
       </view>
       <!-- 菜单导航 -->
       <view class="menu flex-aic-btwn">
-        <view
-          class="menu-item flex-col-ctr"
-          v-for="(item, idx) in menuList"
-          :key="idx"
-          @click.stop="jumpPath(item)"
-        >
+        <view class="menu-item flex-col-ctr" v-for="(item, idx) in menuList" :key="idx" @click.stop="jumpPath(item)">
           <view class="icon flex-ctr">
             <image class="" :src="item.icon" />
           </view>
@@ -53,15 +45,12 @@
         如果您购买的商品有任何问题,请于客服联系,客服会专门为您处理,让您售后无忧。
       </view>
       <!-- 客服 -->
-      <view class="customer-service flex-ctr"> 联系客服 </view>
+      <view class="customer-service flex-ctr" @click="jumpPath({id:'service'})"> 联系客服 </view>
     </view>
 
     <!-- 授权手机号 -->
-    <authority-phone-modal
-      @closemodal="isShowAuthPhone = false"
-      :isShowReject="false"
-      :isShowAuthPhone="isShowAuthPhone"
-    ></authority-phone-modal>
+    <authority-phone-modal @closemodal="closeModal" :isShowReject="false" :isShowAuthPhone="isShowAuthPhone">
+    </authority-phone-modal>
   </view>
 </template>
 <script>
@@ -72,6 +61,8 @@ import shipping_address_icon from "@/static/images/shipping_address_icon.png";
 import customer_service_icon from "@/static/images/customer_service_icon.png";
 import { openCustomerService } from "@/utils/util.js";
 import { Resource } from "@/server/resource-api";
+import { localStorage } from "@/utils/extend";
+import { SK } from "@/utils/constant";
 export default {
   components: { mySwiper },
   data() {
@@ -102,6 +93,11 @@ export default {
           path: "",
         },
       ],
+      userInfo: {
+        nickName: localStorage.get(SK.NICK_NAME),
+        avatarUrl: localStorage.get(SK.USER_IMAGE),
+        phone: localStorage.get(SK.USER_PHONE),
+      }
     };
   },
   onLoad() {
@@ -151,6 +147,24 @@ export default {
       if (item.id == "service") openCustomerService();
       else this.$to(item.path);
     },
+
+    // 关闭授权手机号弹窗
+    closeModal: function (e) {
+      if (e.detail == 'success') {
+        Object.assign(this, {
+          isShowAuthPhone: false,
+          userInfo: {
+            nickName: localStorage.get(SK.NICK_NAME),
+            avatarUrl: localStorage.get(SK.USER_IMAGE),
+            phone: localStorage.get(SK.USER_PHONE),
+          },
+        });
+      } else {
+        uni.reLaunch({ url: '/pages/home/index' });
+        this.isShowAuthPhone = false;
+      }
+    },
+
   },
 };
 </script>

@@ -29,7 +29,7 @@ export default {
             imageList: [], //轮播图图片
             showModal: false, //加入购物车提示弹窗
             isShowAuthPhone: false,
-            selectSkuModalShow:false,
+            selectSkuModalShow: false,
         };
     },
     onLoad(options) {
@@ -100,9 +100,9 @@ export default {
         },
         // sku弹窗
         selectSku: debounce(function (e) {
-			let { type = 'buy' } = e.currentTarget.dataset,
-			{ expand } = _;
-			expand = Object.assign(expand, { type });
+            let { type = 'buy' } = e.currentTarget.dataset,
+                { expand } = _;
+            expand = Object.assign(expand, { type });
             _.checkHasMobile((loged) => {
                 if (loged)
                     _.selectSkuModalShow = true;

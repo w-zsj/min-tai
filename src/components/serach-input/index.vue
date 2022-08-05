@@ -3,7 +3,7 @@
     <uni-easyinput :styles="{ borderColor: '#ececec' }" trim="all" prefixIcon="search" type="text" confirmType="search"
       v-model="content" placeholder="搜索商品-好物等你" @iconClick="changeValue" @confirm="changeValue">
     </uni-easyinput>
-    <span class="canl" v-if="source != 1" @click.stop="goBack">取消</span>
+    <span class="canl" v-if="source == 2" @click.stop="goBack">取消</span>
   </div>
 </template>
 <script>

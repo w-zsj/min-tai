@@ -1,11 +1,11 @@
 <template>
   <view class="category">
     <!-- 搜索 -->
-    <view style="margin:20rpx 20rpx 0 20rpx;">
-      <serachInput :changeValue="changeValue" :source="2"></serachInput>
+    <view class="search content-height">
+      <serachInput :changeValue="changeValue"></serachInput>
     </view>
     <!-- 正文 -->
-    <view class="content flex-aic" :style="'height:' + calc(100% - '20px')">
+    <view class="content flex-aic" :style="'height:' + contentHeight">
       <!-- 一级类目 -->
       <view class="one-category skeleton-rect">
         <scroll-view scroll-y="true">
@@ -26,7 +26,7 @@
       <!-- 右侧 -->
       <view class="prod-list">
         <!-- 二级类目 -->
-        <view class="calc-height">
+        <view class="calc-height content-height">
           <view class="two-category" v-if="isShowTwoCategory">
             <view class="horizontal-row">
               <scroll-view scroll-x="true" :scrollIntoView="
@@ -87,7 +87,7 @@
                 </view>
               </block>
             </view>
-            <view class="end flex-ctr" v-if="total && total == prodList.length">—— 暂无更多商品 ——</view>
+            <view class="end flex-ctr" v-if="isEnd && prodList.length">—— 暂无更多商品 ——</view>
           </scroll-view>
         </view>
       </view>
@@ -107,9 +107,11 @@ import productUnit from "@/components/product-unit/cell.vue";
 import skuModal from "@/components/sku-modal/index.vue";
 import serachInput from "@comps/serach-input/index.vue";
 const app = getApp();
+let _;
 export default {
   components: { productUnit, skuModal, serachInput },
   data() {
+    _ = this;
     return {
       queryCId: "", // 从首页 分类进来
       tabBarHeight: null,
@@ -163,8 +165,7 @@ export default {
   methods: {
     // 类目选择
     select(item = {}, index = -1, type) {
-      console.log('item', item, index)
-      let _ = this;
+      console.log("item", item, index);
       _.id = item.id;
       if (
         (type == "one" && index == _.oneCateIndex) ||
@@ -199,8 +200,7 @@ export default {
     },
     // 价格排序
     filter(type) {
-      let _ = this,
-        { rise, sale } = _;
+      let { rise, sale } = _;
       if (type == "rise") {
         switch (rise) {
           case 0:
@@ -263,7 +263,50 @@ export default {
     },
     // 搜索查询商品
     changeValue(val) {
-      console.log('搜索关键字', val)
+      console.log("搜索关键字", val);
+      let { sale, rise } = _;
+      Object.assign(_, {
+        isExpand: false,
+        isEnd: false,
+        pageNum: 1,
+        scrollTop: -1,
+      });
+      //  rise: 0, // 0 无排序 1 升序 2 降序 升序降序 映射 0 升序 1 降序
+      // sale: false, // 销售量排序 0 首次进来 1 价格 2 销量
+      // sort	排序字段:0->按相关度；1->按新品；2->按销量；3->价格从低到高；4->价格从高到低,可用值:0,1,2,3,4,示例值(0)
+      let _sort = 0;
+      if (sale) _sort = 2;
+      else if (rise == 1) _sort = 3;
+      else if (rise == 2) _sort = 4;
+      _.searchBykeyWord(val, _sort);
+    },
+    searchBykeyWord(keyword = "", sort = 0) {
+      Resource.open
+        .post(
+          { type: "product/search" },
+          {
+            productClassifyId: _.id,
+            sort,
+            keyword,
+            pageNum: _.pageNum,
+            pageSize: 10,
+          },
+          { loadingDelay: true }
+        )
+        .then((res) => {
+          let { code, data } = res;
+          if (code == 1) {
+            if (pageNum == 1) prodList = data.list || [];
+            else prodList = prodList.concat(data.list);
+            isEnd = data.pageNum * data.pageSize >= data.total;
+            Object.assign(_, {
+              prodList,
+              isEnd,
+              total: data.total,
+            });
+          }
+          // else _.reset();
+        });
     },
     // 搜索商品
     getProdList(id = 0) {
@@ -275,8 +318,7 @@ export default {
       // sortColumn:0, //排序字段 0:商品sort(此时参数sort不必填) 1:价格 2:销量(此时参数sort必须为1)
 
       // productClassifyId	分类ID 一级全部分类传0
-      let _ = this,
-        { rise, sale, isEnd, pageNum, prodList, flag } = _,
+      let { rise, sale, isEnd, pageNum, prodList, flag } = _,
         sort = 1,
         sortColumn = 0;
       if (isEnd) return;
@@ -303,7 +345,6 @@ export default {
             sort = 1;
         }
       }
-      uni.showLoading({ title: "加载中" });
       Resource.open
         .post(
           { type: "product/queryProductByClassify" },
@@ -313,7 +354,8 @@ export default {
             sortColumn,
             pageNum,
             pageSize: 10,
-          }
+          },
+          { loadingDelay: true }
         )
         .then((res) => {
           let { code, data } = res;
@@ -331,27 +373,36 @@ export default {
               _.scrollTop = 0;
               const query = uni.createSelectorQuery().in(_);
               query
-                .select(".calc-height")
+                .selectAll(".content-height")
                 .boundingClientRect((data) => {
-                  _.calcHeight = `calc(100% - ${data.height}px)`;
+                  let tal = data.reduce(function getSum(pre, next) {
+                    return pre.height + next.height;
+                  });
+                  _.calcHeight = `calc(100vh - ${tal}px)`;
+                  console.log("data", tal, _.calcHeight);
+                })
+                .exec();
+              // 内容高度
+              query
+                .select(".search")
+                .boundingClientRect((data) => {
+                  console.log(".search", data);
+                  _.contentHeight = `calc(100vh - ${data.height}px)`;
                 })
                 .exec();
             });
           }
           // else _.reset();
-        })
-        .finally(() => {
-          uni.hideLoading();
         });
     },
     customevent: debounce(
       function (params) {
         if (app.globalData.hasmobile()) {
-          Object.assign(this, {
+          Object.assign(_, {
             selectSkuModalShow: true,
             item: params.item,
           });
-        } else this.isShowAuthPhone = true;
+        } else _.isShowAuthPhone = true;
       },
       500,
       true
@@ -360,14 +411,14 @@ export default {
       if (app.globalData.hasmobile()) {
         cb();
       } else {
-        this.isShowAuthPhone = true;
+        _.isShowAuthPhone = true;
       }
     },
     closePhoneModal() {
-      this.isShowAuthPhone = false;
+      _.isShowAuthPhone = false;
     },
     reset() {
-      Object.assign(this, {
+      Object.assign(_, {
         oneCateIndex: 0,
         twoCateIndex: 0,
         isExpand: false,
@@ -377,13 +428,13 @@ export default {
     },
     // 商品滚动加载
     bindscrolltolower(e) {
-      console.log("滚动到底部了", this.id);
-      let { isEnd, pageNum } = this;
+      console.log("滚动到底部了", _.id);
+      let { isEnd, pageNum } = _;
       if (isEnd) return;
       else {
         pageNum++;
-        this.pageNum = pageNum;
-        this.getProdList(this.id);
+        _.pageNum = pageNum;
+        _.getProdList(_.id);
       }
     },
   },

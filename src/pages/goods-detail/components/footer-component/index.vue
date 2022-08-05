@@ -20,14 +20,9 @@
       </view>
       <view class="right">
         <block>
-          <button
-            class="btn  group-car-btn black-bg"
-            data-type="addcar"
-            @click="selectSku"
-          >
+          <button class="btn  group-car-btn black-bg" data-type="addcar" @click="selectSku">
             加入购物车
           </button>
-
           <button class="btn group-buy-btn red-bg" data-type="buy" @click="selectSku">
             立即购买
           </button>
@@ -56,7 +51,7 @@ export default {
       Inipx: !!app.globalData.Inipx,
     };
   },
-  mounted() {},
+  mounted() { },
   methods: {
     // 客服
     customerService: function () {
@@ -70,7 +65,7 @@ export default {
             product_id: this.detail.id,
             product_name: this.detail.name,
           });
-        } catch (e) {}
+        } catch (e) { }
         uni.switchTab({ url: `/pages/mall/index` });
       });
     },

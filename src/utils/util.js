@@ -116,24 +116,27 @@ function compareVersion(v1, v2) {
 }
 
 function openCustomerService() {
-  const version = uni.getSystemInfoSync().SDKVersion;
+  // const version = uni.getSystemInfoSync().SDKVersion;
 
-  if (compareVersion(version, '2.19.0') >= 0) {
-    uni.openCustomerServiceChat({
-      extInfo: {
-        url: 'https://work.weixin.qq.com/kfid/kfc176badfe65e7f44f'
-      },
-      corpId: 'wwa820759ee3251132',
+  // if (compareVersion(version, '2.19.0') >= 0) {
+  //   uni.openCustomerServiceChat({
+  //     extInfo: {
+  //       url: 'https://work.weixin.qq.com/kfid/kfc176badfe65e7f44f'
+  //     },
+  //     corpId: 'wwa820759ee3251132',
 
-      success(res) { }
-    });
-  } else {
-    // 如果希望用户在最新版本的客户端上体验您的小程序，可以这样子提示
-    uni.showModal({
-      title: '提示',
-      content: '当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。'
-    });
-  }
+  //     success(res) { }
+  //   });
+  // } else {
+  //   // 如果希望用户在最新版本的客户端上体验您的小程序，可以这样子提示
+  //   uni.showModal({
+  //     title: '提示',
+  //     content: '当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。'
+  //   });
+  // }
+  uni.makePhoneCall({
+    phoneNumber: '13248166371'
+  });
 }
 /**
  *
@@ -248,7 +251,7 @@ function bannerTap(e) {
   }
 };
 
-export  {
+export {
   formatTime,
   ToastInfo,
   debounce,

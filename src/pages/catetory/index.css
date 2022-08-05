@@ -4,6 +4,10 @@
 	overflow: hidden;
 }
 
+.search {
+	padding: 20rpx 20rpx 0 20rpx;
+}
+
 .navogation-title {
 	width: 100%;
 	background-color: #f6f6f6;

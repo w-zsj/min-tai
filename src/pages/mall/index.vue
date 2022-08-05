@@ -32,8 +32,8 @@
     </view>
 
     <!-- 授权手机号 -->
-    <authority-phone-modal @closemodal="isShowAuthPhone = false" :isShowReject="false"
-      :isShowAuthPhone="isShowAuthPhone"></authority-phone-modal>
+    <authority-phone-modal @closemodal="closeModal" :isShowReject="false" :isShowAuthPhone="isShowAuthPhone">
+    </authority-phone-modal>
   </view>
 </template>
 <script>
@@ -41,6 +41,7 @@ import { Resource } from "@/server/resource-api";
 import sidesLip from "@/components/sides-lip/index.vue";
 import unit from "./comps/unit.vue";
 import { ToastInfo, debounce } from "@/utils/util";
+import { th } from '@dcloudio/vue-cli-plugin-uni/packages/postcss/tags';
 let _,
   app = getApp();
 export default {
@@ -61,7 +62,6 @@ export default {
       total: 0,
     };
   },
-  onLoad() { },
   onShow() {
     _.checkHasMobile((isLoged) => {
       _.isShowAuthPhone = !isLoged;
@@ -142,10 +142,8 @@ export default {
       Resource.updatePromotion
         .post(
           { type: "quantity" },
-          {
-            id: id,
-            quantity: quantity,
-          }
+          { id: id, quantity: quantity, },
+          { loadingDelay: true }
         )
         .then((res) => {
           const { code, data = {} } = res || {};
@@ -370,6 +368,22 @@ export default {
           }
         });
       return flag;
+    },
+
+    // 关闭授权手机号弹窗
+    closeModal: function (e) {
+      if (e.detail == 'success') {
+        Object.assign(this, {
+          pageNum: 1,
+          pageSize: 10,
+          isend: false,
+          isCheckAll: true
+        });
+        this.getCarList();
+      } else {
+        uni.reLaunch({ url: '/pages/home/index' });
+        this.isShowAuthPhone = false;
+      }
     },
   },
 };

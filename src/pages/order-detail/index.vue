@@ -6,10 +6,7 @@
           <view>{{ orderStatus }}</view>
         </view>
         <view class="header-address">
-          <image
-            class="address-icon"
-            src="//file.9jinhuan.com/wine/wechat/choose_address.png"
-          />
+          <image class="address-icon" src="//file.9jinhuan.com/wine/wechat/choose_address.png" />
           <view class="address-detail">
             <view class="address-detail-info">
               <view class="address-detail-name">{{ address.name }}</view>
@@ -23,14 +20,13 @@
         <view class="section-title">商品信息</view>
         <view>
           <view class="section-list" v-for="item in productList" :key="item.id">
-            <view class="section-detail" :data-item="item" @click="checkGoodDetail">
+            <view class="section-detail" @click="checkGoodDetail(item.id)">
               <image class="section-detail-image" :src="item.productPic" />
               <view class="section-detail-center flex-col-btwn">
                 <view class="section-detail-title">{{ item.productName }}</view>
                 <view class="section-detail-type">
-                  <text class="txt" v-for="item in item.productAttr" :key="item.key"
-                    >{{ item.key }}:{{ item.value }}</text
-                  >
+                  <text class="txt" v-for="item in item.productAttr"
+                    :key="item.key">{{ item.key }}:{{ item.value }}</text>
                 </view>
               </view>
               <view class="section-detail-right flex-col-btwn">
@@ -70,12 +66,7 @@
           <view class="section-item-title">订单编号</view>
           <view class="section-item-right">
             {{ orderSn }}
-            <text
-              class="section-item-right-copy"
-              :data-ordersn="orderSn"
-              @click="copyOrderSn"
-              >复制</text
-            >
+            <text class="section-item-right-copy" :data-ordersn="orderSn" @click="copyOrderSn">复制</text>
           </view>
         </view>
         <view class="section-item">

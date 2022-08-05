@@ -23,7 +23,6 @@
 }
 
 .content {
-	padding-top: 30rpx;
 	/* #ifdef MP-WEIXIN */
 	height: calc(100vh - 70px - 85px - env(safe-area-inset-bottom));
 	/* #endif */

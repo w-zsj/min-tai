@@ -40,7 +40,7 @@ export default {
     changeValue(value) {
       if (typeof value !== "string") value = value.detail.value;
       value = value.replace(/\s+/g, "");
-      console.log('搜索内容', value)
+      console.log('搜索关键字', value)
       let history = JSON.parse(localStorage.get(SK.SEARCH_HISTORY) || "[]");
       if (value && !history.includes(value)) {
         history.unshift(value);

@@ -2,7 +2,7 @@
  * @Author: zhangsanjun 
  * @Date: 2022-05-17 17:37:18 
  * @Last Modified by: zhangsanjun
- * @Last Modified time: 2022-08-05 10:28:55
+ * @Last Modified time: 2022-08-05 13:33:58
  */
 
 import Pop from "@/components/pop";
@@ -32,6 +32,7 @@ export default {
       reqError: false,
       confirmReceiveAddressModal: false, // 确认收货地址弹框
       coin: 0,//金币余额
+      useCoin: false,// 是否使用金币
 
     };
   },
@@ -194,18 +195,23 @@ export default {
       _.confirmReceiveAddressModal = true;
 
     },
+    // 选择是否使用金币
+    changeCoinStatus(event) {
+      console.log('event.detail', event.detail)
+      _.useCoin = event?.detail?.value
+    },
     // 下单
     generateOrder: debounce(
       function () {
         let {
           address, note, cartIds,
-          productList, sourceType, productId, productSkuId,
-          quantity = 1
+          sourceType, productId, productSkuId,
+          quantity = 1, useCoin
         } = _,
           api = "generateOrderByCar",
           params = {
             memberReceiveAddressId: address.id,
-            note,
+            note, useCoin
           },
           resource = Resource.order;
         switch (sourceType) {
@@ -227,12 +233,14 @@ export default {
         });
         resource
           .post({ type: api }, params)
-          .then((res) => {
-            if (res.code == 1 && res?.data?.orderSn) {
+          .then(({ code, data }) => {
+            if (code == 1 && data?.orderSn) {
               _.confirmReceiveAddressModal = false;
               // 购物车下单成功 再次进入购物车 需要刷新
               if (sourceType == 2) app.globalData["isNeedUpdetaCarList"] = true;
-              _.$to(`pay/index?orderSn=${res.data.orderSn}&payAmount=${payAmount}&coin=${coin}`)
+              if (data.needPay)
+                _.$to(`payment-voucher/index?orderSn=${data.orderSn}&source=1`)
+              else _.$to(`order-detail?orderSn=${data.orderSn}`)
             }
           })
           .finally(uni.hideLoading);

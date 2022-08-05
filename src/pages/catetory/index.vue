@@ -1,9 +1,11 @@
 <template>
   <view class="category">
     <!-- 搜索 -->
-    <serachInput :changeValue="changeValue" :source="2"></serachInput>
+    <view style="margin:20rpx 20rpx 0 20rpx;">
+      <serachInput :changeValue="changeValue" :source="2"></serachInput>
+    </view>
     <!-- 正文 -->
-    <view class="content flex-aic" :style="'height:' + contentHeight">
+    <view class="content flex-aic" :style="'height:' + calc(100% - '20px')">
       <!-- 一级类目 -->
       <view class="one-category skeleton-rect">
         <scroll-view scroll-y="true">
@@ -230,6 +232,7 @@ export default {
       });
       _.getProdList(_.id);
     },
+    // 获取分类
     getList() {
       let { oneCateIndex = 0 } = this;
       Resource.classifyList.post({ type: "classifyList" }, {}).then((res) => {
@@ -258,6 +261,11 @@ export default {
         } else this.reset();
       });
     },
+    // 搜索查询商品
+    changeValue(val) {
+      console.log('搜索关键字', val)
+    },
+    // 搜索商品
     getProdList(id = 0) {
       // 刚进分类tab，sortColumn: 0  sort: 1 （价格、销量都置灰）
       // 点击价格升序: sortColumn: 1  sort: 0 (销量置灰)

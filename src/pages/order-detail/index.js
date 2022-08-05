@@ -59,9 +59,9 @@ export default {
   },
 
   methods: {
-    customevent(item) {
-      console.log("item", item);
-      this.$to(`/pages/mall/goods-detail/goods-detail?id=${item.giftId}`);
+    checkGoodDetail(item) {
+      console.log("item>>>", item);
+      this.$to(`goods-detail/index?id=${item.id}`);
     },
     initData: function () {
       const that = this,
@@ -85,7 +85,7 @@ export default {
             productQuantity = 1,
           } = data;
 
-          Object.assign(that,{
+          Object.assign(that, {
             productList: orderItemList,
             createTime,
             tradeNo,
@@ -112,8 +112,7 @@ export default {
     },
 
     // 不想买了
-    handleCancelOrder: function () {},
-
+    handleCancelOrder: function () { },
     // 我要付款
     handleOrder: debounce(
       function () {
@@ -122,7 +121,6 @@ export default {
       2000,
       true
     ),
-
     // 复制订单号
     copyOrderSn: function (e) {
       uni.setClipboardData({

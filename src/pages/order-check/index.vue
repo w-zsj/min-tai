@@ -45,9 +45,13 @@
         </view>
 
         <view class="section-item section-deliver">
-          <view class="section-item-title">配送方式</view>
-          <view class="section-item-right">包邮</view>
+          <view class="section-item-title">是否使用金币</view>
+          <view class="section-item-right">
+            <span>{{ !coin ? "不可用" : "" }}</span>
+            <switch color="#a7002d" :disabled="!coin" @change="changeCoinStatus" style="transform: scale(0.7)" />
+          </view>
         </view>
+        <view class="_line"></view>
         <view class="section-item section-remark" @click="isShowModal">
           <view class="section-item-title">备注信息</view>
           <view class="section-item-right">

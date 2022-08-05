@@ -1,12 +1,8 @@
 <template>
   <view class="c-list flex-aic">
-    <view @click.stop="changeSelect(copyItem)" style="height: 100%">
+    <view @click.stop="changeSelect(copyItem)" class="checkbox-wrap">
       <view class="checkbox" :class="['checkbox', copyItem.checked && 'act']">
-        <image
-          class="img"
-          v-if="copyItem.checked"
-          src="/static/images/checked_icon.png"
-        />
+        <image class="img" v-if="copyItem.checked" src="/static/images/checked_icon.png" />
       </view>
     </view>
     <view class="pic" @click.stop="toDetail(copyItem.productId)">
@@ -22,12 +18,7 @@
       <view class="price"><text class="rb">฿</text>{{ copyItem.price }}</view>
       <view :class="['add-num flex-aic', !copyItem.isValid && 'disabled']">
         <view class="div flex-ctr" data-type="div" @click.stop="addcount">-</view>
-        <input
-          type="number flex-ctr"
-          :disabled="!copyItem.isValid"
-          v-model="copyItem.quantity"
-          @blur="addcount"
-        />
+        <input type="number flex-ctr" :disabled="!copyItem.isValid" v-model="copyItem.quantity" @blur="addcount" />
         <view class="add flex-ctr" data-type="add" @click.stop="addcount">+</view>
       </view>
     </view>
@@ -39,7 +30,7 @@ export default {
   props: {
     changeSelect: {
       type: Function,
-      default: () => {},
+      default: () => { },
     },
     item: {
       type: Object,
@@ -99,27 +90,32 @@ export default {
 </script>
 <style scoped lang="scss">
 .c-list {
-  padding: 32rpx;
+  padding: 24rpx;
+  padding-left: 0;
   background: #fff;
   border-radius: 8rpx;
   .disabled {
     background: #faf7f7 !important;
   }
-  .checkbox {
-    width: 30rpx;
-    height: 30rpx;
-    border: 1px solid #807b7b;
-    border-radius: 50%;
-    margin-right: 32rpx;
-    &.act {
-      border: 0;
-      .img {
-        display: block;
-        width: 100%;
-        height: 100%;
+  .checkbox-wrap {
+    padding: 40rpx 32rpx 40rpx 24rpx;
+    .checkbox {
+      width: 30rpx;
+      height: 30rpx;
+      border: 1px solid #807b7b;
+      border-radius: 50%;
+      // margin-right: 32rpx;
+      &.act {
+        border: 0;
+        .img {
+          display: block;
+          width: 100%;
+          height: 100%;
+        }
       }
     }
   }
+
   .pic {
     width: 154rpx;
     height: 154rpx;

@@ -32,11 +32,11 @@
               <view class="section-detail-right flex-col-btwn">
                 <view>
                   <view class="section-detail-amount">
-                    <view class="integra" v-if="item.useCoin>0">
-                      {{item.useCoin}}金币
+                    <view class="integra" v-if="item.useCoin > 0">
+                      {{ item.useCoin }}金币
                     </view>
                     <!-- 普通商品价格 -->
-                    <view v-if="item.productPrice>0">{{item.useCoin>0?'+':''}}￥{{ item.productPrice }}</view>
+                    <view v-if="item.productPrice > 0">{{ item.useCoin > 0 ? "+" : "" }}￥{{ item.productPrice }}</view>
                   </view>
                   <view class="section-detail-num">x{{ item.productQuantity }}</view>
                 </view>
@@ -65,6 +65,13 @@
 
       <view class="section">
         <view class="section-title">订单信息</view>
+        <view class="section-item" v-if="payImageUrl">
+          <view class="section-item-title">支付凭证</view>
+          <view class="section-item-right flex-aic" @click.stop="previewImg(payImageUrl)">
+            <text class="txt">点击查看</text>
+            <image class="payImageUrl" show-menu-by-longpress :src="payImageUrl" />
+          </view>
+        </view>
         <view class="section-item">
           <view class="section-item-title">订单编号</view>
           <view class="section-item-right">
@@ -99,9 +106,7 @@
         <view class="bottom-btn bottom-btn-left" v-if="orderStatus == 4 || orderStatus == 5"
           @click.stop="handleBtnOrder(copyItem, 'again')">再次购买</view>
         <view class="bottom-btn" v-if="orderStatus === 0" @click.stop="handleBtnOrder(copyItem, 'pay')">立即支付
-          <text v-if="countDown">
-            {{ date.m }}:{{ date.s }}
-          </text>
+          <text v-if="countDown"> {{ date.m }}:{{ date.s }} </text>
         </view>
       </view>
     </view>

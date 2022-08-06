@@ -37,6 +37,7 @@ export default {
       freightAmount: "", //运费金额
       productQuantity: 1,
       countDown: 0,
+      payImageUrl: '',
       date: {},// 倒计时
     };
   },
@@ -95,7 +96,8 @@ export default {
             receiverDetailAddress,
             receiverName,
             receiverPhone,
-            countDown
+            countDown,
+            payImageUrl
           } = data;
 
           Object.assign(_, {
@@ -109,7 +111,9 @@ export default {
             payAmount,
             orderStatus: status,
             productQuantity,
-            useCoin
+            useCoin,
+            countDown,
+            payImageUrl
           });
           const obj = {
             receiverPhone: receiverPhone,
@@ -177,5 +181,13 @@ export default {
         },
       });
     },
+    previewImg(url) {
+      uni.previewImage({
+        current: 0,
+        urls: [url],
+        loop: true,
+        indicator: 'number'
+      });
+    }
   },
 };

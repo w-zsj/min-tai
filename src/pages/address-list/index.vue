@@ -3,12 +3,7 @@
     <view v-if="hasdata" class="list">
       <block v-for="(item, idx) in list" :key="idx">
         <view class="_in">
-          <SidesLip
-            :item="item"
-            :data_transit="{ index: index, item: item }"
-            @delItem="delItem"
-            class="sit"
-          >
+          <SidesLip :item="item" :data_transit="{ index: index, item: item }" @delItem="delItem" class="sit">
             <view class="cont">
               <view @click.stop.prevent="goback" data-type="back" :data-item="item">
                 <view class="name flex-aic">
@@ -20,28 +15,16 @@
                 </view>
               </view>
               <view class="default flex-aic-btwn">
-                <view
-                  class="selsct flex flex-ctr"
-                  :data-id="item.id"
-                  @click.stop.prevent="selet"
-                >
-                  <image
-                    :src="
+                <view class="selsct flex flex-ctr" :data-id="item.id" @click.stop.prevent="selet">
+                  <image :src="
                       item.defaultStatus
                         ? '/static/images/checked_icon.png'
                         : '/static/images/unselected_radio.png'
-                    "
-                    mode="widthFix"
-                  />
+                    " mode="widthFix" />
                   <view class="font28">默认地址</view>
                 </view>
-                <image
-                  :data-item="item"
-                  data-type="edit"
-                  @click.stop.prevent="goback"
-                  src="/static/images/edit-icon.png"
-                  mode="widthFix"
-                />
+                <image :data-item="item" data-type="edit" @click.stop.prevent="goback"
+                  src="/static/images/edit-icon.png" mode="widthFix" />
               </view>
             </view>
           </SidesLip>
@@ -107,7 +90,7 @@ export default {
           if (res.code == 1) {
             ToastInfo("已删除");
             this.getList();
-          }else ToastInfo(res.message)
+          } else ToastInfo(res.message)
         })
     },
     // 获取地址列表
@@ -118,7 +101,7 @@ export default {
       Resource.addAddress
         .post({ type: "list" })
         .then((res) => {
-          console.log('res',res)
+          console.log('res', res)
           list = res?.data || [];
           that.hasdata = !!list.length;
           that.list = list;

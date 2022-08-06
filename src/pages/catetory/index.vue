@@ -235,7 +235,7 @@ export default {
     // 获取分类
     getList() {
       let { oneCateIndex = 0 } = this;
-      Resource.classifyList.post({ type: "classifyList" }, {}).then((res) => {
+      Resource.open.post({ type: "home/classifyList" }, {}).then((res) => {
         this.list = res?.data || [];
         // 渲染骨架屏异步数据
         if (res.code == 1) {

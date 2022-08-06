@@ -50,15 +50,21 @@ export default {
       hotProductList: [],
     };
   },
-  async onLoad() {
-    await this.$onLaunched;
-    if (!app.globalData.hasmobile()) this.isShowLoginHint = false;
+  onLoad() {
     // 获取分类
     this.getClassifyList();
     // 获取banner
     this.getHomeBannerList();
     // 新品推荐
     this.getHotProductList();
+  },
+  onShow() {
+    if (!app.globalData.hasmobile()) this.isShowLoginHint = false;
+    else this.isShowLoginHint = true;
+    this.isShowAuthPhone = false;
+  },
+  onHide() {
+    this.isShowAuthPhone = false;
   },
   // 上拉加载
   onReachBottom: function () { },
@@ -131,8 +137,9 @@ export default {
           }
         });
     },
+    // 分类
     getClassifyList() {
-      Resource.classifyList.post({ type: "classifyList" }, {}).then((res) => {
+      Resource.open.post({ type: "home/classifyList" }, {}).then((res) => {
         // 渲染骨架屏异步数据
         if (res.code == 1) {
           if (res?.data?.length) {

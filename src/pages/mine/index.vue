@@ -10,7 +10,7 @@
           <view class="gold flex-aic-ard">
             <view class="flex-aic">
               <image class="gold_icon" src="/static/images/gold_icon.png" />
-              <view>90</view>
+              <view>{{userInfo.coin}}</view>
             </view>
             <image class="arrow_icon" src="/static/images/arrow_icon.png" />
           </view>
@@ -57,12 +57,13 @@
 import mySwiper from "@comps/my-swiper/index.vue";
 import order_icon from "@/static/images/order_icon.png";
 import pending_payment_icon from "@/static/images/pending_payment_icon.png";
-import shipping_address_icon from "@/static/images/shipping_address_icon.png";
-import customer_service_icon from "@/static/images/customer_service_icon.png";
+import wait_receipt_icon from "@/static/images/wait_receipt_icon.png";
+import completed_icon from "@/static/images/completed_icon.png";
 import { openCustomerService } from "@/utils/util.js";
 import { Resource } from "@/server/resource-api";
 import { localStorage } from "@/utils/extend";
 import { SK } from "@/utils/constant";
+let app = getApp();
 export default {
   components: { mySwiper },
   data() {
@@ -82,22 +83,22 @@ export default {
           path: "order-list/index?type=1",
         },
         {
-          title: "收货地址",
-          icon: shipping_address_icon,
-          path: "address-list/index",
+          title: "待收货",
+          icon: wait_receipt_icon,
+          path: "order-list/index?type=2",
         },
         {
-          title: "联系客服",
-          icon: customer_service_icon,
-          id: "service",
-          path: "",
+          title: "已完成",
+          icon: completed_icon,
+          path: "order-list/index?type=3",
         },
       ],
       userInfo: {
         nickName: localStorage.get(SK.NICK_NAME),
         avatarUrl: localStorage.get(SK.USER_IMAGE),
         phone: localStorage.get(SK.USER_PHONE),
-      }
+        coin: localStorage.get(SK.COIN) || 0,
+      },
     };
   },
   onLoad() {
@@ -150,15 +151,22 @@ export default {
 
     // 关闭授权手机号弹窗
     closeModal: function (e) {
+      let _ = this;
       if (e.detail == 'success') {
-        Object.assign(this, {
-          isShowAuthPhone: false,
-          userInfo: {
-            nickName: localStorage.get(SK.NICK_NAME),
-            avatarUrl: localStorage.get(SK.USER_IMAGE),
-            phone: localStorage.get(SK.USER_PHONE),
-          },
-        });
+        app.globalData.login().then(res => {
+          if (res.token) {
+            Object.assign(_, {
+              isShowAuthPhone: false,
+              userInfo: {
+                nickName: localStorage.get(SK.NICK_NAME),
+                avatarUrl: localStorage.get(SK.USER_IMAGE),
+                phone: localStorage.get(SK.USER_PHONE),
+                coin: res.data.coin || 0
+              },
+            });
+          }
+        })
+
       } else {
         uni.reLaunch({ url: '/pages/home/index' });
         this.isShowAuthPhone = false;

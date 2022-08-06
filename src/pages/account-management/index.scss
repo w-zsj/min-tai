@@ -1,17 +1,42 @@
-.account-management{
+page {
+    overflow: hidden;
+}
+
+.account-management {
     background: #FAF7F7;
     min-height: 100vh;
     padding: 32rpx;
-    .list{
-        padding: 32rpx;
+
+    .list {
         background: #fff;
         border-radius: 16rpx;
-        .item{
-            height: 80rpx;
+        padding: 0 32rpx;
+
+        .item {
+            height: 100rpx;
+            font-size: 14px;
             border-bottom: 1px solid #e4e2e2;
             color: #272727;
-            &:last-child{
+
+            &:last-child {
                 border-bottom: 0;
+            }
+
+            .tit {
+                margin-right: 10rpx;
+                width: 150rpx;
+            }
+
+            .img {
+                width: 50rpx;
+                height: 50rpx;
+
+
+            }
+
+            .arrow_icon {
+                width: 40rpx;
+                height: 40rpx;
             }
         }
     }

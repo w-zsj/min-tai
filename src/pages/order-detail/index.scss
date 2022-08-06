@@ -219,9 +219,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 56rpx;
+  min-height: 80rpx;
   color: #272727;
   font-size: 28rpx;
+}
+
+.payImageUrl {
+  width: 60rpx;
+  height: 60rpx;
+  display: block;
 }
 
 .section-connect {
@@ -249,6 +255,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.section-item-right .txt {
+  font-size: 20rpx;
+  margin-right: 10rpx;
 }
 
 .section-item-right .integra {

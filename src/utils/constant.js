@@ -18,6 +18,7 @@ const SK = {
     USER_PHONE: IS_TEST ? 'test_phone' : 'phone', // 手机号是否存在
     HAS_MOBILE: IS_TEST ? 'test_hasmobile' : 'hasmobile', // 手机号是否存在
     SEARCH_HISTORY: IS_TEST ? 'test_history' : 'history', // 搜索历史
+    COIN: IS_TEST ? 'test_coin' : 'coin', //金币
 };
 const reqConfig = {
     IS_TEST,

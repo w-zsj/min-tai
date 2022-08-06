@@ -215,17 +215,19 @@ const login = (params = {}, $isResolve = null) => {
 					...params
 				})
 				.then((res) => {
+					if ($isResolve) $isResolve()
 					if (res && res.data && res.data['token']) {
-						let { token, nickName, image, phone } = res.data;
+						let { token, nickName, image, phone, coin } = res.data;
 						localStorage.set({
 							[SK.TOKEN]: token,
 							[SK.HAS_MOBILE]: phone ? 1 : 0,
 							[SK.NICK_NAME]: nickName,
 							[SK.USER_IMAGE]: image,
 							[SK.USER_PHONE]: phone,
+							[SK.COIN]: coin
 						});
 						if ($isResolve) $isResolve()
-						else resolve(res.data)
+						resolve(res.data)
 						Resource.cart.post({ type: "list" }, { pageNum: 1, pageSize: 1 }).then((res) => {
 							if (res.code == 1 && res?.data?.total) {
 								let num = res?.data?.total > 99 ? '99+' : (res?.data?.total + '')

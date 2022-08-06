@@ -270,16 +270,32 @@ export default {
         };
       Resource.cart.post({ type: "list" }, params, { loadingDelay: true }).then((res) => {
         if (res.code == 1) {
+          let total = res?.data?.total;
+          try {
+            let num = total > 99 ? '99+' : (total + '')
+            console.log("list", num, list);
+            if (num == 0) {
+              console.log('333', 333)
+              uni.removeTabBarBadge({ index: 2 });
+            }
+            else {
+              console.log('333', 4444)
+              uni.setTabBarBadge({
+                index: 2,
+                text: num
+              })
+            }
+          }
+          catch (e) { }
           if (res?.data?.list?.length) {
             isend = !!(pageNum >= res?.data?.totalPage);
             let data = res.data?.list || [];
-            let total = res?.data?.total;
             if (pageNum == 1) list = data;
             else list = [...list, ...data];
             list = _.formatList(list);
             Object.assign(_, { list, isend, total });
             _.promotion();
-            console.log("list", list);
+
           } else _.isCheckAll = false;
         }
       });

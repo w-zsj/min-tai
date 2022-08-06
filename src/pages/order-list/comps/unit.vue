@@ -116,12 +116,13 @@ export default {
               this.$set(this.copyItem, "date", d);
               // console.log("date", d, this.copyItem);
               this.clearTimer = T;
-              clearTimeout(T);
+              clearTimeout(this.clearTimer);
               this.$forceUpdate();
             },
             (d) => {
               console.log("d---", d == "end");
-              if (_.clearTimer) clearTimeout(_.clearTimer);
+              if (this.clearTimer) clearTimeout(this.clearTimer);
+              this.$set(this.copyItem, 'status', 4)
             }
           );
         }

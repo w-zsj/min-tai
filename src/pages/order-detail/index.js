@@ -71,9 +71,9 @@ export default {
   },
 
   methods: {
-    checkGoodDetail(item) {
-      console.log("item>>>", item);
-      this.$to(`goods-detail/index?id=${item.id}`);
+    checkGoodDetail(id) {
+      console.log("item>>>", id);
+      this.$to(`goods-detail/index?id=${id}`);
     },
     initData: function () {
       const { orderSn, date } = _;

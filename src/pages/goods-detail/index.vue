@@ -1,13 +1,8 @@
 <template>
   <view class="goods-detail-page">
     <view class="tab-container">
-      <view
-        :class="{ 'tab-item': true, 'black-text-color': currTabIndex == index }"
-        v-for="(item, index) in tabMenu"
-        :key="index"
-        @click="goAnchor(item.ele, index)"
-        >{{ item.title }}</view
-      >
+      <view :class="{ 'tab-item': true, 'black-text-color': currTabIndex == index }" v-for="(item, index) in tabMenu"
+        :key="index" @click="goAnchor(item.ele, index)">{{ item.title }}</view>
     </view>
     <view class="goods-detail">
       <!-- 轮播图 -->
@@ -21,10 +16,7 @@
                 <text class="price-number">
                   {{ detail.price ? detail.price : "暂无报价" }}
                 </text>
-                <text
-                  class="price-onsale"
-                  v-if="detail.originalPrice && detail.originalPrice != 'null'"
-                >
+                <text class="price-onsale" v-if="detail.originalPrice && detail.originalPrice != 'null'">
                   ฿{{ detail.originalPrice }}
                 </text>
               </block>
@@ -38,7 +30,7 @@
           </view>
         </view>
         <view class="detail-property-container" v-if="propertyList.length">
-          <view class="common-row" >
+          <view class="common-row">
             <view class="flex-aic text-ellipsis">
               <text class="common-label">参数</text>
               <view class="common-text-style text-ellipsis">
@@ -60,26 +52,16 @@
       <view class="context-image" v-if="detail.detailMobileHtml">
         <mp-html :content="detail.detailMobileHtml" />
       </view>
-      {{selectSkuModalShow}}
       <!-- 底部按钮 -->
       <footer-component :detail="detail" @selectSku="selectSku"></footer-component>
     </view>
 
     <!-- 规格选择 -->
 
-    <sku-modal
-      v-if="selectSkuModalShow"
-      :expand="expand"
-      :productId="detail.id"
-      source="product-detail"
-      @close="closeSkuModal"
-    ></sku-modal>
+    <sku-modal v-if="selectSkuModalShow" :expand="expand" :productId="detail.id" source="product-detail"
+      @close="closeSkuModal"></sku-modal>
     <!-- 授权手机号 -->
-    <authority-phone-modal
-      v-if="isShowAuthPhone"
-      @closemodal="closeModal"
-      :isShowAuthPhone="isShowAuthPhone"
-    >
+    <authority-phone-modal v-if="isShowAuthPhone" @closemodal="closeModal" :isShowAuthPhone="isShowAuthPhone">
     </authority-phone-modal>
   </view>
 </template>

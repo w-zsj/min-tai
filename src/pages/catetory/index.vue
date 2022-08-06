@@ -281,6 +281,7 @@ export default {
       _.searchBykeyWord(val, _sort);
     },
     searchBykeyWord(keyword = "", sort = 0) {
+      let { pageNum, prodList, isEnd } = _;
       Resource.open
         .post(
           { type: "product/search" },
@@ -288,7 +289,7 @@ export default {
             productClassifyId: _.id,
             sort,
             keyword,
-            pageNum: _.pageNum,
+            pageNum,
             pageSize: 10,
           },
           { loadingDelay: true }
@@ -296,7 +297,7 @@ export default {
         .then((res) => {
           let { code, data } = res;
           if (code == 1) {
-            if (pageNum == 1) prodList = data.list || [];
+            if (_.pageNum == 1) prodList = data.list || [];
             else prodList = prodList.concat(data.list);
             isEnd = data.pageNum * data.pageSize >= data.total;
             Object.assign(_, {

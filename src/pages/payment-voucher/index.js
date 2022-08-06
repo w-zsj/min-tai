@@ -11,12 +11,12 @@ export default {
             photoList: [],
             payPic: '',
             orderno: '',
-            payImageUrl: "https://cdn.taihail.com/mall/images/t/ef777744c298447db4dc701449a3d431.png",// 支付截图 
+            payImageUrl: "",// 支付截图 
         }
     },
     onLoad(option) {
         // source 1 支付 2 充值
-        let { source, orderSn: orderno } = option;
+        let { source, orderSn: orderno = '' } = option;
         Object.assign(_, {
             source, orderno
         })
@@ -29,6 +29,7 @@ export default {
         uploadCall(data) {
             console.log('data--', data)
             _.photoList = data;
+            _.payImageUrl = data[0];
         },
         getPayCodePic() {
             Resource.pay.get({ type: 'payUrl?type=' + _.source })
@@ -46,6 +47,11 @@ export default {
                         if (res.code == 1) {
                             ToastInfo('上传成功')
                             if (source == 1) _.$to(`order-list/index?type=1`)
+                            else {
+                                setTimeout(() => {
+                                    _.$to('home/index', 'reLaunch')
+                                }, 2000);
+                            }
                         }
                     })
         }, 500, true)

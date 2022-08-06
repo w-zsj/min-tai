@@ -5,7 +5,7 @@
         <view class="header">
           <image :src="userInfo.avatarUrl" />
         </view>
-        <view class="flex-col-btwn">
+        <view class="flex-col-btwn" @click.stop="jumpPath({ path: 'payment-voucher/index?source=2' })">
           <view class="phone">{{userInfo.phone}}</view>
           <view class="gold flex-aic-ard">
             <view class="flex-aic">

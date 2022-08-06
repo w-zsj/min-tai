@@ -1,16 +1,12 @@
 <template>
-  <view class="list">
+  <view class="list" @click.stop="toDetail(copyItem.orderSn)">
     <view class="header flex-aic-btwn">
       <view class="order-no">订单号:{{ copyItem.orderSn }}</view>
-      <view class="status"> {{ orderStatus[copyItem.status] }} </view>
+      <view class="status"> {{ orderStatus[copyItem.status] }}</view>
     </view>
     <view class="item">
       <view>
-        <view
-          class="flex-aic-btwn subItem"
-          v-for="goodsItem in copyItem.list"
-          :key="goodsItem.id"
-        >
+        <view class="flex-aic-btwn subItem" v-for="goodsItem in copyItem.list" :key="goodsItem.id">
           <view class="pic">
             <image class="img" :src="goodsItem.productPic" />
           </view>
@@ -20,11 +16,7 @@
                 {{ goodsItem.productName }}
               </view>
               <view class="sku">
-                <block
-                  class="wine-size"
-                  v-for="(attItem, attIndex) in goodsItem.productAttrList"
-                  :key="attIndex"
-                >
+                <block class="wine-size" v-for="(attItem, attIndex) in goodsItem.productAttrList" :key="attIndex">
                   {{ attItem.key }}:{{ attItem.value }}
                 </block>
               </view>
@@ -32,7 +24,11 @@
             <view class="timer">下单时间 {{ copyItem.createTime }}</view>
           </view>
           <view class="price flex-col">
-            <view>฿&nbsp;{{ goodsItem.productPrice }}</view>
+            <view class="integral" v-if="item.useCoin"> {{ item.useCoin }}金币 </view>
+            <!-- 正常价格的显示 -->
+            <view v-if="goodsItem.productPrice > 0">
+              {{ item.useCoin ? "+" : "" }}฿&nbsp;{{ goodsItem.productPrice }}
+            </view>
             <view class="count">x{{ goodsItem.productQuantity || 1 }}</view>
           </view>
         </view>
@@ -49,22 +45,17 @@
       </view>
       <!-- wait-pay -->
       <view class="flex-end">
-        <view
-          class="handel-btn"
-          v-if="copyItem.status == 5"
-          @click.stop="handleBtnOrder(copyItem.orderSn, 'deleteOrder')"
-        >
+        <view class="handel-btn" v-if="copyItem.status == 5"
+          @click.stop="handleBtnOrder(copyItem.orderSn, 'deleteOrder')">
           删除订单
         </view>
-        <view
-          class="handel-btn"
-          v-if="copyItem.status == 0"
-          @click.stop="handleBtnOrder(copyItem.orderSn, 'cancelUserOrder')"
-          >取消订单
+        <view class="handel-btn" v-if="copyItem.status == 0"
+          @click.stop="handleBtnOrder(copyItem.orderSn, 'cancelUserOrder')">取消订单
         </view>
         <view class="handel-btn wait-pay" v-if="copyItem.status == 0">
           待付款
-          {{ copyItem.date.h }}:{{ copyItem.date.m }}:{{ copyItem.date.s }}
+          <span v-if="copyItem.countDown">
+            {{ copyItem.date.h }}:{{ copyItem.date.m }}:{{ copyItem.date.s }}</span>
         </view>
       </view>
     </view>
@@ -86,7 +77,7 @@ export default {
     },
     handleBtnOrder: {
       type: Function,
-      default: () => {},
+      default: () => { },
     },
   },
   data() {
@@ -98,9 +89,10 @@ export default {
       orderStatus: {
         0: "待付款",
         1: "待审核",
+        2: "审核失败待付款",
         3: "待收货",
         4: "已取消",
-        5: "已完成",
+        5: "已收货",
       },
     };
   },
@@ -108,29 +100,33 @@ export default {
     item: {
       handler: function (newVal, oldVal) {
         let copyItem = { ..._clone(newVal || {}) };
-        if (copyItem.status == 0) {
-          // customCountDown(
-          //   { time: copyItem.countDown, type: "h" },
-          //   (d, T) => {
-          //     copyItem["date"] = d;
-          //     console.log(_.copyItem);
-          //     _.clearTimer = T;
-          //     _.copyItem = copyItem;
-          //     clearTimeout(T);
-          //   },
-          //   (d) => {
-          //     console.log("d---", d == "end");
-          //     if (_.clearTimer) clearTimeout(_.clearTimer);
-          //   }
-          // );
+        _.copyItem = copyItem;
+        if (copyItem.status == 0 && copyItem.countDown) {
+          customCountDown(
+            { time: copyItem.countDown, type: "h" },
+            (d, T) => {
+              copyItem["date"] = d;
+              console.log("date", d, _.copyItem);
+              _.clearTimer = T;
+              _.copyItem = copyItem;
+              clearTimeout(T);
+            },
+            (d) => {
+              console.log("d---", d == "end");
+              if (_.clearTimer) clearTimeout(_.clearTimer);
+            }
+          );
         }
       },
       immediate: true,
       deep: true,
     },
   },
-  mounted() {
-    let _ = this;
+  mounted() { },
+  methods: {
+    toDetail(orderSn) {
+      _.$to(`order-detail/index?orderSn=${orderSn}`);
+    },
   },
 };
 </script>
@@ -156,7 +152,7 @@ export default {
   }
   .item {
     .subItem {
-      margin-bottom: 10rpx;
+      margin-bottom: 20rpx;
       .pic {
         width: 138rpx;
         height: 138rpx;
@@ -197,6 +193,7 @@ export default {
           font-family: PingFangSC-Regular, PingFang SC;
           font-weight: 400;
           color: #272727;
+          white-space: nowrap;
         }
       }
       .price {
@@ -205,6 +202,15 @@ export default {
         font-family: PingFangSC-Semibold, PingFang SC;
         font-weight: bold;
         color: #272727;
+        .integral {
+          font-size: 28rpx;
+          font-weight: 400;
+          color: #808080;
+        }
+        .integral .red {
+          color: #a7002d !important;
+        }
+
         .count {
           height: 40rpx;
           font-size: 28rpx;

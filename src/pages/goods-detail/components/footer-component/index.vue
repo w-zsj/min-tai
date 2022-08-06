@@ -2,6 +2,12 @@
   <view :class="'footer ' + (Inipx ? 'ipxHeight' : '')">
     <view class="footer-container line-lighter">
       <view class="left">
+        <view class="menu-icon-container" @click="goToHome">
+          <view class="menu-icon">
+            <image src="@/static/images/nav_home.png"></image>
+          </view>
+          <view class="menu-text">首页</view>
+        </view>
         <view class="menu-icon-container" @click="customerService">
           <view class="menu-icon">
             <image src="@/static/images/customer_service.png"></image>
@@ -20,12 +26,12 @@
       </view>
       <view class="right">
         <block>
-          <button class="btn  group-car-btn black-bg" data-type="addcar" @click="selectSku">
+          <button class="btn group-car-btn black-bg" data-type="addcar" @click="selectSku">
             加入购物车
           </button>
-          <button class="btn group-buy-btn red-bg" data-type="buy" @click="selectSku">
+          <!-- <button class="btn group-buy-btn red-bg" data-type="buy" @click="selectSku">
             立即购买
-          </button>
+          </button> -->
         </block>
       </view>
     </view>
@@ -53,6 +59,9 @@ export default {
   },
   mounted() { },
   methods: {
+    goToHome() {
+      this.$to('home/index', 'reLaunch')
+    },
     // 客服
     customerService: function () {
       openCustomerService();

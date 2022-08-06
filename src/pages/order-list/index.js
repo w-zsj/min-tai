@@ -36,9 +36,10 @@ export default {
     },
     onLoad(option) {
         _.curIdx = option.type || 0;
+        _.getList(_.curIdx);
     },
     onShow() {
-        _.getList();
+
     },
     onReachBottom: function () {
         const { isend, list } = _;
@@ -50,8 +51,15 @@ export default {
     methods: {
         selectTab(item, idx) {
             if (_.curIdx == idx) return;
-            console.log('item', item)
-            _.curIdx = idx;
+            // console.log('item', item)
+            Object.assign(_, {
+                pageNum: 1,
+                pageSize: 10,
+                isend: false,
+                curIdx: item.value,
+                list: []
+            })
+            _.getList(_.curIdx)
         },
         // 获取订单列表
         getList(status = 0) {
@@ -70,8 +78,8 @@ export default {
                             let data = res.data?.list || [];
                             if (pageNum == 1) list = data;
                             else list = [...list, ...data];
-                            list = _.formatList(list);
-                            Object.assign(_, { list, isend });
+                            _.list = _.formatList(list);
+                            _.isend = isend;
                             console.log("list", list);
                         }
                     }

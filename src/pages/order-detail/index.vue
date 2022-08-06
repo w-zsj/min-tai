@@ -3,16 +3,16 @@
     <view class="main-wrapper">
       <view class="header">
         <view class="order-status">
-          <view>{{ orderStatus }}</view>
+          <view>{{ enmuStatus[orderStatus] }}</view>
         </view>
         <view class="header-address">
           <image class="address-icon" src="//file.9jinhuan.com/wine/wechat/choose_address.png" />
           <view class="address-detail">
             <view class="address-detail-info">
-              <view class="address-detail-name">{{ address.name }}</view>
-              <view class="address-detail-phone">{{ address.phone }}</view>
+              <view class="address-detail-name">{{ address.receiverName }}</view>
+              <view class="address-detail-phone">{{ address.receiverPhone }}</view>
             </view>
-            <view class="address-detail-add">{{ address.add }}</view>
+            <view class="address-detail-add">{{ address.receiverDetailAddress }}</view>
           </view>
         </view>
       </view>
@@ -32,8 +32,11 @@
               <view class="section-detail-right flex-col-btwn">
                 <view>
                   <view class="section-detail-amount">
+                    <view class="integra" v-if="item.useCoin>0">
+                      {{item.useCoin}}金币
+                    </view>
                     <!-- 普通商品价格 -->
-                    <view v-if="item.productPrice > 0"> ￥{{ item.productPrice }} </view>
+                    <view v-if="item.productPrice>0">{{item.useCoin>0?'+':''}}￥{{ item.productPrice }}</view>
                   </view>
                   <view class="section-detail-num">x{{ item.productQuantity }}</view>
                 </view>
@@ -50,7 +53,7 @@
           </view>
         </view>
         <view class="section-item section-deliver">
-          <view class="section-item-title">订单运费</view>
+          <view class="section-item-title">金币</view>
           <view class="section-item-right">￥{{ freightAmount }}</view>
         </view>
 

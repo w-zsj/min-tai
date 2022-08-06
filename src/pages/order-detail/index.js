@@ -9,11 +9,19 @@ export default {
     return {
       Inipx: app.globalData["Inipx"],
       address: {
-        name: "",
-        phone: "",
-        add: "",
+        receiverPhone: '',
+        receiverName: '',
+        receiverDetailAddress: '',
       },
       productList: [],
+      enmuStatus: {
+        0: "待付款",
+        1: "待审核",
+        2: "审核失败待付款",
+        3: "待收货",
+        4: "已取消",
+        5: "已收货",
+      },
       orderStatus: "", // 订单状态：0->待付款；1->待审核 3 待收货->4已取消；5->已完成
       note: "", // 订单备注
 
@@ -77,13 +85,16 @@ export default {
             createTime,
             orderItemList = [],
             note = "",
-            address,
             payType,
             paymentTime = "",
             totalAmount,
             freightAmount,
             remainingTime, // 待付款剩余时间
             productQuantity = 1,
+            payAmount,
+            receiverDetailAddress,
+            receiverName,
+            receiverPhone
           } = data;
 
           Object.assign(_, {
@@ -99,15 +110,12 @@ export default {
             productQuantity,
           });
 
-          if (address) {
-            const { receiverPhone, receiverName } = data;
-            const obj = {
-              phone: receiverPhone,
-              name: receiverName,
-              add: address,
-            };
-            _.address = obj;
-          }
+          const obj = {
+            receiverPhone: receiverPhone,
+            receiverName: receiverName,
+            receiverDetailAddress: receiverDetailAddress,
+          };
+          _.address = obj;
           if (status == 0) {
             let timer = remainingTime.second * 1000 || 0;
             if (remainingTime.hour) {

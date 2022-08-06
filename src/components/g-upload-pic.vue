@@ -1,7 +1,7 @@
 <template>
   <view class="photo-list">
     <block v-for="(item, index) in photoList" :key="index">
-      <view class="img-content">
+      <view class="img-content flex-ctr">
         <image class="img-item" mode="aspectFill" :src="item" @click.stop="previewImg(index)" />
         <image class="delete-photo" src="/static/images/delete_photo.png" :data-index="index" data-type="delete"
           @click="deletePhoto" />
@@ -157,37 +157,40 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 24rpx;
-  height: 200rpx;
-  width: 200rpx;
+  /* margin-bottom: 24rpx; */
+  height: 300rpx;
+  width: 300rpx;
   background: #fafafa;
 }
 .modal-comment-upload .img {
-  height: 200rpx;
-  width: 200rpx;
+  height: 100rpx;
+  width: 100rpx;
 }
 .photo-list {
   display: flex;
   flex-wrap: wrap;
   margin-top: 20px;
+  border-radius: 8rpx;
+  border: 1px solid #e3d6d6;
+  overflow: hidden;
 }
 .img-content {
   position: relative;
-  width: 200rpx;
-  height: 200rpx;
+  width: 300rpx;
+  height: 300rpx;
   overflow: hidden;
-  margin-right: 10rpx;
-  margin-bottom: 10rpx;
   border-radius: 8rpx;
+  padding: 10rpx;
 }
 
 .img-item {
-  width: 200rpx;
-  height: 200rpx;
+  width: 100%;
+  height: 100%;
   background: #faf7f7;
-  display: flex;
+
+  /* display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
 }
 
 .delete-photo {

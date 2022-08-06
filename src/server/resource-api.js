@@ -2,7 +2,7 @@
  * @Author: zhangsanjun 
  * @Date: 2022-07-25 11:01:10 
  * @Last Modified by: zhangsanjun
- * @Last Modified time: 2022-08-05 10:28:18
+ * @Last Modified time: 2022-08-06 15:12:47
  */
 
 import {
@@ -18,7 +18,7 @@ export const Resource = {
   // open
   open: HttpResource(`${API_HOST}/open/:type`),
   //上传图片
-  uploadImage: HttpResource(`${API_HOST}/file/oss/upload`),
+  uploadImage: HttpResource(`${API_HOST}/oss/upload`),
   // 分类
   classifyList: HttpResource(`${API_HOST}/productClassify/:type`),
   // 首页
@@ -36,5 +36,5 @@ export const Resource = {
   //购物车-修改商品数量
   updatePromotion: HttpResource(`${API_HOST}/cart/update/:type`),
   // 小程序支付
-  pay: HttpResource(`${API_HOST}/pay/xcxpay`),
+  pay: HttpResource(`${API_HOST}/pay/:type`),
 };

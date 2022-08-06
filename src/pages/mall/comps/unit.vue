@@ -63,11 +63,9 @@ export default {
     addcount: function (e) {
       let _ = this,
         { copyItem } = _,
-        { type } = e?.currentTarget?.dataset,
-        total = copyItem.stockCount;
+        { type } = e?.currentTarget?.dataset
       copyItem.originQuantity = copyItem.quantity;
-      if (!total || !copyItem.isValid) return;
-      else if (!Number(copyItem.quantity)) copyItem.quantity = 1;
+      if (!Number(copyItem.quantity)) copyItem.quantity = 1;
       else if (type) {
         //代表加减
         if (type == "add") copyItem.quantity++;
@@ -78,11 +76,9 @@ export default {
       }
       // 输入框 以及 最后结果校验
       if (copyItem.quantity <= 1) copyItem.quantity = 1;
-      else if (copyItem.quantity > total) {
-        copyItem.quantity = total;
-        // ToastInfo(`数量超出范围`, "none", 1500);
-      } else if (copyItem.quantity > 200) copyItem.quantity = 200;
+      else if (copyItem.quantity > 200) copyItem.quantity = 200;
       _.copyItem = copyItem;
+
       _.changeSelect(copyItem, "changeCount");
     },
   },

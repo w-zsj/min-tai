@@ -170,4 +170,27 @@ export default {
             }, 500)
         },
     },
+    /**
+  * 用户点击右上角分享
+  */
+    onShareAppMessage: function () {
+        let { detail } = this;
+        return {
+            title: "泰嗨乐",
+            path: `/pages/goods-detail/index?id=${detail.id}`,
+            imageUrl: `/pages/goods-detail/index?id=${detail.pic}`,
+        };
+    },
+
+    /**
+     * 用户点击右上角分享到朋友圈
+     */
+    onShareTimeline: function () {
+        let { detail } = this.info;
+        return {
+            title,
+            query: `id=${that.id}`,
+            imageUrl: `/pages/goods-detail/index?id=${detail.pic}`,
+        };
+    },
 };

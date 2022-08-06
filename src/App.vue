@@ -5,7 +5,7 @@ const app = getApp();
 export default {
   onLaunch: function () {
     let self = this;
-    login({}, this.$isResolve);
+
     try {
       CheckVersion();
       this.globalData.isRestart = true;
@@ -29,9 +29,9 @@ export default {
             res.platform == "ios" || res.platform == "devtools"
           );
         },
-        fail(res) {},
+        fail(res) { },
       });
-    } catch (e) {}
+    } catch (e) { }
   },
   onShow: function () {
     if (this.globalData.isRestart) {
@@ -39,13 +39,14 @@ export default {
     } else {
       this.globalData.restart = 0;
     }
+    login({}, this.$isResolve);
   },
   onHide: function () {
     console.log("App Hide");
   },
   // 设置订阅消息 只能真机调试
   // TEMPLATE_ID 接口返回
-  requestMessage(TEMPLATE_ID, call = () => {}) {
+  requestMessage(TEMPLATE_ID, call = () => { }) {
     // _wx_begin_
     let _ = this,
       { hasmobile } = _.globalData,

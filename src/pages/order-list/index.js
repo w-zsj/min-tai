@@ -10,19 +10,19 @@ export default {
             statusOptions: [
                 {
                     label: "全部",
-                    value: null,
-                },
-                {
-                    label: "待付款",
                     value: 0,
                 },
                 {
-                    label: "待审核",
+                    label: "待付款",
                     value: 1,
                 },
                 {
+                    label: "待收货",
+                    value: 2,
+                },
+                {
                     label: "已完成",
-                    value: 5,
+                    value: 3,
                 },
             ],
             curIdx: 0,
@@ -37,6 +37,9 @@ export default {
     onLoad(option) {
         _.curIdx = option.type || 0;
     },
+    onShow() {
+        _.getList();
+    },
     onReachBottom: function () {
         const { isend, list } = _;
         if (!isend && list.length) {
@@ -46,12 +49,12 @@ export default {
     },
     methods: {
         selectTab(item, idx) {
-            console.log('item', item)
             if (_.curIdx == idx) return;
+            console.log('item', item)
             _.curIdx = idx;
         },
         // 获取订单列表
-        getList(status = null) {
+        getList(status = 0) {
             let { pageNum, list, isend, pageSize } = _,
                 params = {
                     pageNum: pageNum || 1,

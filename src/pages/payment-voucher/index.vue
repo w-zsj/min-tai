@@ -3,12 +3,15 @@
     <view class="code">
       <view class="tit flex-ctr">{{ source == 1 ? "支付凭证" : "充值凭证" }}</view>
       <view class="pic flex-ctr">
-        <!-- <image class="img" show-menu-by-longpress src="" /> -->
+        <image class="img" show-menu-by-longpress :src="payPic" />
       </view>
     </view>
     <view class="desc flex-aic">
-      点击咖啡馆黑客帝国河科大干哈考拉放大干哈看得见高开了个蝶恋蜂狂
-      三个地块联建光电垃圾活动假单胞菌点击咖啡馆黑客帝国河科大干哈考拉放大干哈看得见高开了个蝶恋蜂狂三个地块联建光电垃圾活动假单胞菌
+      {{
+        source == 1
+          ? "请长按保存商家泰国银行收款二维码到手机相册自行转账支付后，上传支付成功截图，客服验证后即可完成订单支付。"
+          : "请长按保存商家泰国银行收款二维码到手机相册，自行转账支付后，上传支付成功截图，客服验证后即可完成金币充值。泰铢和金币的充值兑换比例是1:1。(如您充值1000泰铢=1000金币)"
+      }}
     </view>
     <view class="uploader">
       <view class="tit flex-ctr">{{ source == 1 ? "支付凭证" : "充值凭证" }}</view>

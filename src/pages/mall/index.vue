@@ -276,7 +276,7 @@ export default {
             Object.assign(_, { list, isend, total });
             _.promotion();
             console.log("list", list);
-          }
+          } else _.isCheckAll = false;
         }
       });
     },

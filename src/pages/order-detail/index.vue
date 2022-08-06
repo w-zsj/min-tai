@@ -6,7 +6,7 @@
           <view>{{ enmuStatus[orderStatus] }}</view>
         </view>
         <view class="header-address">
-          <image class="address-icon" src="//file.9jinhuan.com/wine/wechat/choose_address.png" />
+          <image class="address-icon" src="/static/images/shipping_address_icon.png" />
           <view class="address-detail">
             <view class="address-detail-info">
               <view class="address-detail-name">{{ address.receiverName }}</view>

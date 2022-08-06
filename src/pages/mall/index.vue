@@ -12,7 +12,7 @@
         <view class="footer-container line-lighter">
           <view class="left flex-aic" @click.stop="changeCheckAll">
             <view v-if="!isCheckAll" class="circle-point"></view>
-            <image v-else class="circle-point-image" src="https://file.9jinhuan.com/wine/wechat/radio_checked.png">
+            <image v-else class="circle-point-image" src="/static/images/radio_checked.png">
             </image>
             <view class="check-all-tetx">全选</view>
           </view>

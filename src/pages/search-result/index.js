@@ -22,10 +22,8 @@ export default {
         }
     },
     onLoad(options) {
-        _.keyword = options.keyword || ''
-    },
-    onShow() {
-        this.searchBykeyWord();
+        _.keyword = options.keyword || '';
+        _.searchBykeyWord(_.keyword);
     },
     onReachBottom: function () {
         const { isEnd, prodList } = this;

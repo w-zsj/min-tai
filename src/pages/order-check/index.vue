@@ -56,7 +56,7 @@
           <view class="section-item-title">备注信息</view>
           <view class="section-item-right">
             <view class="section-item-remark-detail">{{ note }}</view>
-            <image class="section-item-remark-arrow" src="//file.9jinhuan.com/wine/wechat/arrow_icon.png" />
+            <image class="section-item-remark-arrow" src="/static/images/arrow_icon.png" />
           </view>
         </view>
         <view class="_line"></view>

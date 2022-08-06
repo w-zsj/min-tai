@@ -38,7 +38,7 @@
                 </view>
               </scroll-view>
               <view class="icon" @click="isExpand = !isExpand">
-                <image class="img" src="https://file.9jinhuan.com/wine/wechat/arrow_icon.png" mode=""></image>
+                <image class="img" src="/static/images/arrow_icon.png" mode=""></image>
               </view>
             </view>
           </view>
@@ -47,7 +47,7 @@
             <view class="all flex-aic-btwn">
               <view class="item">全部分类</view>
               <view class="icon flex-ctr" @click="isExpand = !isExpand">
-                <image class="_img" src="https://file.9jinhuan.com/wine/wechat/arrow_icon.png" mode=""></image>
+                <image class="_img" src="/static/images/arrow_icon.png" mode=""></image>
               </view>
             </view>
             <view class="other">

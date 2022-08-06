@@ -9,16 +9,16 @@
         <image src="/static/images/delete_icon.png" @click="clearAll" />
       </view>
       <view class="list flex-aic flex-wrap">
-        <view class="item" v-for="(item, idx) in historyData" :key="idx">{{ item }}</view>
+        <view class="item" v-for="(item, idx) in historyData" :key="idx" @click.stop="goSearch(item)">{{ item }}</view>
       </view>
     </view>
     <!-- 大家都在搜 -->
-    <view class="history">
+    <!-- <view class="history">
       <view class="title flex-aic"> 大家都在搜 </view>
       <view class="list flex-aic flex-wrap">
         <view class="item" v-for="(item, idx) in historyData" :key="idx">{{ item }}</view>
       </view>
-    </view>
+    </view> -->
   </view>
 </template>
 <script>
@@ -47,7 +47,11 @@ export default {
         localStorage.set(SK.SEARCH_HISTORY, JSON.stringify(history));
         _.historyData = [...history];
         console.log("value", _.handleData);
+        _.$to(`search-result/index?keyword=${value}`)
       }
+    },
+    goSearch(keyword) {
+      _.$to(`search-result/index?keyword=${keyword}`)
     },
     clearAll() {
       this.historyData = [];

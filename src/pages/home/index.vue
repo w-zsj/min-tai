@@ -1,7 +1,7 @@
 <template>
   <view class="home">
     <!-- 搜索 -->
-    <serachInput :goto="goto"></serachInput>
+    <serachInput :goto="goto" :disabled="true"></serachInput>
     <!-- 轮播 -->
     <view style="margin-bottom: 20rpx" v-if="bannerList && bannerList.length">
       <mySwiper :bannerList="bannerList" :bannerTap="bannerTap"></mySwiper>

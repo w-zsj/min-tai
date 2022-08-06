@@ -14,6 +14,10 @@
       </view>
     </view>
     <view class="loading" v-if="!isend && list.length">已加载全部</view>
+    <view class="empt flex-col-ctr" v-if="list.length == 0">
+      <image class="_img" src="/static/images/add-empty-icon.png" mode=""></image>
+      <view class="txt">暂无数据</view>
+    </view>
   </view>
 </template>
 <script src="./index.js"></script>

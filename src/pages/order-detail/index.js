@@ -33,10 +33,10 @@ export default {
       tradeNo: "", // 交易单号
       payAmount: "", // 应付金额（实际支付金额）
       totalAmount: "", // 订单总金额
-
+      useCoin: 0,
       freightAmount: "", //运费金额
       productQuantity: 1,
-
+      countDown: 0,
       date: {},// 倒计时
     };
   },
@@ -89,12 +89,13 @@ export default {
             paymentTime = "",
             totalAmount,
             freightAmount,
-            remainingTime, // 待付款剩余时间
+            useCoin,
             productQuantity = 1,
             payAmount,
             receiverDetailAddress,
             receiverName,
-            receiverPhone
+            receiverPhone,
+            countDown
           } = data;
 
           Object.assign(_, {
@@ -108,31 +109,28 @@ export default {
             payAmount,
             orderStatus: status,
             productQuantity,
+            useCoin
           });
-
           const obj = {
             receiverPhone: receiverPhone,
             receiverName: receiverName,
             receiverDetailAddress: receiverDetailAddress,
           };
           _.address = obj;
-          if (status == 0) {
-            let timer = remainingTime.second * 1000 || 0;
-            if (remainingTime.hour) {
-              timer += remainingTime.hour * 60 * 60 * 1000
-            } else if (remainingTime.minute) timer += remainingTime.minute * 60 * 1000;
+          // console.log('status', _.countDown)
+          if (status == 0 && _.countDown > 0) {
             customCountDown(
-              { time: copyItem.countDown, type: "m" },
+              { time: _.countDown, type: "m" },
               (d, T) => {
-                date = d;
-                console.log('---', date);
+                _.date = d;
                 timerInterval = T;
-                _.date = date;
                 clearTimeout(T);
+                this.$forceUpdate();
               },
               (d) => {
                 console.log("d---", d == "end");
                 if (timerInterval) clearTimeout(timerInterval);
+                _.initData();
               }
             );
           }
@@ -140,26 +138,29 @@ export default {
       });
     },
 
-    // 不想买了
-    handleCancelOrder: function () {
-      Resource.order
-        .post({ type: `cancelUserOrder` }, { orderSn: _.orderSn })
-        .then((res) => {
-          if (res.code == 1) {
-            ToastInfo('已取消');
-            this.orderStatus = 4;
-          }
-        })
-    },
-    // 我要付款
-    handleOrder: debounce(
-      function () {
-        const { orderSn } = this;
-        _.$to(`payment-voucher/index?orderSn=${orderSn}&source=1`)
-      },
-      2000,
-      true
-    ),
+    // 取消 删除订单
+    handleBtnOrder: debounce(
+      function ({ orderSn, id }, type) {
+        console.log('orderSn', orderSn, id, type)
+        let params = {};
+        if (type == 'pay') {
+          _.$to(`payment-voucher/index?orderSn=${orderSn}&source=1`)
+          return
+        }
+        if (type == 'again') {
+          _.$to('home/index', 'reLaunch')
+          return
+        }
+        params.orderSn = orderSn;
+        Resource.order
+          .post({ type: type }, params, { loadingDelay: true })
+          .then(({ code }) => {
+            if (code == 1) {
+              ToastInfo(type == 'deleteOrder' ? '已删除' : type == 'confirmReceiveOrder' ? '已确认收货' : '已取消');
+              _.list = _.list.filter((i) => i.orderSn != orderSn);
+            }
+          })
+      }, 500, true),
     // 复制订单号
     copyOrderSn: function (e) {
       uni.setClipboardData({

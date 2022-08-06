@@ -46,7 +46,7 @@ export default {
                     .then(res => {
                         if (res.code == 1) {
                             ToastInfo('上传成功')
-                            if (source == 1) _.$to(`order-list/index?type=1`)
+                            if (source == 1) _.$to(`order-detail/index?orderSn=${orderno}`, 'redirectTo')
                             else {
                                 setTimeout(() => {
                                     _.$to('home/index', 'reLaunch')

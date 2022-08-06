@@ -127,13 +127,23 @@ export default {
         },
         // 取消 删除订单
         handleBtnOrder: debounce(
-            function (orderSn, type) {
-                console.log('orderSn', orderSn, type)
+            function ({ orderSn, id }, type) {
+                console.log('orderSn', orderSn, id, type)
+                let params = {};
+                if (type == 'pay') {
+                    _.$to(`payment-voucher/index?orderSn=${orderSn}&source=1`)
+                    return
+                }
+                if (type == 'again') {
+                    _.$to('home/index', 'reLaunch')
+                    return
+                }
+                params.orderSn = orderSn;
                 Resource.order
                     .post({ type: type }, params, { loadingDelay: true })
                     .then(({ code }) => {
                         if (code == 1) {
-                            ToastInfo(type == 'deleteOrder' ? '已删除' : '已取消');
+                            ToastInfo(type == 'deleteOrder' ? '已删除' : type == 'confirmReceiveOrder' ? '已确认收货' : '已取消');
                             _.list = _.list.filter((i) => i.orderSn != orderSn);
                         }
                     })

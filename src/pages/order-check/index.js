@@ -2,7 +2,7 @@
  * @Author: zhangsanjun 
  * @Date: 2022-05-17 17:37:18 
  * @Last Modified by: zhangsanjun
- * @Last Modified time: 2022-08-05 13:33:58
+ * @Last Modified time: 2022-08-06 19:41:47
  */
 
 import Pop from "@/components/pop";
@@ -239,7 +239,7 @@ export default {
               // 购物车下单成功 再次进入购物车 需要刷新
               if (sourceType == 2) app.globalData["isNeedUpdetaCarList"] = true;
               if (data.needPay)
-                _.$to(`payment-voucher/index?orderSn=${data.orderSn}&source=1`)
+                _.$to(`payment-voucher/index?orderSn=${data.orderSn}&source=1`, 'redirectTo')
               else _.$to(`order-detail?orderSn=${data.orderSn}`)
             }
           })

@@ -1,7 +1,8 @@
 <template>
   <div class="search-input flex-aic" @click="goto">
-    <uni-easyinput :styles="{ borderColor: '#ececec' }" trim="all" prefixIcon="search" type="text" confirmType="search"
-      v-model="content" placeholder="搜索商品-好物等你" @iconClick="changeValue" @confirm="changeValue">
+    <uni-easyinput :disabled="disabled" :styles="{ borderColor: '#ececec' ,disableColor:'#ffffff'}" trim="all"
+      prefixIcon="search" type="text" confirmType="search" v-model="content" placeholder="搜索商品-好物等你"
+      @iconClick="changeValue" @confirm="changeValue" @clear="changeValue">
     </uni-easyinput>
     <span class="canl" v-if="source == 2" @click.stop="goBack">取消</span>
   </div>
@@ -17,6 +18,14 @@ export default {
       type: Function,
       default: () => () => { },
     },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    keyword: {
+      type: String,
+      default: ''
+    },
     goto: {
       type: Function,
       default: () => () => { },
@@ -27,9 +36,13 @@ export default {
       content: "",
     };
   },
+  mounted() {
+    this.content = this.keyword;
+  },
   methods: {
     goBack() {
-      this.$to()
+      this.content = ''
+      this.$emit('canl', '')
     }
   },
 };

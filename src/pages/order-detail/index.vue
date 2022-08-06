@@ -54,7 +54,7 @@
         </view>
         <view class="section-item section-deliver">
           <view class="section-item-title">金币</view>
-          <view class="section-item-right">￥{{ freightAmount }}</view>
+          <view class="section-item-right">￥{{ useCoin }}</view>
         </view>
 
         <view class="real-amount">
@@ -90,9 +90,19 @@
         </view>
       </view>
 
-      <view class="bottom line" :class="{ ipx: Inipx }" v-if="orderStatus === 0">
-        <view class="bottom-btn bottom-btn-left" @click="handleCancelOrder">不想买了</view>
-        <view class="bottom-btn" @click="handleOrder">立即支付 {{ payTimer }}</view>
+      <view class="bottom line" :class="{ ipx: Inipx }">
+        <view class="bottom-btn bottom-btn-left" v-if="orderStatus === 3"
+          @click.stop="handleBtnOrder(copyItem, 'confirmReceiveOrder')">确认收货
+        </view>
+        <view class="bottom-btn bottom-btn-left" v-if="orderStatus === 0"
+          @click.stop="handleBtnOrder(copyItem, 'cancelUserOrder')">取消订单</view>
+        <view class="bottom-btn bottom-btn-left" v-if="orderStatus == 4 || orderStatus == 5"
+          @click.stop="handleBtnOrder(copyItem, 'again')">再次购买</view>
+        <view class="bottom-btn" v-if="orderStatus === 0" @click.stop="handleBtnOrder(copyItem, 'pay')">立即支付
+          <text v-if="countDown">
+            {{ date.m }}:{{ date.s }}
+          </text>
+        </view>
       </view>
     </view>
   </view>

@@ -1,61 +1,66 @@
 <template>
-  <view class="list" @click.stop="toDetail(copyItem.orderSn)">
-    <view class="header flex-aic-btwn">
-      <view class="order-no">订单号:{{ copyItem.orderSn }}</view>
-      <view class="status"> {{ orderStatus[copyItem.status] }}</view>
-    </view>
-    <view class="item">
-      <view>
-        <view class="flex-aic-btwn subItem" v-for="goodsItem in copyItem.list" :key="goodsItem.id">
-          <view class="pic">
-            <image class="img" :src="goodsItem.productPic" />
-          </view>
-          <view class="base-info flex-col-btwn">
-            <view class="name">
-              <view class="ellip">
-                {{ goodsItem.productName }}
-              </view>
-              <view class="sku">
-                <block class="wine-size" v-for="(attItem, attIndex) in goodsItem.productAttrList" :key="attIndex">
-                  {{ attItem.key }}:{{ attItem.value }}
-                </block>
-              </view>
-            </view>
-            <view class="timer">下单时间 {{ copyItem.createTime }}</view>
-          </view>
-          <view class="price flex-col">
-            <view class="integral" v-if="item.useCoin"> {{ item.useCoin }}金币 </view>
-            <!-- 正常价格的显示 -->
-            <view v-if="goodsItem.productPrice > 0">
-              {{ item.useCoin ? "+" : "" }}฿&nbsp;{{ goodsItem.productPrice }}
-            </view>
-            <view class="count">x{{ goodsItem.productQuantity || 1 }}</view>
-          </view>
-        </view>
+  <view>
+    <view class="list" @click.stop="toDetail(copyItem.orderSn)" v-if="copyItem.orderSn">
+      <view class="header flex-aic-btwn">
+        <view class="order-no">订单号:{{ copyItem.orderSn }}</view>
+        <view class="status"> {{ orderStatus[copyItem.status] }}</view>
       </view>
-      <!-- 实付款 -->
-      <view class="real-payment flex-end">
-        <text class="count">共{{ copyItem.count || 0 }}件,</text>
-        <text class="txt">实付款</text>
-        <text class="money">
-          <text class="rb">฿</text>
-          &nbsp; <text class="price-int">{{ copyItem.priceInt }}</text>
-          <text class="price-point">{{ copyItem.pricePoint }}</text>
-        </text>
-      </view>
-      <!-- wait-pay -->
-      <view class="flex-end">
-        <view class="handel-btn" v-if="copyItem.status == 5"
-          @click.stop="handleBtnOrder(copyItem.orderSn, 'deleteOrder')">
-          删除订单
+      <view class="item">
+        <view>
+          <view class="flex-aic-btwn subItem" v-for="goodsItem in copyItem.list" :key="goodsItem.id">
+            <view class="pic">
+              <image class="img" :src="goodsItem.productPic" />
+            </view>
+            <view class="base-info flex-col-btwn">
+              <view class="name">
+                <view class="ellip">
+                  {{ goodsItem.productName }}
+                </view>
+                <view class="sku">
+                  <block class="wine-size" v-for="(attItem, attIndex) in goodsItem.productAttrList" :key="attIndex">
+                    {{ attItem.key }}:{{ attItem.value }}
+                  </block>
+                </view>
+              </view>
+              <view class="timer">下单时间 {{ copyItem.createTime }}</view>
+            </view>
+            <view class="price flex-col">
+              ฿&nbsp;{{ goodsItem.productPrice||0 }}
+              <view class="count">x{{ goodsItem.productQuantity || 1 }}</view>
+            </view>
+          </view>
         </view>
-        <view class="handel-btn" v-if="copyItem.status == 0"
-          @click.stop="handleBtnOrder(copyItem.orderSn, 'cancelUserOrder')">取消订单
+        <!-- 实付款 -->
+        <view class="real-payment flex-aic-btwn">
+          <view class="count">已使用金币 {{copyItem.useCoin||0}}</view>
+          <view>
+            <text class="count">共{{ copyItem.count || 0 }}件,</text>
+            <text class="txt">实付款</text>
+            <text class="money">
+              <text class="rb">฿</text>
+              &nbsp; <text class="price-int">{{ copyItem.priceInt }}</text>
+              <text class="price-point">{{ copyItem.pricePoint }}</text>
+            </text>
+          </view>
         </view>
-        <view class="handel-btn wait-pay" v-if="copyItem.status == 0">
-          待付款
-          <span v-if="copyItem.countDown">
-            {{ copyItem.date.h }}:{{ copyItem.date.m }}:{{ copyItem.date.s }}</span>
+        <!-- wait-pay -->
+        <view class="flex-end">
+          <view class="handel-btn" v-if="copyItem.status == 4 || copyItem.status == 5"
+            @click.stop="handleBtnOrder(copyItem, 'again')">
+            再次购买
+          </view>
+          <view class="handel-btn" v-if="copyItem.status == 3"
+            @click.stop="handleBtnOrder(copyItem, 'confirmReceiveOrder')">
+            确认收货
+          </view>
+          <view class="handel-btn" v-if="copyItem.status == 0"
+            @click.stop="handleBtnOrder(copyItem, 'cancelUserOrder')">取消订单
+          </view>
+          <view class="handel-btn wait-pay" v-if="copyItem.status == 0" @click.stop="handleBtnOrder(copyItem, 'pay')">
+            待付款
+            <text v-if="copyItem.countDown">
+              {{ copyItem.date.m }}:{{ copyItem.date.s }}</text>
+          </view>
         </view>
       </view>
     </view>
@@ -99,17 +104,20 @@ export default {
   watch: {
     item: {
       handler: function (newVal, oldVal) {
-        let copyItem = { ..._clone(newVal || {}) };
-        _.copyItem = copyItem;
-        if (copyItem.status == 0 && copyItem.countDown) {
+        // let copyItem = { ..._clone(newVal || {}) };
+        this.copyItem = newVal;
+        if (_.clearTimer) clearTimeout(_.clearTimer);
+        if (newVal.status == 0 && newVal.countDown) {
           customCountDown(
-            { time: copyItem.countDown, type: "h" },
+            { time: newVal.countDown, type: "m" },
             (d, T) => {
-              copyItem["date"] = d;
-              console.log("date", d, _.copyItem);
-              _.clearTimer = T;
-              _.copyItem = copyItem;
+              newVal["date"] = d;
+              this.copyItem = newVal;
+              this.$set(this.copyItem, "date", d);
+              // console.log("date", d, this.copyItem);
+              this.clearTimer = T;
               clearTimeout(T);
+              this.$forceUpdate();
             },
             (d) => {
               console.log("d---", d == "end");

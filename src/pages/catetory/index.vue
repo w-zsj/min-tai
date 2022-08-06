@@ -2,7 +2,7 @@
   <view class="category">
     <!-- 搜索 -->
     <view class="search content-height">
-      <serachInput :changeValue="changeValue"></serachInput>
+      <serachInput :goto="goto" :disabled="true"></serachInput>
     </view>
     <!-- 正文 -->
     <view class="content flex-aic" :style="'height:' + contentHeight">
@@ -261,53 +261,8 @@ export default {
         } else this.reset();
       });
     },
-    // 搜索查询商品
-    changeValue(val) {
-      console.log("搜索关键字", val);
-      let { sale, rise } = _;
-      Object.assign(_, {
-        isExpand: false,
-        isEnd: false,
-        pageNum: 1,
-        scrollTop: -1,
-      });
-      //  rise: 0, // 0 无排序 1 升序 2 降序 升序降序 映射 0 升序 1 降序
-      // sale: false, // 销售量排序 0 首次进来 1 价格 2 销量
-      // sort	排序字段:0->按相关度；1->按新品；2->按销量；3->价格从低到高；4->价格从高到低,可用值:0,1,2,3,4,示例值(0)
-      let _sort = 0;
-      if (sale) _sort = 2;
-      else if (rise == 1) _sort = 3;
-      else if (rise == 2) _sort = 4;
-      _.searchBykeyWord(val, _sort);
-    },
-    searchBykeyWord(keyword = "", sort = 0) {
-      let { pageNum, prodList, isEnd } = _;
-      Resource.open
-        .post(
-          { type: "product/search" },
-          {
-            productClassifyId: _.id,
-            sort,
-            keyword,
-            pageNum,
-            pageSize: 10,
-          },
-          { loadingDelay: true }
-        )
-        .then((res) => {
-          let { code, data } = res;
-          if (code == 1) {
-            if (_.pageNum == 1) prodList = data.list || [];
-            else prodList = prodList.concat(data.list);
-            isEnd = data.pageNum * data.pageSize >= data.total;
-            Object.assign(_, {
-              prodList,
-              isEnd,
-              total: data.total,
-            });
-          }
-          // else _.reset();
-        });
+    goto() {
+      this.$to("search-history/index");
     },
     // 搜索商品
     getProdList(id = 0) {

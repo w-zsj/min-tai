@@ -161,7 +161,7 @@ export default {
                 nickName: localStorage.get(SK.NICK_NAME),
                 avatarUrl: localStorage.get(SK.USER_IMAGE),
                 phone: localStorage.get(SK.USER_PHONE),
-                coin: res.data.coin || 0
+                coin: res.coin || 0
               },
             });
           }

@@ -30,7 +30,10 @@
         </view>
       </view>
     </view>
-
+    <view class="empt flex-col-ctr" v-if="list.length == 0">
+      <image class="_img" src="/static/images/add-empty-icon.png" mode=""></image>
+      <view class="txt">暂无数据</view>
+    </view>
     <!-- 授权手机号 -->
     <authority-phone-modal @closemodal="closeModal" :isShowReject="false" :isShowAuthPhone="isShowAuthPhone">
     </authority-phone-modal>
@@ -72,7 +75,8 @@ export default {
         pageNum: 1,
         pageSize: 10,
         isend: false,
-        isCheckAll: true
+        isCheckAll: true,
+        list: []
       })
       _.getCarList();
     }

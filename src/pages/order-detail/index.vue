@@ -20,7 +20,7 @@
         <view class="section-title">商品信息</view>
         <view>
           <view class="section-list" v-for="item in productList" :key="item.id">
-            <view class="section-detail" @click="checkGoodDetail(item.id)">
+            <view class="section-detail" @click="checkGoodDetail(item.productId)">
               <image class="section-detail-image" :src="item.productPic" />
               <view class="section-detail-center flex-col-btwn">
                 <view class="section-detail-title">{{ item.productName }}</view>

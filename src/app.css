@@ -1,10 +1,16 @@
-/**app.wxss**/
-.uni-app--maxwidth{
-	/* #ifdef H5 */
-	max-width: 414px;
-	margin: 0 auto;
-	/* #endif */
+page {
+    background: #f6f6f6;
+    min-height: 100vh;
 }
+
+/**app.wxss**/
+.uni-app--maxwidth {
+    /* #ifdef H5 */
+    max-width: 414px;
+    margin: 0 auto;
+    /* #endif */
+}
+
 .container {
     height: 100%;
     display: flex;
@@ -19,14 +25,14 @@ view {
     box-sizing: border-box;
 }
 
-button::after{
-  border: none;
+button::after {
+    border: none;
 }
 
 .app-btn {
     width: 260rpx;
     height: 80rpx;
-    background: #a7002d;
+    background: #EC0D0D;
     border-radius: 40px;
     font-size: 32rpx;
     font-family: PingFangSC-Semibold, PingFang SC;
@@ -35,9 +41,11 @@ button::after{
     text-align: center;
     line-height: 80rpx;
 }
-.app-red{
-	color:#A7002D;
+
+.app-red {
+    color: #EC0D0D;
 }
+
 .flex,
 [class*=' flex-'],
 [class^='flex-'],

@@ -47,12 +47,6 @@ export default {
   },
 };
 </script>
-<style>
-/* .placeholder {
-  font-size: 24rpx;
-  color: #c9c9c9;
-} */
-</style>
 <style scoped lang="scss">
 .search-input {
   margin-bottom: 20rpx;

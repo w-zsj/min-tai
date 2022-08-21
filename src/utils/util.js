@@ -1,4 +1,3 @@
-import { reqConfig } from '@/utils/constant.js'
 import { Resource } from '@/server/resource-api';
 
 const formatTime = (date) => {
@@ -86,82 +85,19 @@ const debounce = (func, wait, immediate) => {
   };
 }; // 版本号比较
 
-function compareVersion(v1, v2) {
-  v1 = v1.split('.');
-  v2 = v2.split('.');
-  const len = Math.max(v1.length, v2.length);
-
-  while (v1.length < len) {
-    v1.push('0');
-  }
-
-  while (v2.length < len) {
-    v2.push('0');
-  }
-
-  for (let i = 0; i < len; i++) {
-    const num1 = parseInt(v1[i]);
-    const num2 = parseInt(v2[i]);
-
-    if (num1 > num2) {
-      return 1;
-    } else {
-      if (num1 < num2) {
-        return -1;
-      }
-    }
-  }
-
-  return 0;
-}
 
 function openCustomerService() {
-  // const version = uni.getSystemInfoSync().SDKVersion;
-
-  // if (compareVersion(version, '2.19.0') >= 0) {
-  //   uni.openCustomerServiceChat({
-  //     extInfo: {
-  //       url: 'https://work.weixin.qq.com/kfid/kfc176badfe65e7f44f'
-  //     },
-  //     corpId: 'wwa820759ee3251132',
-
-  //     success(res) { }
-  //   });
-  // } else {
-  //   // 如果希望用户在最新版本的客户端上体验您的小程序，可以这样子提示
-  //   uni.showModal({
-  //     title: '提示',
-  //     content: '当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。'
-  //   });
-  // }
-  uni.makePhoneCall({
-    phoneNumber: '13248166371'
-  });
-}
-/**
- *
- * @param {*} orderno 订单编号
- * @param paySource 支付来源 1:订单支付 2：vip会员卡支付
- * @param {*} onSuccess  // 支付成功回调
- * @param {*} onError  // 支付失败回调
- */
-
-function openMiniProgramPay(params, onSuccess, onError) {
-  let { orderno = '', paySource = 1, redirect_url = '' } = params || {},
-    reqParams = {
-      orderno,
-      paySource,
-      payType: reqConfig.payType,
-    }
-  uni.showToast({
-    title: "支付中...",
-    icon: "loading"
-  })
-  Resource.miniProgramPay
-    .post({ type: `xcxPrepay` }, reqParams)
-    .then((res) => {
+  Resource.open.get({ type: 'home/kefu' }, { loadingDelay: true })
+    .then(res => {
+      if (res.code == 1 && res.data) {
+        uni.navigateTo({ url: `/packPages/webview/index?url=${encodeURIComponent(res.data)}&type=img` });
+      } else uni.makePhoneCall({
+        phoneNumber: '0889066660'
+      });
     })
-} // 深拷贝
+}
+
+// 深拷贝
 
 const _clone = (obj) => {
   // Handle the 3 simple types, and null or undefined
@@ -199,65 +135,11 @@ const _clone = (obj) => {
 
   throw new Error("Unable to copy obj! Its type isn't supported.");
 };
-/**
- * 获取节点信息
- * @param node 节点
- * @param all 是否选择全部
- */
-
-function selectElement(node, all = false, _) {
-  return new Promise((resolve, reject) => {
-    uni.createSelectorQuery()
-    [all ? 'selectAll' : 'select'](node)
-      in (_)
-        .boundingClientRect(function (rect) {
-          if (rect) {
-            resolve(rect);
-          } else {
-            reject('获取失败');
-          }
-        })
-        .exec();
-  });
-}
-
-// 轮播图点击
-function bannerTap(e) {
-  console.log(e);
-  const {
-    url,
-    type
-  } = e.currentTarget.dataset; //type: 1商品详情 2h5  3图片 4:开通vip页面
-  const urlTypeArr = [1, 4]; //小程序内页面跳转
-  const tabBarPages = ['/pages/mall/mall', '/pages/category/index', '/pages/mine/mine', '/pages/vip/members-rights/index']; //tabar页面
-  if (urlTypeArr.includes(type)) {
-    if (tabBarPages.includes(url)) {
-      uni.switchTab({
-        url: url
-      });
-    } else {
-      uni.navigateTo({
-        url: url
-      });
-    }
-  } else {
-    const nType = type == 2 ? 1 : 2;
-    uni.navigateTo({
-      url: `/pages/wine-test/notice/notice?type=${nType}&url=${url}`
-    });
-    // #ifdef H5
-    window.location.href = url;
-    // #endif
-  }
-};
 
 export {
   formatTime,
   ToastInfo,
   debounce,
   openCustomerService,
-  openMiniProgramPay,
   _clone,
-  selectElement,
-  bannerTap
 };

@@ -5,7 +5,7 @@
         <view class="header">
           <image :src="userInfo.avatarUrl" />
         </view>
-        <view class="flex-col-btwn" @click.stop="jumpPath({ path: 'payment-voucher/index?source=2' })">
+        <view class="flex-col-btwn" @click.stop="jumpPath({ path: '/packPages/payment-voucher/index?source=2' })">
           <view class="phone">{{userInfo.phone}}</view>
           <view class="gold flex-aic-ard">
             <view class="flex-aic">
@@ -16,7 +16,7 @@
           </view>
         </view>
       </view>
-      <view class="account-management flex-aic" @click.stop="jumpPath({ path: 'account-management/index' })">
+      <view class="account-management flex-aic" @click.stop="jumpPath({ path: '/packPages/account-management/index' })">
         <text>账户管理</text>
         <image class="arrow_icon" src="/static/images/arrow_icon.png" />
       </view>
@@ -42,7 +42,7 @@
 
       <!-- 描述 -->
       <view class="desc">
-        如果您购买的商品有任何问题,请于客服联系,客服会专门为您处理,让您售后无忧。
+        如果您购买的商品有任何问题，请与客服联系，客服会第一时间为您处理，让您售后无忧。
       </view>
       <!-- 客服 -->
       <view class="customer-service flex-ctr" @click="jumpPath({id:'service'})"> 联系客服 </view>
@@ -75,22 +75,22 @@ export default {
         {
           title: "全部订单",
           icon: order_icon,
-          path: "order-list/index?type=0",
+          path: "/packPages/order-list/index?type=0",
         },
         {
           title: "待付款",
           icon: pending_payment_icon,
-          path: "order-list/index?type=1",
+          path: "/packPages/order-list/index?type=1",
         },
         {
           title: "待收货",
           icon: wait_receipt_icon,
-          path: "order-list/index?type=2",
+          path: "/packPages/order-list/index?type=2",
         },
         {
           title: "已完成",
           icon: completed_icon,
-          path: "order-list/index?type=3",
+          path: "/packPages/order-list/index?type=3",
         },
       ],
       userInfo: {
@@ -125,21 +125,25 @@ export default {
         });
     },
     // 轮播图点击
-    bannerTap: function (url, type, source) {
-      console.log("e---", url, type, source); //type 2h5Url  3图片 4 小程序路径
+    bannerTap: function ({ url, urlType }, source) {
+      console.log("e---", url, urlType, source); //type 2h5Url  3图片 4 小程序路径
       const tabBarPages = [
         "/pages/mall/index",
         "/pages/category/index",
         "/pages/mine/index",
       ]; //tabar页面
-      if (type == 4) {
+      if (urlType == 4) {
         if (tabBarPages.includes(url)) {
           uni.switchTab({ url: url });
         } else {
           uni.navigateTo({ url: url });
         }
-      } else if (type == 2) {
-        this.$to(`webview/index?url=${encodeURIComponent(url)}`);
+      } else if (urlType == 3) {
+        if (url)
+          this.$to(`/packPages/webview/index?url=${encodeURIComponent(url)}&type=img`);
+      }
+      else if (urlType == 2) {
+        this.$to(`/packPages/webview/index?url=${encodeURIComponent(url)}`);
       }
     },
     // 菜单跳转

@@ -8,24 +8,6 @@
 	padding: 20rpx 20rpx 0 20rpx;
 }
 
-.navogation-title {
-	width: 100%;
-	background-color: #f6f6f6;
-	text-align: center;
-}
-
-.red-logo-container {
-	font-size: 0;
-	display: flex;
-	align-items: center;
-	padding-left: 32rpx;
-}
-
-.wine-red-logo {
-	width: 145rpx;
-	height: 50rpx;
-}
-
 .content {
 	/* #ifdef MP-WEIXIN */
 	height: calc(100vh - 70px - 85px - env(safe-area-inset-bottom));
@@ -56,7 +38,7 @@ scroll-view {
 
 .one-category .item.act {
 	background: #fff;
-	color: #a7002d;
+	color: #EC0D0D;
 	font-weight: bold;
 }
 
@@ -175,11 +157,11 @@ scroll-view {
 }
 
 .expand .item.act {
-	color: #a7002d;
+	color: #EC0D0D;
 	background: #fffafa;
 	border-radius: 8rpx;
 	border: 1px solid #ff81a3;
-	color: #a7002d;
+	color: #EC0D0D;
 }
 
 .two-category {
@@ -243,59 +225,15 @@ scroll-view {
 .horizontal-row .item.act {
 	background: #fffafa;
 	border-radius: 8rpx;
-	border: 1px solid #ff81a3;
-	color: #a7002d;
-}
-
-.filter {
-	font-size: 24rpx;
-	color: #808080;
-	height: 100rpx;
-}
-
-.filter .price {
-	margin-right: 130rpx;
-
-}
-
-.filter .txt {
-	height: 100rpx;
-	padding: 0 10rpx;
-}
-
-.filter .price .icon {
-	margin-left: 8rpx;
-	transform: rotate(180deg);
-}
-
-.filter .price .icon.act,
-.filter .price .icon.stop {
-	transform: rotate(0);
-}
-
-
-.filter .price .ic {
-	width: 16rpx;
-	height: 10rpx;
-	position: static;
-}
-
-.filter .price .ic.gray {
-	transform: rotate(180deg);
-	margin-bottom: 2rpx;
-}
-
-.filter .txt.act {
-	color: #A7002D;
-	font-weight: bold;
-
+	border: 1px solid #EC0D0D;
+	color: #EC0D0D;
 }
 
 .end {
 	font-size: 24rpx;
 	font-weight: 400;
 	color: #CCCCCC;
-	padding-bottom: 20rpx;
+	padding-bottom: 40rpx;
 }
 
 .empt {
@@ -319,7 +257,11 @@ scroll-view {
 }
 
 .search-list {
-	padding: 0 24rpx;
+	padding: 24rpx 24rpx 0;
+}
+
+.over {
+	overflow-y: auto;
 }
 
 /deep/ .product-unit-item.catetory {

@@ -19,7 +19,7 @@ export default {
     },
     bannerTap: {
       type: Function,
-      default: () => {},
+      default: () => { },
     },
   },
   data() {
@@ -47,9 +47,10 @@ export default {
       text-align: center;
       font-size: 28rpx;
       color: #272727;
+      width: 116rpx;
       .pic {
-        width: 110rpx;
-        height: 110rpx;
+        width: 116rpx;
+        height: 116rpx;
         border-radius: 50%;
         overflow: hidden;
         margin-bottom: 14rpx;
@@ -58,6 +59,13 @@ export default {
           width: 100%;
           height: 100%;
         }
+      }
+      .name {
+        width: 116rpx;
+        font-size: 24rpx;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
     }
   }

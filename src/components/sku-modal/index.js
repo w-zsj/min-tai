@@ -151,7 +151,8 @@ export default {
                 "pageSize": 1
               }).then(res => {
                 if (res.code == 1 && res?.data?.total) {
-                  let num = res?.data?.total > 99 ? '99+' : (res?.data?.total + '')
+                  let num = res?.data?.total > 99 ? '99+' : (res?.data?.total + '');
+                  console.log('num', num)
                   uni.setTabBarBadge({
                     index: 2,
                     text: num
@@ -428,7 +429,7 @@ export default {
         { count } = _,
         fn = () => {
           let path =
-            `/pages/order-check/index` +
+            `/packPages/order-check/index` +
             `?productId=${productId}` +
             `&productSkuId=${skuId}` +
             `&quantity=${count}` +

@@ -10,6 +10,14 @@
 	padding: 24rpx;
 }
 
+._ellip {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+}
+
 .product-right-item {
 	width: 100%;
 	padding-left: 32rpx;
@@ -18,10 +26,10 @@
 	justify-content: space-between;
 }
 
-.product-image,
-.product-image .img {
-	width: 256rpx;
-	height: 256rpx;
+.p-image,
+.p-image .img {
+	width: 150rpx;
+	height: 150rpx;
 	border-radius: 10rpx;
 	position: relative;
 }
@@ -34,19 +42,19 @@
 	left: 25%;
 }
 
-.product-title {
+._product-title {
 	display: flex;
-	word-break: break-all;
+	/* word-break: break-all; */
 	font-size: 28rpx;
 	font-family: PingFangSC-Regular, PingFang SC;
 	font-weight: 400;
 	color: #272727;
-	overflow: hidden;
+	/* overflow: hidden;
 	text-overflow: ellipsis;
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
-	margin-bottom: -5rpx;
+	margin-bottom: -5rpx; */
 }
 
 .price-tag,
@@ -71,18 +79,18 @@
 
 .coupon-tag-list {
 	display: flex;
-  align-items: center;
-  margin-top:8rpx;
+	align-items: center;
+	margin-top: 8rpx;
 }
 
 .activity-tag {
 	font-size: 20rpx;
 	font-family: PingFangSC-Regular, PingFang SC;
 	font-weight: 400;
-	color: #a7002d;
+	color: #EC0D0D;
 	line-height: 28rpx;
 	border-radius: 5rpx;
-	border: 1px solid #a7002d;
+	border: 1px solid #EC0D0D;
 	padding: 0 6rpx;
 }
 
@@ -92,10 +100,10 @@
 	font-size: 20rpx;
 	font-family: PingFangSC-Regular, PingFang SC;
 	font-weight: 400;
-	color: #A7002D;
+	color: #EC0D0D;
 	margin-left: 10rpx;
 	text-align: center;
-	padding:3rpx 6rpx;
+	padding: 3rpx 6rpx;
 	/* border:1px solid; */
 }
 
@@ -129,7 +137,7 @@
 	font-size: 36rpx;
 	font-family: PingFangSC-Medium, PingFang SC;
 	font-weight: 500;
-	color: #A7002D;
+	color: #EC0D0D;
 }
 
 .vip-price-number::before {

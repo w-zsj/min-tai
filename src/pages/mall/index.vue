@@ -7,12 +7,13 @@
         </view>
       </sidesLip>
     </view>
+    <view class="loading" v-if="isend && list.length">已加载全部</view>
     <view class="footer">
       <view class="footer-main-container">
         <view class="footer-container line-lighter">
           <view class="left flex-aic" @click.stop="changeCheckAll">
             <view v-if="!isCheckAll" class="circle-point"></view>
-            <image v-else class="circle-point-image" src="/static/images/radio_checked.png">
+            <image v-else class="circle-point-image" src="/static/images/checked_icon.png">
             </image>
             <view class="check-all-tetx">全选</view>
           </view>
@@ -32,7 +33,7 @@
     </view>
     <view class="empt flex-col-ctr" v-if="list.length == 0">
       <image class="_img" src="/static/images/add-empty-icon.png" mode=""></image>
-      <view class="txt">暂无数据</view>
+      <view class="txt flex-ctr" @click.stop="goto">去选购</view>
     </view>
     <!-- 授权手机号 -->
     <authority-phone-modal @closemodal="closeModal" :isShowReject="false" :isShowAuthPhone="isShowAuthPhone">
@@ -44,7 +45,6 @@ import { Resource } from "@/server/resource-api";
 import sidesLip from "@/components/sides-lip/index.vue";
 import unit from "./comps/unit.vue";
 import { ToastInfo, debounce } from "@/utils/util";
-import { th } from '@dcloudio/vue-cli-plugin-uni/packages/postcss/tags';
 let _,
   app = getApp();
 export default {
@@ -68,17 +68,20 @@ export default {
   onShow() {
     _.checkHasMobile((isLoged) => {
       _.isShowAuthPhone = !isLoged;
+      if (isLoged) {
+        Object.assign(_, {
+          pageNum: 1,
+          pageSize: 10,
+          isend: false,
+          isCheckAll: true,
+          // list: []
+        })
+        _.getCarList();
+      }
     });
     if (app.globalData["isNeedUpdetaCarList"]) {
       app.globalData["isNeedUpdetaCarList"] = false;
-      Object.assign(_, {
-        pageNum: 1,
-        pageSize: 10,
-        isend: false,
-        isCheckAll: true,
-        list: []
-      })
-      _.getCarList();
+
     }
   },
   onReachBottom: function () {
@@ -105,8 +108,7 @@ export default {
         });
       } else {
         const newList = list.map((item) => {
-          // && item.isValid
-          if (!item.stockStatus) {
+          if (!item.stockStatus && item.isValid) {
             item.checked = true;
           }
           return item;
@@ -118,9 +120,18 @@ export default {
       }
       _.promotion();
     },
+    goto() {
+      uni.reLaunch({
+        url: "/pages/catetory/index",
+      });
+      getApp().globalData.needUpdeta = true;
+    },
     changeSelect(item, type) {
       let list = JSON.parse(JSON.stringify(_.list));
-      // if (!item.isValid) return;
+      if (!item.isValid) {
+        ToastInfo('商品已下架')
+        return
+      };
       for (let key in list) {
         if (list[key].id == item.id) {
           list[key].quantity = item.quantity;
@@ -160,10 +171,10 @@ export default {
                   (listItem) => item.id === listItem.id
                 );
                 list[checkedIndex].quantity = item.quantity;
-                // list[checkedIndex].isValid = item.isValid;
-                // if (!item.isValid) {
-                //   list[checkedIndex].checked = false;
-                // }
+                list[checkedIndex].isValid = item.isValid;
+                if (!item.isValid) {
+                  list[checkedIndex].checked = false;
+                }
               });
               that.list = [...list];
               that.promotion();
@@ -192,8 +203,7 @@ export default {
         if (item.checked) {
           ids.push(item.id);
         }
-        // !item.isValid ||
-        if (item.stockStatus) {
+        if (!item.isValid || item.stockStatus) {
           unValidIds.push(item.id);
         }
       });
@@ -258,6 +268,7 @@ export default {
                 index: 2,
                 text: total,
               });
+            _.total = total;
             _.promotion();
           } else ToastInfo(res.message || res.msg);
         });
@@ -268,18 +279,16 @@ export default {
           pageNum: pageNum || 1,
           pageSize,
         };
-      Resource.cart.post({ type: "list" }, params, { loadingDelay: true }).then((res) => {
+      Resource.cart.post({ type: "list" }, params, { loadingDelay: pageNum > 1 }).then((res) => {
         if (res.code == 1) {
           let total = res?.data?.total;
           try {
             let num = total > 99 ? '99+' : (total + '')
             console.log("list", num, list);
             if (num == 0) {
-              console.log('333', 333)
               uni.removeTabBarBadge({ index: 2 });
             }
             else {
-              console.log('333', 4444)
               uni.setTabBarBadge({
                 index: 2,
                 text: num
@@ -296,7 +305,14 @@ export default {
             Object.assign(_, { list, isend, total });
             _.promotion();
 
-          } else _.isCheckAll = false;
+          } else {
+            _.isCheckAll = false;
+            _.productCount = 0;
+            _.totalPriceInt = "",// 价格 整数部分
+              _.totalPricePoint = "" // 价格 小数部分
+            _.list = [];
+            _.ids = []
+          }
         }
       });
     },
@@ -308,8 +324,8 @@ export default {
         item.pricePoint = pricePoint;
         item.realAmount = 0;
         item.reduceAmount = 0;
-        // && item.isValid
-        if (!item.stockStatus && _.isCheckAll) {
+        // 
+        if (!item.stockStatus && _.isCheckAll && item.isValid) {
           item.checked = true;
         } else {
           item.checked = false;
@@ -354,7 +370,7 @@ export default {
         }
         // const flag = await _.checkOrder();
         // if (!flag) return;
-        let path = `/pages/order-check/index?cartIds=${JSON.stringify(ids)}&sourceType=2`;
+        let path = `/packPages/order-check/index?cartIds=${JSON.stringify(ids)}&sourceType=2`;
         uni.navigateTo({ url: path });
       },
       1500,
@@ -378,8 +394,8 @@ export default {
                   (listItem) => item.id === listItem.id
                 );
                 list[checkedIndex].quantity = item.quantity;
-                // list[checkedIndex].isValid = item.isValid;
-                // list[checkedIndex].checked = item.isValid ? true : false;
+                list[checkedIndex].isValid = item.isValid;
+                list[checkedIndex].checked = item.isValid ? true : false;
               });
               that.list = [...list];
               that.promotion();

@@ -1,7 +1,11 @@
 <template>
   <view>
     <view class="box-slideLeft">
-      <view class="touch-item touch-slideLeft " @touchstart="touchS" @touchmove="touchM" @touchend="touchE"
+      <view v-if="flag" class="touch-item touch-slideLeft " @touchstart="touchS" @touchmove="touchM" @touchend="touchE"
+        :style="item_show.txtStyle">
+        <slot />
+      </view>
+      <view v-else class="touch-item touch-slideLeft" @touchstart="touchS" @touchmove.stop="touchM" @touchend="touchE"
         :style="item_show.txtStyle">
         <slot />
       </view>
@@ -9,13 +13,11 @@
       <view class="touch-item del-box-touch-slideLeft cf-shuCenter" @click="delItem(item_show)">
         <view class="iconfont icon-shanchu"></view>
       </view>
-
     </view>
   </view>
 </template>
 
 <script>
-
 export default {
   components: {
 
@@ -42,10 +44,11 @@ export default {
 
   data() {
     return {
-
       item_show: {},
       delBtnWidth: 60, //删除按钮宽度单位（rpx）
       startX: '',
+      flag: true,
+      onoff: false
     };
   },
   created: function () {
@@ -74,54 +77,72 @@ export default {
     },
     touchS: function (e) {
       let that = this;
-
       if (e.touches.length == 1) {
         //设置触摸起始点水平方向位置
-        this.startX = e.touches[0].clientX
+        this.startX = e.touches[0].clientX;
+        this.startY = e.touches[0].clientY;
 
       }
     },
     touchM: function (e) {
       let that = this;
-
       if (e.touches.length == 1) {
         //手指移动时水平方向位置
         var moveX = e.touches[0].clientX;
+        var moveY = e.touches[0].clientY;
         //手指起始点位置与移动期间的差值
         var disX = this.startX - moveX;
         var delBtnWidth = this.delBtnWidth;
         var txtStyle = "";
+        var angel = this.angel({ X: this.startX, Y: this.startY }, { X: moveX, Y: moveY })
+
+        if (this.onoff) return;
+        if (Math.abs(angel) > 30) {
+          this.onoff = true
+          return;
+        };
+        this.flag = false;
+
         if (disX == 0 || disX < 0) { //如果移动距离小于等于0，说明向右滑动，文本层位置不变
           txtStyle = "left:0px";
         } else if (disX > 0) { //移动距离大于0，文本层left值等于手指移动距离
           txtStyle = "left:-" + disX + "px";
+
           if (disX >= delBtnWidth) {
             //控制手指移动距离最大值为删除按钮的宽度
             txtStyle = "left:-" + delBtnWidth + "px";
           }
         }
         //获取手指触摸的是哪一项
-
-        that.item_show.txtStyle = txtStyle;
-
+        that.$set(that.item_show, 'txtStyle', txtStyle)
+        // that.item_show.txtStyle = txtStyle;
+        // that.$forceUpdate();
       }
     },
     touchE: function (e) {
       let that = this;
       if (e.changedTouches.length == 1) {
-        //手指移动结束后水平位置
-        var endX = e.changedTouches[0].clientX;
-        //触摸开始与结束，手指移动的距离
-        var disX = this.startX - endX;
-        var delBtnWidth = this.delBtnWidth;
-        //如果距离小于删除按钮的1/2，不显示删除按钮
-        var txtStyle = disX > delBtnWidth / 2 ? "left:-" + delBtnWidth + "px" : "left:0px";
-        //获取手指触摸的是哪一项
-        that.item_show.txtStyle = txtStyle;
-
+        if (!this.onoff) {
+          //手指移动结束后水平位置
+          var endX = e.changedTouches[0].clientX;
+          //触摸开始与结束，手指移动的距离
+          var disX = this.startX - endX;
+          var delBtnWidth = this.delBtnWidth;
+          //如果距离小于删除按钮的1/2，不显示删除按钮
+          var txtStyle = disX > delBtnWidth / 2 ? "left:-" + delBtnWidth + "px" : "left:0px";
+          //获取手指触摸的是哪一项
+          that.item_show.txtStyle = txtStyle;
+        }
+        that.flag = true;
+        that.onoff = false;
       }
     },
-
+    angel(start, end) {//计算滑动的角度 
+      // 移动坐标减去对应的开始坐标
+      var _X = end.X - start.X,
+        _Y = end.Y - start.Y;
+      return Math.abs(360 * Math.atan(_Y / _X) / (2 * Math.PI))
+    },
   }
 
 }

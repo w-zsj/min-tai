@@ -9,21 +9,21 @@
 <template>
   <view>
     <view :class="['product-unit-item', className]" @click="toDetail">
-      <view class="product-image">
+      <view class="p-image">
         <image :src="item.pic" mode="scaleToFill" class="img"></image>
-        <image v-if="item.videoFlag===1" src="/static/images/video.png" class="video-img"></image>
+        <image v-if="item.videoFlag === 1" src="/static/images/video.png" class="video-img"></image>
       </view>
       <view class="product-right-item">
         <view>
-          <view class="product-title">
-            <text class="new-price-tag" v-if="item.newStatus === 1">上新</text>
-            <text class="price-tag" v-if="item.recommandStatus === 1 && item.newStatus !== 1">推荐</text>
-            {{ item.name }}
+          <view class="_product-title flex-aic">
+            <view class="new-price-tag" v-if="item.newStatus === 1">上新</view>
+            <view class="price-tag" v-if="item.recommandStatus === 1 && item.newStatus !== 1">推荐</view>
+            <view class="ellip-2">{{ item.name }}</view>
           </view>
         </view>
 
         <view class="product-right-second">
-          <view class="product-sale-price">{{ item.price || 0 }}</view>
+          <view class="product-sale-price">{{ item.skuPrice || 0 }}</view>
           <view class="product-right-bottom">
             <view class="recommend-sale-number">销量 {{ item.sale || 0 }}</view>
             <image src="/static/images/add-btn-icon.png" class="add-cart-btn" @click.stop="changeEvent"></image>

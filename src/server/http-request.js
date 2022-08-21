@@ -2,7 +2,7 @@
  * @Author: zhangsanjun 
  * @Date: 2022-07-25 17:27:23 
  * @Last Modified by: zhangsanjun
- * @Last Modified time: 2022-08-06 21:45:07
+ * @Last Modified time: 2022-08-19 14:35:59
  */
 
 import { ToastInfo } from '@/utils/util.js';
@@ -18,7 +18,7 @@ const fetchMethod = (_url, _config) => {
         timer = setTimeout(
             () => {
                 uni.showLoading({
-                    title: '加载中...',
+                    title: _config.txt ? _config.txt : '加载中...',
                     mask: true
                 });
             },
@@ -31,13 +31,7 @@ const fetchMethod = (_url, _config) => {
         version: reqConfig.version,
         os: reqConfig.os,
         deviceInfo: getApp().globalData['deviceInfo'],
-        // "Authorization": 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MzM2NzA5NjksImp0aSI6IjE0MzU0MzYxNTYzNDI3Mzg5NDYiLCJsYXN0bG9naW50aW1lIjoxNjMxMDc4OTY5fQ.jD5Cpj8r680wO-jL5CIrfy5yRpPGitmcKhDcuzEmu3cbFMFxxinWM7xteet88tBcos1Q-jsDj0ihBHBkL_B5ew',
-        // #ifdef H5
-        Authorization: localStorage.get(SK.TOKEN) || '',
-        // #endif
-        // #ifdef MP-WEIXIN || MP-ALIPAY
         Authorization: _url.includes('/open/login') ? '' : localStorage.get(SK.TOKEN) || '',
-        // #endif
 
     };
     return uni.getNetworkType().then((netRes) => {

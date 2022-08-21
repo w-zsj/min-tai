@@ -1,11 +1,11 @@
 <template>
   <view class="c-list flex-aic">
     <view @click.stop="changeSelect(copyItem)" class="checkbox-wrap">
-      <view class="checkbox" :class="['checkbox', copyItem.checked && 'act']">
+      <view class="checkbox" :class="['checkbox', copyItem.checked && 'act',!copyItem.isValid && 'disabled']">
         <image class="img" v-if="copyItem.checked" src="/static/images/checked_icon.png" />
       </view>
     </view>
-    <view class="pic" @click.stop="toDetail(copyItem.productId)">
+    <view class="pic" @click.stop="toDetail(copyItem)">
       <image :src="copyItem.productPic" />
     </view>
     <view class="base-info flex-col-btwn">
@@ -16,9 +16,9 @@
         <view class="sku">{{ copyItem.attr }}</view>
       </view>
       <view class="price"><text class="rb">฿</text>{{ copyItem.price }}</view>
-      <view :class="['add-num flex-aic', !copyItem.isValid && 'disabled']">
+      <view :class="['add-num flex-aic']">
         <view class="div flex-ctr" data-type="div" @click.stop="addcount">-</view>
-        <input type="number flex-ctr" :disabled="!copyItem.isValid" v-model="copyItem.quantity" @blur="addcount" />
+        <input :disabled="!copyItem.isValid" type="number flex-ctr" v-model="copyItem.quantity" @blur="addcount" />
         <view class="add flex-ctr" data-type="add" @click.stop="addcount">+</view>
       </view>
     </view>
@@ -56,15 +56,18 @@ export default {
     },
   },
   methods: {
-    toDetail(id) {
-      this.$to("goods-detail/index?id=" + id);
+    toDetail({ productId: id, isValid }) {
+      if (!isValid) {
+        ToastInfo('商品已下架')
+      } else this.$to("/packPages/goods-detail/index?id=" + id);
     },
     // 购买数量更新
     addcount: function (e) {
       let _ = this,
         { copyItem } = _,
-        { type } = e?.currentTarget?.dataset
+        { type } = e?.currentTarget?.dataset;
       copyItem.originQuantity = copyItem.quantity;
+      if (!copyItem.isValid) return
       if (!Number(copyItem.quantity)) copyItem.quantity = 1;
       else if (type) {
         //代表加减
@@ -109,6 +112,9 @@ export default {
           height: 100%;
         }
       }
+      &.disabled {
+        background: #ccc9c9;
+      }
     }
   }
 
@@ -150,14 +156,14 @@ export default {
         font-size: 24rpx;
         font-family: OPPOSans-M, OPPOSans;
         font-weight: normal;
-        color: #a7002d;
+        color: #ec0d0d;
         line-height: 32rpx;
         margin-right: 6rpx;
       }
       font-size: 30rpx;
       font-family: OPPOSans-H, OPPOSans;
       font-weight: bold;
-      color: #a7002d;
+      color: #ec0d0d;
       line-height: 48rpx;
     }
     .add-num {
@@ -188,7 +194,7 @@ export default {
         font-weight: bold;
         color: #272727;
         line-height: 30px;
-        padding-left: 6rpx;
+        text-align: center;
       }
     }
   }

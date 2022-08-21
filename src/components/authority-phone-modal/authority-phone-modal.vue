@@ -15,12 +15,7 @@
           <button class="btn" @click.stop="reject" v-if="isShowReject">取消</button>
           <!-- 头像 -->
           <button class="btn" v-if="isShowAuthHeader" @click="wechatLogin">确认</button>
-          <button
-            class="btn"
-            v-else
-            open-type="getPhoneNumber"
-            @getphonenumber="getPhoneNumber"
-          >
+          <button class="btn" v-else open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">
             确认
           </button>
         </view>
@@ -67,7 +62,7 @@ export default {
       default: true,
     },
   },
-  onShow() {},
+  onShow() { },
   // 生命周期函数，可以为函数，或一个在methods段中定义的方法名
   beforeMount: function () {
     // #ifndef H5

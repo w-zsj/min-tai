@@ -28,14 +28,6 @@ const $to = debounce((path, routeType = 'navigate', isneedrec = false) => {
 		});
 		return;
 	}
-
-	// #ifdef H5
-	if (isneedrec) {
-		location.href = location.origin + '/#' + path
-		return
-	}
-	// #endif
-
 	let routes = getCurrentPages(),
 		data = {},
 		tabBars = [
@@ -203,10 +195,9 @@ const CheckVersion = () => {
 const login = (params = {}, $isResolve = null) => {
 	return new Promise((resolve, reject) => {
 		let code = ''
-		// #ifndef H5
 		uni.login().then((res) => {
+			console.log('获取code', res)
 			code = res[1].code
-			// #endif
 			Resource.open
 				.post({
 					type: 'login'
@@ -228,18 +219,6 @@ const login = (params = {}, $isResolve = null) => {
 						});
 						if ($isResolve) $isResolve()
 						resolve(res.data)
-						Resource.cart.post({ type: "list" }, { pageNum: 1, pageSize: 1 }).then((res) => {
-							if (res.code == 1 && res?.data?.total) {
-								let num = res?.data?.total > 99 ? '99+' : (res?.data?.total + '')
-								if (num == 0) uni.removeTabBarBadge({ index: 2 });
-								else
-									uni.setTabBarBadge({
-										index: 2,
-										text: num
-									})
-							}
-
-						});
 					}
 				})
 				.catch((e) => console.error(e));

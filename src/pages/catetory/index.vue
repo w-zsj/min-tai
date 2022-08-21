@@ -8,9 +8,9 @@
     <view class="content flex-aic" :style="'height:' + contentHeight">
       <!-- 一级类目 -->
       <view class="one-category skeleton-rect">
-        <scroll-view scroll-y="true">
+        <scroll-view scroll-y="true" :scroll-into-view="'item_'+oneCateIndex" :scroll-with-animation="true">
           <view class="item flex-ctr" :class="idx == oneCateIndex ? 'act' : ''" v-for="(item, idx) in list" :key="idx"
-            @click.stop="select(item, idx, 'one')">
+            @click.stop="select(item, idx, 'one')" :id="'item_'+idx">
             <view class="" style="padding: 0 20rpx; text-align: center">
               {{ item.name }}
             </view>
@@ -58,21 +58,11 @@
             </view>
           </view>
           <view class="bg" v-show="isExpand" @click="isExpand = !isExpand"></view>
-          <!-- 价格销量筛选 -->
-          <view class="filter flex-ctr" v-if="prodList.length">
-            <view class="price flex-aic" @click.stop="filter('rise')">
-              <view class="txt flex-ctr" :class="rise ? 'act' : ''">价格</view>
-              <view class="icon flex-col-ctr" :class="rise == 1 ? 'act' : rise == 0 ? 'stop' : ''">
-                <image class="ic gray" src="@/static/images/triangle-gray.png" v-if="rise == 0" />
-                <image class="ic" src="@/static/images/triangle-act.png" v-else style="margin-bottom: 2rpx" />
-                <image class="ic" src="@/static/images/triangle-gray.png" />
-              </view>
-            </view>
-            <view class="sale txt flex-ctr" :class="sale ? 'act' : ''" @click.stop="filter('sale')">销量</view>
-          </view>
         </view>
         <!-- 搜索结果商品 -->
-        <view class="search-list" :style="{ height: calcHeight }">
+
+        <view class="search-list" :style="{ height: calcHeight }" @touchstart="touchStart" @touchmove="touchMove"
+          @touchend="touchEnd">
           <view class="empt flex-col-ctr" :class="isShowTwoCategory ? 'pad-top' : ''" v-if="prodList.length == 0">
             <image class="_img" src="/static/images/add-empty-icon.png" mode=""></image>
             <view class="txt">暂无商品</view>
@@ -87,7 +77,8 @@
                 </view>
               </block>
             </view>
-            <view class="end flex-ctr" v-if="isEnd && prodList.length">—— 暂无更多商品 ——</view>
+            <view class="end flex-ctr" v-if="prodList.length && oneCateIndex < list.length && isEnd">上拉 至下一分类</view>
+            <view class="end flex-ctr" v-else-if="isEnd && prodList.length">—— 暂无更多商品 ——</view>
           </scroll-view>
         </view>
       </view>
@@ -114,10 +105,7 @@ export default {
     _ = this;
     return {
       queryCId: "", // 从首页 分类进来
-      tabBarHeight: null,
-      isFixed: true,
-      statusBarHeight: app.globalData.statusBarHeight + "px",
-      navBarHeight: app.globalData.navBarHeight + "px",
+
       contentHeight: "100vh",
       isExpand: false, // 二级类目是否展开
       oneCateId: "", // 一级类类目id
@@ -138,17 +126,36 @@ export default {
       isEnd: false,
       total: 0,
       pageNum: 1,
+
+      touchStartX: 0, //触摸时的原点
+      touchStartY: 0, //触摸时的原点
+      time: 0, // 时间记录，用于滑动时且时间小于1s则执行左右滑动
+      interval: "", // 记录/清理时间记录
+      touchMoveX: 0, // x轴方向移动的距离
+      touchMoveY: 0, // y轴方向移动的距离
+      direction: "all",
+      distance: 50,
+      isBottom: false,
+      scrollCount: 0,
+      islowContentHeight: false,
     };
   },
-  async onShow() {
-    await this.$onLaunched;
-    this.twoCateIndex = 0;
-    this.isEnd = false;
-    this.pageNum = 1;
-    // 首页分类进来
-    this.queryCId = app.globalData.categoryId || "";
-    delete app.globalData.categoryId || "";
+  onLoad(options) {
     this.getList();
+  },
+  onShow() {
+    this.queryCId = app.globalData.categoryId || "";
+    console.log("this.queryCId", this.queryCId);
+    if (this.queryCId || getApp().globalData.needUpdeta) {
+      delete app.globalData.categoryId || "";
+      delete getApp().globalData.needUpdeta;
+      this.twoCateIndex = 0;
+      this.oneCateIndex = 0;
+      this.isEnd = false;
+      this.pageNum = 1;
+      this.id = "";
+      this.getList();
+    }
   },
   computed: {
     isShowTwoCategory() {
@@ -161,17 +168,69 @@ export default {
     },
   },
   id: "",
-  flag: true,
   methods: {
+    touchStart(e) {
+      console.log("开始滚动", this.isEnd);
+      this.touchStartX = e.changedTouches[0].pageX; // 获取触摸时的原点
+      this.touchStartY = e.changedTouches[0].pageY; // 获取触摸时的原点
+      // 使用js计时器记录时间
+      this.interval = setInterval(() => {
+        this.time++;
+      }, 100);
+    },
+    // 触摸移动事件
+    touchMove(e) {
+      this.touchMoveX = e.changedTouches[0].pageX;
+      this.touchMoveY = e.changedTouches[0].pageY;
+    },
+    // 触摸结束事件
+    // 触摸结束事件
+    touchEnd(e) {
+      let that = this;
+      let moveX = this.touchMoveX - this.touchStartX;
+      let moveY = this.touchMoveY - this.touchStartY;
+      if (Math.sign(moveX) == -1) {
+        moveX = moveX * -1;
+      }
+      if (Math.sign(moveY) == -1) {
+        moveY = moveY * -1;
+      }
+      if (2 * moveX <= moveY) {
+        // 上下
+        if (this.direction != "all" && this.direction != "vertical") return;
+        // 向上滑动
+        if (this.touchMoveY - this.touchStartY <= -this.distance && this.time < 10) {
+          if (this.isEnd && this.scrollCount >= 2 || this.islowContentHeight) {
+            console.log("1_1_11 向上滑动", this.scrollCount, this.islowContentHeight, this.oneCateIndex);
+            this.scrollCount = 0;
+            if (this.oneCateIndex < this.list.length - 1) {
+              let eq = this.oneCateIndex + 1;
+              let item = this.list[eq];
+              this.select(item, eq, "one");
+            } else {
+              let item = this.list[0];
+              this.select(item, 0, "one");
+            }
+          }
+        }
+        // 向下滑动
+        if (this.touchMoveY - this.touchStartY >= this.distance && this.time < 10) {
+          console.log("1_2 向下滑动");
+        }
+      }
+      clearInterval(this.interval); // 清除setInterval
+      this.time = 0;
+    },
     // 类目选择
     select(item = {}, index = -1, type) {
       console.log("item", item, index);
-      _.id = item.id;
+
       if (
         (type == "one" && index == _.oneCateIndex) ||
         (type == "two" && index == _.twoCateIndex)
       )
         return;
+
       switch (type) {
         case "one":
           Object.assign(this, {
@@ -196,41 +255,9 @@ export default {
         isEnd: false,
         pageNum: 1,
       });
+      _.id = item.id;
+      console.log("item.id>>", item.id);
       _.getProdList(item.id);
-    },
-    // 价格排序
-    filter(type) {
-      let { rise, sale } = _;
-      if (type == "rise") {
-        switch (rise) {
-          case 0:
-            rise = 1;
-            break;
-          case 1:
-            rise = 2;
-            break;
-          case 2:
-            rise = 1;
-            break;
-        }
-
-        Object.assign(_, {
-          rise: rise,
-          sale: false,
-          scrollTop: -1,
-        });
-      } else if (type == "sale") {
-        Object.assign(_, {
-          sale: !sale,
-          rise: 0,
-          scrollTop: -1,
-        });
-      }
-      Object.assign(this, {
-        isEnd: false,
-        pageNum: 1,
-      });
-      _.getProdList(_.id);
     },
     // 获取分类
     getList() {
@@ -262,52 +289,22 @@ export default {
       });
     },
     goto() {
-      this.$to("search-history/index");
+      this.$to("/packPages/search-history/index");
     },
     // 搜索商品
     getProdList(id = 0) {
-      // 刚进分类tab，sortColumn: 0  sort: 1 （价格、销量都置灰）
-      // 点击价格升序: sortColumn: 1  sort: 0 (销量置灰)
-      // 点击价格降序:  sortColumn: 1  sort: 1 (销量置灰)
-      // 点击销量: sortColumn: 2  sort: 1 (价格置灰)
-      // sort:1, //排序方式 0:升序 1:降序
-      // sortColumn:0, //排序字段 0:商品sort(此时参数sort不必填) 1:价格 2:销量(此时参数sort必须为1)
-
       // productClassifyId	分类ID 一级全部分类传0
-      let { rise, sale, isEnd, pageNum, prodList, flag } = _,
-        sort = 1,
-        sortColumn = 0;
+      let { isEnd, pageNum, prodList } = _;
       if (isEnd) return;
       _.isEnd = true;
-      if (sale) {
-        sortColumn = 2;
-        sort = 1;
-      } else {
-        switch (rise) {
-          case 0:
-            sortColumn = 0;
-            sort = 1;
-            break;
-          case 1:
-            sortColumn = 1;
-            sort = 0;
-            break;
-          case 2:
-            sortColumn = 1;
-            sort = 1;
-            break;
-          default:
-            sortColumn = 0;
-            sort = 1;
-        }
-      }
+      console.log("id>>", id);
       Resource.open
         .post(
           { type: "product/queryProductByClassify" },
           {
             productClassifyId: id,
-            sort,
-            sortColumn,
+            sort: 1,
+            sortColumn: 1,
             pageNum,
             pageSize: 10,
           },
@@ -318,7 +315,9 @@ export default {
           if (code == 1) {
             if (pageNum == 1) prodList = data.list || [];
             else prodList = prodList.concat(data.list);
-            isEnd = data.pageNum * data.pageSize >= data.total;
+            setTimeout(() => {
+              _.isEnd = data.pageNum * data.pageSize >= data.total;
+            }, 500);
             Object.assign(_, {
               prodList,
               isEnd,
@@ -338,14 +337,37 @@ export default {
                   console.log("data", tal, _.calcHeight);
                 })
                 .exec();
+
               // 内容高度
               query
                 .select(".search")
                 .boundingClientRect((data) => {
                   console.log(".search", data);
-                  _.contentHeight = `calc(100vh - ${data.height}px)`;
+                  _.contentHeight = `calc(100vh - ${data.height + 10}px)`;
                 })
                 .exec();
+              let searchListH = 0,
+                itemH = 0;
+              setTimeout(() => {
+                query
+                  .select(".search-list")
+                  .boundingClientRect((data) => {
+                    searchListH = data.height;
+                  })
+                  .exec();
+              }, 0);
+              setTimeout(() => {
+                query
+                  .select(".search-list .item")
+                  .boundingClientRect((data) => {
+                    itemH = data?.height || 0;
+
+                    _.islowContentHeight = searchListH - itemH > 0;
+                    console.log("3333", _.islowContentHeight, searchListH, itemH);
+                  })
+                  .exec();
+              }, 100);
+
             });
           }
           // else _.reset();
@@ -386,8 +408,11 @@ export default {
     bindscrolltolower(e) {
       console.log("滚动到底部了", _.id);
       let { isEnd, pageNum } = _;
-      if (isEnd) return;
-      else {
+      if (isEnd) {
+        _.isBottom = true;
+        _.scrollCount++;
+        return;
+      } else {
         pageNum++;
         _.pageNum = pageNum;
         _.getProdList(_.id);

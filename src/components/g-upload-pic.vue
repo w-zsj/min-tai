@@ -75,8 +75,9 @@ export default {
         content: base64,
         fileType: 'jpeg'
       };
-      Resource.uploadImage.post({}, param).then(res => {
+      Resource.uploadImage.post({}, param, { loadingDelay: true, txt: '正在上传...' }).then(res => {
         let { code, data = '' } = res;
+        console.log('上传支付凭证返回结果', res)
         data = [data]
         if (code === 1) {
           photoListArr = [...photoList, ...data];

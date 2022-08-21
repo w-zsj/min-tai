@@ -16,6 +16,15 @@
     </view>
     <view class="loading" v-if="isend && hotProductList.length">已加载全部</view>
 
+    <!-- 弹屏 -->
+    <view class="popup-adv" v-if="popupAdv.pic">
+      <view class="pic">
+        <image :src="popupAdv.pic" class="img" mode='widthFix' @click.stop="bannerTap(item)"></image>
+        <view class="close" @click.stop="popClose">
+          <image class="icon" src="/static/images/close_icon.png" />
+        </view>
+      </view>
+    </view>
     <!-- 登录提示 -->
     <view class="login-hint flex-aic-btwn" v-if="!isShowLoginHint">
       <view class="txt flex-aic">
@@ -40,6 +49,7 @@ export default {
   data() {
     return {
       bannerList: [],
+      popupAdv: {},// 弹屏
       catetoryList: [],
       isShowAuthPhone: false,
       isShowLoginHint: true,
@@ -55,23 +65,48 @@ export default {
     this.getClassifyList();
     // 获取banner
     this.getHomeBannerList();
+    // 获取弹屏广告
+    this.getHomeBannerList(0);
     // 新品推荐
     this.getHotProductList();
   },
-  onShow() {
+  async onShow() {
+    await this.$onLaunched;
     if (!app.globalData.hasmobile()) this.isShowLoginHint = false;
     else this.isShowLoginHint = true;
     this.isShowAuthPhone = false;
+    uni.showTabBar();
+
   },
   onHide() {
+    this.popupAdv = {};
     this.isShowAuthPhone = false;
   },
+  /**
+   * 页面相关事件处理函数--监听用户下拉动作
+   */
+  onPullDownRefresh: function () {
+    // 获取分类
+    this.getClassifyList();
+    // 获取banner
+    this.getHomeBannerList();
+    // // 获取弹屏广告
+    // this.getHomeBannerList(0);
+    // 新品推荐
+    this.getHotProductList();
+  },
   // 上拉加载
-  onReachBottom: function () { },
+  onReachBottom: function () {
+    const { isend, list } = this;
+    if (!isend && list.length) {
+      this.pageNum += 1;
+      this.getHotProductList();
+    }
+  },
   methods: {
     // 轮播图点击
-    bannerTap: function ({ url, type, id }, source) {
-      console.log("e---", url, type, id, source); //type 2h5Url  3图片 4 小程序路径
+    bannerTap: function ({ url, urlType, id }, source) {
+      console.log("e---", url, urlType, id, source); //type 2h5Url  3图片 4 小程序路径
       const tabBarPages = [
         "/pages/mall/index",
         "/pages/category/index",
@@ -83,25 +118,30 @@ export default {
         });
         getApp().globalData.categoryId = id;
       } else {
-        if (type == 4) {
-          if (tabBarPages.includes(url)) {
-            uni.switchTab({ url: url });
-          } else {
-            uni.navigateTo({ url: url });
-          }
-        } else if (type == 2) {
-          this.$to(`webview/index?url=${encodeURIComponent(url)}`);
+        if (urlType == 4) {
+          if (tabBarPages.includes(url)) uni.switchTab({ url: url });
+          else uni.navigateTo({ url: url });
+        } else if (urlType == 3) {
+          if (url)
+            this.$to(`/packPages/webview/index?url=${encodeURIComponent(url)}&type=img`);
+        }
+        else if (urlType == 2) {
+          this.$to(`/packPages/webview/index?url=${encodeURIComponent(url)}`);
         }
       }
+    },
+    popClose() {
+      uni.showTabBar();
+      this.popupAdv = {};
     },
     closemodal(e) {
       this.isShowAuthPhone = false;
       if (e.detail == "success") {
-        this.isShowLoginHint = false;
+        this.isShowLoginHint = true;
       }
     },
     goto() {
-      this.$to("search-history/index");
+      this.$to("/packPages/search-history/index");
     },
     // 新品推荐
     getHotProductList() {
@@ -113,6 +153,7 @@ export default {
         };
       Resource.open.post({ type: "product/hotProductList" }, params, { loadingDelay: true }).then((res) => {
         if (res.code == 1) {
+          uni.stopPullDownRefresh();
           if (res?.data?.list?.length) {
             isend = !!(pageNum >= res?.data?.totalPage);
             let data = res.data?.list || [];
@@ -126,13 +167,24 @@ export default {
       });
     },
     // banner
-    getHomeBannerList() {
+    getHomeBannerList(type = 1) {
       Resource.open
-        .post({ type: "home/getHomePageAdvertiseList" }, { type: 1 })
+        .post({ type: "home/getHomePageAdvertiseList" }, { type })
         .then((res) => {
           if (res.code == 1) {
+            uni.stopPullDownRefresh();
             if (res?.data?.length) {
-              this.bannerList = res?.data;
+              if (type == 1) this.bannerList = res?.data;
+              else if (type == 0) {
+                uni.hideTabBar();
+                this.popupAdv = res?.data[0] || {};
+              }
+            } else {
+              if (type == 1) this.bannerList = [];
+              else if (type == 0) {
+                this.popupAdv = {};
+                uni.showTabBar();
+              }
             }
           }
         });
@@ -149,6 +201,7 @@ export default {
             }
             this.catetoryList = result;
           }
+          uni.stopPullDownRefresh();
         }
       });
     },
@@ -188,7 +241,7 @@ page {
 }
 .home {
   min-height: 100vh;
-  padding: 32rpx;
+  padding: 16rpx;
   .loading {
     text-align: center;
     color: #ccc9c9;
@@ -219,10 +272,45 @@ page {
     }
     .btn {
       height: 40rpx;
-      background: #a7002d;
+      background: #ec0d0d;
       border-radius: 20rpx;
       font-size: 24rpx;
       padding: 0 16rpx;
+    }
+  }
+
+  .popup-adv {
+    position: fixed;
+    background: rgba(0, 0, 0, 0.5);
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    .pic {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 600rpx;
+      .img {
+        width: 600rpx;
+        // height: 800rpx;
+      }
+      .close {
+        width: 60rpx;
+        height: 60rpx;
+        border-radius: 50%;
+        padding: 10rpx;
+        border: 1px solid #fff;
+        position: absolute;
+        left: 50%;
+        bottom: -80rpx;
+        transform: translateX(-50%);
+        .icon {
+          width: 100%;
+          height: 100%;
+        }
+      }
     }
   }
 }

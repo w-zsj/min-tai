@@ -4,13 +4,15 @@
 			"path": "pages/home/index",
 			"style": {
 				"navigationBarTitleText": "首页",
-				"onReachBottomDistance": 50
+				"onReachBottomDistance": 50,
+				"enablePullDownRefresh": true
 			}
 		},
 		{
 			"path": "pages/catetory/index",
 			"style": {
-				"navigationBarTitleText": "分类"
+				"navigationBarTitleText": "分类",
+				"disableScroll": true
 			}
 		},
 		{
@@ -25,87 +27,14 @@
 			"style": {
 				"navigationBarTitleText": "我的",
 				"navigationBarTextStyle": "white",
-				"navigationBarBackgroundColor": "#a7002d"
-			}
-		},
-		{
-			"path": "pages/search-history/index",
-			"style": {
-				"navigationBarTitleText": "搜索"
-			}
-		},
-		{
-			"path": "pages/search-result/index",
-			"style": {
-				"navigationBarTitleText": "搜索结果"
-			}
-		},
-		{
-			"path": "pages/goods-detail/index",
-			"style": {
-				"navigationBarTitleText": "商品详情"
-			}
-		},
-		{
-			"path": "pages/order-check/index",
-			"style": {
-				"navigationBarTitleText": "确认订单"
-			}
-		},
-		{
-			"path": "pages/address-list/index",
-			"style": {
-				"navigationBarTitleText": "收货地址"
-			}
-		},
-		{
-			"path": "pages/address/index",
-			"style": {
-				"navigationBarTitleText": "添加收货地址"
-			}
-		},
-		{
-			"path": "pages/order-list/index",
-			"style": {
-				"navigationBarTitleText": "订单列表",
-				"onReachBottomDistance": 50
-			}
-		},
-		{
-			"path": "pages/order-detail/index",
-			"style": {
-				"navigationBarTitleText": "订单详情"
-			}
-		},
-		{
-			"path": "pages/account-management/index",
-			"style": {
-				"navigationBarTitleText": "账户管理"
-			}
-		},
-		{
-			"path": "pages/webview/index",
-			"style": {
-				"navigationBarTitleText": "泰嗨乐"
-			}
-		},
-		{
-			"path": "pages/pay/index",
-			"style": {
-				"navigationBarTitleText": "支付"
-			}
-		},
-		{
-			"path": "pages/payment-voucher/index",
-			"style": {
-				"navigationBarTitleText": "支付凭证"
+				"navigationBarBackgroundColor": "#EC0D0D"
 			}
 		}
 	],
 	"tabBar": {
 		"backgroundColor": "#FFFFFF",
 		"borderStyle": "black",
-		"selectedColor": "#272727",
+		"selectedColor": "#ec0d0d",
 		"color": "#CCC9C9",
 		"list": [
 			{
@@ -134,6 +63,89 @@
 			}
 		]
 	},
+	"preloadRule": {
+		"pages/home/index": {
+			"packages": [
+				"__APP__"
+			]
+		}
+	},
+	"subPackages": [
+		{
+			"root": "packPages",
+			"pages": [
+				{
+					"path": "account-management/index",
+					"style": {
+						"navigationBarTitleText": "账户管理"
+					}
+				},
+				{
+					"path": "search-history/index",
+					"style": {
+						"navigationBarTitleText": "搜索"
+					}
+				},
+				{
+					"path": "search-result/index",
+					"style": {
+						"navigationBarTitleText": "搜索结果"
+					}
+				},
+				{
+					"path": "goods-detail/index",
+					"style": {
+						"navigationBarTitleText": "商品详情"
+					}
+				},
+				{
+					"path": "order-check/index",
+					"style": {
+						"navigationBarTitleText": "确认订单"
+					}
+				},
+				{
+					"path": "address-list/index",
+					"style": {
+						"navigationBarTitleText": "收货地址"
+					}
+				},
+				{
+					"path": "address/index",
+					"style": {
+						"navigationBarTitleText": "添加收货地址"
+					}
+				},
+				{
+					"path": "order-list/index",
+					"style": {
+						"navigationBarTitleText": "订单列表",
+						"onReachBottomDistance": 50,
+						"backgroundColor": "#f6f6f6",
+						"enablePullDownRefresh": true
+					}
+				},
+				{
+					"path": "order-detail/index",
+					"style": {
+						"navigationBarTitleText": "订单详情"
+					}
+				},
+				{
+					"path": "webview/index",
+					"style": {
+						"navigationBarTitleText": "泰嗨乐"
+					}
+				},
+				{
+					"path": "payment-voucher/index",
+					"style": {
+						"navigationBarTitleText": "支付凭证"
+					}
+				}
+			]
+		}
+	],
 	"networkTimeout": {
 		"request": 8000,
 		"connectSocket": 30000,
@@ -155,6 +167,7 @@
 		"backgroundTextStyle": "light",
 		"navigationBarBackgroundColor": "#fff",
 		"navigationBarTitleText": "泰嗨",
-		"navigationBarTextStyle": "black"
+		"navigationBarTextStyle": "black",
+		"backgroundColor": "#f6f6f6"
 	}
 }
